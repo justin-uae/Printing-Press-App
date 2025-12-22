@@ -1,47 +1,160 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
 import { Filter, X, ChevronDown } from 'lucide-react';
-import { setSelectedCategory, setSortBy, resetFilters } from '../store/slices/filterSlice';
-import { categories, products, getProductsByCategory } from '../data/mockData';
+import { useAppDispatch, useAppSelector } from '../store/hooks';
+import { fetchProducts } from '../store/productsSlice';
 import ProductCard from '../components/ProductCard';
-import type { RootState, Product } from '../types';
+import type { Product } from '..';
+
+interface Category {
+    id: string;
+    name: string;
+    slug: string;
+    icon: string;
+    productCount: number;
+    description: string;
+}
 
 const ProductsPage: React.FC = () => {
-    const dispatch = useDispatch();
+    const dispatch = useAppDispatch();
     const [searchParams, setSearchParams] = useSearchParams();
     const [showFilters, setShowFilters] = useState<boolean>(false);
-    const [filteredProducts, setFilteredProducts] = useState<Product[]>(products);
+    const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+    const [sortBy, setSortBy] = useState<string>('featured');
 
-    const selectedCategory = useSelector((state: RootState) => state.filter.selectedCategory);
-    const sortBy = useSelector((state: RootState) => state.filter.sortBy);
+    // Get data from Redux store
+    const { items: allProducts, loading: productsLoading, error } = useAppSelector(
+        (state) => state.products
+    );
 
+    // Fetch initial data
+    useEffect(() => {
+        dispatch(fetchProducts({ first: 100 }));
+    }, [dispatch]);
+
+    // Handle URL params
     useEffect(() => {
         const categoryParam = searchParams.get('category');
         if (categoryParam) {
-            dispatch(setSelectedCategory(categoryParam));
+            setSelectedCategory(categoryParam);
+        } else {
+            setSelectedCategory(null);
         }
     }, [searchParams]);
 
-    useEffect(() => {
-        let filtered = [...products];
+    // Generate categories from product.category field
+    const categories = useMemo((): Category[] => {
+        if (!allProducts.length) return [];
 
+        // Get unique categories from products
+        const categoryMap = new Map<string, { count: number; products: Product[] }>();
+
+        allProducts.forEach(product => {
+            if (product.category) {
+                const existing = categoryMap.get(product.category) || { count: 0, products: [] };
+                categoryMap.set(product.category, {
+                    count: existing.count + 1,
+                    products: [...existing.products, product]
+                });
+            }
+        });
+
+        // Map categories to Category objects with icons
+        const categoryIcons: Record<string, string> = {
+            'business-cards-stationery': '💼',
+            'business-cards': '💼',
+            'flyers-brochures': '📄',
+            'flyers': '📄',
+            'brochures': '📄',
+            'stickers-labels': '🏷️',
+            'stickers': '🏷️',
+            'labels': '🏷️',
+            'packaging': '📦',
+            'marketing-materials': '📢',
+            'marketing': '📢',
+            'banners': '🎌',
+            'posters': '🖼️',
+            'catalogs': '📚',
+            'letterheads': '📝',
+            'envelopes': '✉️',
+            'folders': '📁',
+            'calendars': '📅',
+            'notebooks': '📓',
+        };
+
+        const categoryDescriptions: Record<string, string> = {
+            'business-cards-stationery': 'Professional business cards and stationery',
+            'business-cards': 'High-quality business cards',
+            'flyers-brochures': 'Eye-catching flyers and brochures',
+            'flyers': 'Promotional flyers',
+            'brochures': 'Informative brochures',
+            'stickers-labels': 'Custom stickers and labels',
+            'stickers': 'Custom stickers',
+            'labels': 'Professional labels',
+            'packaging': 'Custom packaging solutions',
+            'marketing-materials': 'Complete marketing materials',
+            'marketing': 'Marketing materials',
+            'banners': 'Large format banners',
+            'posters': 'Eye-catching posters',
+            'catalogs': 'Product catalogs',
+            'letterheads': 'Professional letterheads',
+            'envelopes': 'Custom envelopes',
+            'folders': 'Presentation folders',
+            'calendars': 'Custom calendars',
+            'notebooks': 'Branded notebooks',
+        };
+
+        return Array.from(categoryMap.entries())
+            .map(([categorySlug, data]) => {
+                const name = categorySlug
+                    .split('-')
+                    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+                    .join(' ');
+
+                return {
+                    id: categorySlug,
+                    name,
+                    slug: categorySlug,
+                    icon: categoryIcons[categorySlug] || '🖨️',
+                    productCount: data.count,
+                    description: categoryDescriptions[categorySlug] || `${name} products`
+                };
+            })
+            .sort((a, b) => b.productCount - a.productCount); // Sort by product count
+    }, [allProducts]);
+
+    // Filter and sort products
+    const filteredProducts = useMemo((): Product[] => {
+        let filtered: Product[] = [];
+
+        // Filter by category
         if (selectedCategory) {
-            filtered = getProductsByCategory(selectedCategory);
+            filtered = allProducts.filter(product => product.category === selectedCategory);
+        } else {
+            filtered = [...allProducts];
         }
 
+        // Sort products
         switch (sortBy) {
             case 'price-low':
                 filtered.sort((a, b) => {
-                    const priceA = Math.min(...a.pricing.filter(p => p.type === 'online').map(p => p.price));
-                    const priceB = Math.min(...b.pricing.filter(p => p.type === 'online').map(p => p.price));
+                    const priceA = a.pricing.length > 0
+                        ? Math.min(...a.pricing.filter(p => p.type === 'online').map(p => p.price))
+                        : 0;
+                    const priceB = b.pricing.length > 0
+                        ? Math.min(...b.pricing.filter(p => p.type === 'online').map(p => p.price))
+                        : 0;
                     return priceA - priceB;
                 });
                 break;
             case 'price-high':
                 filtered.sort((a, b) => {
-                    const priceA = Math.min(...a.pricing.filter(p => p.type === 'online').map(p => p.price));
-                    const priceB = Math.min(...b.pricing.filter(p => p.type === 'online').map(p => p.price));
+                    const priceA = a.pricing.length > 0
+                        ? Math.min(...a.pricing.filter(p => p.type === 'online').map(p => p.price))
+                        : 0;
+                    const priceB = b.pricing.length > 0
+                        ? Math.min(...b.pricing.filter(p => p.type === 'online').map(p => p.price))
+                        : 0;
                     return priceB - priceA;
                 });
                 break;
@@ -50,25 +163,31 @@ const ProductsPage: React.FC = () => {
                 break;
             case 'featured':
             default:
-                filtered.sort((a, b) => (b.featured ? 1 : 0) - (a.featured ? 1 : 0));
+                // Keep original order (featured products first if badge exists)
+                filtered.sort((a, b) => {
+                    const aFeatured = a.badge === 'POPULAR' || a.badge === 'BESTSELLER' ? 1 : 0;
+                    const bFeatured = b.badge === 'POPULAR' || b.badge === 'BESTSELLER' ? 1 : 0;
+                    return bFeatured - aFeatured;
+                });
                 break;
         }
 
-        setFilteredProducts(filtered);
-    }, [selectedCategory, sortBy]);
+        return filtered;
+    }, [allProducts, selectedCategory, sortBy]);
 
     const handleCategoryChange = (categoryId: string): void => {
         if (categoryId === selectedCategory) {
-            dispatch(setSelectedCategory(null));
+            setSelectedCategory(null);
             setSearchParams({});
         } else {
-            dispatch(setSelectedCategory(categoryId));
+            setSelectedCategory(categoryId);
             setSearchParams({ category: categoryId });
         }
     };
 
     const handleResetFilters = (): void => {
-        dispatch(resetFilters());
+        setSelectedCategory(null);
+        setSortBy('featured');
         setSearchParams({});
     };
 
@@ -96,13 +215,13 @@ const ProductsPage: React.FC = () => {
                 <div className="flex flex-col lg:flex-row gap-8">
                     {/* Filters Sidebar - Desktop */}
                     <aside className="hidden lg:block w-72 flex-shrink-0">
-                        <div className="bg-white rounded-3xl shadow-lg p-6 sticky top-24">
+                        <div className="bg-white rounded-3xl shadow-lg p-6 sticky top-24 border-4 border-gray-900">
                             <div className="flex items-center justify-between mb-6">
                                 <h3 className="text-xl font-black text-gray-900 flex items-center gap-2">
                                     <Filter size={20} className="text-red-600" />
-                                    Filters
+                                    Categories
                                 </h3>
-                                {(selectedCategory) && (
+                                {selectedCategory && (
                                     <button
                                         onClick={handleResetFilters}
                                         className="text-sm text-red-600 hover:text-red-700 font-bold hover:underline transition-colors"
@@ -113,39 +232,44 @@ const ProductsPage: React.FC = () => {
                             </div>
 
                             {/* Categories */}
-                            <div className="space-y-2">
-                                {categories.map(category => (
-                                    <label
-                                        key={category.id}
-                                        className={`flex items-center gap-3 cursor-pointer p-3 rounded-2xl transition-all duration-200 ${selectedCategory === category.id
-                                                ? 'bg-gradient-to-r from-red-50 to-pink-50'
+                            {categories.length > 0 ? (
+                                <div className="space-y-2">
+                                    {categories.map(category => (
+                                        <label
+                                            key={category.id}
+                                            className={`flex items-center gap-3 cursor-pointer p-3 rounded-2xl transition-all duration-200 ${selectedCategory === category.id
+                                                ? 'bg-gradient-to-r from-red-50 to-pink-50 border-2 border-red-200'
                                                 : 'hover:bg-gray-50'
-                                            }`}
-                                    >
-                                        <input
-                                            type="checkbox"
-                                            checked={selectedCategory === category.id}
-                                            onChange={() => handleCategoryChange(category.id)}
-                                            className="w-5 h-5 text-red-600 rounded focus:ring-red-500 focus:ring-2"
-                                        />
-                                        <div className="flex-1">
-                                            <p className="text-sm font-bold text-gray-700">
-                                                {category.name}
-                                            </p>
-                                            <p className="text-xs text-gray-500">
-                                                {category.productCount} items
-                                            </p>
-                                        </div>
-                                    </label>
-                                ))}
-                            </div>
+                                                }`}
+                                        >
+                                            <input
+                                                type="checkbox"
+                                                checked={selectedCategory === category.id}
+                                                onChange={() => handleCategoryChange(category.id)}
+                                                className="w-5 h-5 text-red-600 rounded focus:ring-red-500 focus:ring-2"
+                                            />
+                                            <div className="flex-1">
+                                                <div className="flex items-center gap-2">
+                                                    <p className="text-sm font-bold text-gray-700">
+                                                        {category.name}
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </label>
+                                    ))}
+                                </div>
+                            ) : (
+                                <p className="text-sm text-gray-500 text-center py-4">
+                                    No categories available
+                                </p>
+                            )}
                         </div>
                     </aside>
 
                     {/* Main Content */}
                     <div className="flex-1">
                         {/* Mobile Filter Toggle & Sort */}
-                        <div className="flex items-center justify-between mb-6 gap-4 bg-white rounded-2xl shadow-md p-4">
+                        <div className="flex items-center justify-between mb-6 gap-4 bg-white rounded-2xl shadow-md p-4 border-3 border-gray-900">
                             {/* Mobile Filter Button */}
                             <button
                                 onClick={() => setShowFilters(!showFilters)}
@@ -167,7 +291,7 @@ const ProductsPage: React.FC = () => {
                             <div className="relative">
                                 <select
                                     value={sortBy}
-                                    onChange={(e: any) => dispatch(setSortBy(e.target.value))}
+                                    onChange={(e) => setSortBy(e.target.value)}
                                     className="appearance-none bg-white border-2 border-gray-200 rounded-xl px-4 py-2.5 pr-10 text-sm font-bold text-gray-700 hover:border-red-300 focus:border-red-500 focus:ring-4 focus:ring-red-100 outline-none transition-all cursor-pointer"
                                 >
                                     <option value="featured">Featured</option>
@@ -181,11 +305,11 @@ const ProductsPage: React.FC = () => {
 
                         {/* Mobile Filters */}
                         {showFilters && (
-                            <div className="lg:hidden bg-white rounded-2xl shadow-lg p-6 mb-6">
+                            <div className="lg:hidden bg-white rounded-2xl shadow-lg p-6 mb-6 border-3 border-gray-900">
                                 <div className="flex items-center justify-between mb-6">
                                     <h3 className="text-lg font-black text-gray-900 flex items-center gap-2">
                                         <Filter size={20} className="text-red-600" />
-                                        Filter Products
+                                        Filter by Category
                                     </h3>
                                     <button
                                         onClick={() => setShowFilters(false)}
@@ -195,26 +319,35 @@ const ProductsPage: React.FC = () => {
                                     </button>
                                 </div>
 
-                                <div className="space-y-2 mb-6">
-                                    {categories.map(category => (
-                                        <label
-                                            key={category.id}
-                                            className={`flex items-center gap-3 cursor-pointer p-3 rounded-2xl transition-all ${selectedCategory === category.id
-                                                    ? 'bg-gradient-to-r from-red-50 to-pink-50'
+                                {categories.length > 0 ? (
+                                    <div className="space-y-2 mb-6">
+                                        {categories.map(category => (
+                                            <label
+                                                key={category.id}
+                                                className={`flex items-center gap-3 cursor-pointer p-3 rounded-2xl transition-all ${selectedCategory === category.id
+                                                    ? 'bg-gradient-to-r from-red-50 to-pink-50 border-2 border-red-200'
                                                     : 'hover:bg-gray-50'
-                                                }`}
-                                        >
-                                            <input
-                                                type="checkbox"
-                                                checked={selectedCategory === category.id}
-                                                onChange={() => handleCategoryChange(category.id)}
-                                                className="w-5 h-5 text-red-600 rounded focus:ring-red-500"
-                                            />
-                                            {/* <span className="text-2xl">{category.icon}</span> */}
-                                            <span className="text-sm font-bold flex-1">{category.name}</span>
-                                        </label>
-                                    ))}
-                                </div>
+                                                    }`}
+                                            >
+                                                <input
+                                                    type="checkbox"
+                                                    checked={selectedCategory === category.id}
+                                                    onChange={() => handleCategoryChange(category.id)}
+                                                    className="w-5 h-5 text-red-600 rounded focus:ring-red-500"
+                                                />
+                                                <span className="text-2xl">{category.icon}</span>
+                                                <div className="flex-1">
+                                                    <span className="text-sm font-bold">{category.name}</span>
+                                                    <span className="text-xs text-gray-500 ml-2">({category.productCount})</span>
+                                                </div>
+                                            </label>
+                                        ))}
+                                    </div>
+                                ) : (
+                                    <p className="text-sm text-gray-500 text-center py-4 mb-6">
+                                        No categories available
+                                    </p>
+                                )}
 
                                 <button
                                     onClick={handleResetFilters}
@@ -240,23 +373,35 @@ const ProductsPage: React.FC = () => {
                             </div>
                         )}
 
-                        {/* Products Grid */}
-                        {filteredProducts.length > 0 ? (
+                        {/* Loading State */}
+                        {productsLoading ? (
+                            <div className="flex justify-center items-center py-20">
+                                <div className="animate-spin rounded-full h-16 w-16 border-b-4 border-red-500"></div>
+                            </div>
+                        ) : error ? (
+                            <div className="text-center py-20 bg-red-50 rounded-3xl border-4 border-gray-900">
+                                <div className="text-6xl mb-4">⚠️</div>
+                                <h3 className="text-2xl font-black text-gray-900 mb-3">Error Loading Products</h3>
+                                <p className="text-gray-600 font-medium">{error}</p>
+                            </div>
+                        ) : filteredProducts.length > 0 ? (
                             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 lg:gap-8">
                                 {filteredProducts.map((product) => (
                                     <ProductCard key={product.id} product={product} />
                                 ))}
                             </div>
                         ) : (
-                            <div className="text-center py-16 lg:py-24 bg-white rounded-3xl shadow-lg">
+                            <div className="text-center py-16 lg:py-24 bg-white rounded-3xl shadow-lg border-4 border-gray-900">
                                 <div className="text-6xl lg:text-7xl mb-6">📦</div>
                                 <h3 className="text-2xl lg:text-3xl font-black mb-3 text-gray-900">No products found</h3>
                                 <p className="text-gray-600 mb-8 text-lg font-medium">
-                                    Try adjusting your filters to see more results
+                                    {selectedCategory
+                                        ? 'No products in this category. Try another category or reset filters.'
+                                        : 'Try adjusting your filters to see more results'}
                                 </p>
                                 <button
                                     onClick={handleResetFilters}
-                                    className="inline-flex items-center gap-2 bg-gradient-to-r from-red-500 to-pink-500 hover:from-red-600 hover:to-pink-600 text-white px-8 py-4 rounded-2xl font-black text-lg shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105"
+                                    className="inline-flex items-center gap-2 bg-gradient-to-r from-red-500 to-pink-500 hover:from-red-600 hover:to-pink-600 text-white px-8 py-4 rounded-2xl font-black text-lg shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105 border-4 border-gray-900"
                                 >
                                     Reset Filters
                                 </button>

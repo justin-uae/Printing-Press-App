@@ -1,11 +1,31 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, Star, Clock, Shield, TrendingDown, Zap } from 'lucide-react';
-import { categories, getFeaturedProducts } from '../data/mockData';
+import { useAppDispatch, useAppSelector } from '../store/hooks';
+import { fetchFeaturedProducts } from '../store/productsSlice';
+import { fetchCollections } from '../store/collectionsSlice';
+import { generateCategoriesFromCollections } from '../utils/transformers';
 import ProductCard from '../components/ProductCard';
 
 const HomePage: React.FC = () => {
-    const featuredProducts = getFeaturedProducts();
+    const dispatch = useAppDispatch();
+
+    // Select data from Redux store
+    const { featuredProducts, loading: productsLoading, error: productsError } = useAppSelector(
+        (state) => state.products
+    );
+    const { items: collections, loading: collectionsLoading } = useAppSelector(
+        (state) => state.collections
+    );
+
+    // Fetch data on component mount
+    useEffect(() => {
+        dispatch(fetchFeaturedProducts(12));
+        dispatch(fetchCollections(10));
+    }, [dispatch]);
+
+    // Generate categories from collections
+    const categories = generateCategoriesFromCollections(collections);
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50">
@@ -13,11 +33,8 @@ const HomePage: React.FC = () => {
             <section className="relative overflow-hidden py-20 lg:py-32">
                 {/* Geometric Background Elements */}
                 <div className="absolute inset-0 overflow-hidden">
-                    {/* Large circles */}
                     <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-br from-red-400/20 to-pink-400/20 rounded-full blur-3xl"></div>
                     <div className="absolute bottom-0 left-0 w-96 h-96 bg-gradient-to-tr from-blue-400/20 to-purple-400/20 rounded-full blur-3xl"></div>
-
-                    {/* Geometric shapes */}
                     <div className="absolute top-20 left-10 w-20 h-20 bg-yellow-300 rounded-lg rotate-12 opacity-30"></div>
                     <div className="absolute top-40 right-20 w-16 h-16 bg-red-400 rounded-full opacity-30"></div>
                     <div className="absolute bottom-40 left-1/4 w-24 h-24 border-4 border-blue-400 rounded-lg rotate-45 opacity-30"></div>
@@ -56,11 +73,11 @@ const HomePage: React.FC = () => {
                                 </Link>
                             </div>
 
-                            {/* Quick Stats - Vector Style */}
+                            {/* Quick Stats */}
                             <div className="grid grid-cols-4 gap-4 mt-12">
                                 {[
                                     { value: '10K+', label: 'Happy Clients', color: 'from-blue-400 to-blue-500' },
-                                    { value: '50+', label: 'Products', color: 'from-purple-400 to-purple-500' },
+                                    { value: `${collections.length || '50'}+`, label: 'Collections', color: 'from-purple-400 to-purple-500' },
                                     { value: '6 Hrs', label: 'Express', color: 'from-pink-400 to-pink-500' },
                                     { value: '24/7', label: 'Support', color: 'from-orange-400 to-orange-500' }
                                 ].map((stat, idx) => (
@@ -77,26 +94,17 @@ const HomePage: React.FC = () => {
                         {/* Right Illustration */}
                         <div className="relative hidden lg:block">
                             <div className="relative w-full aspect-square">
-                                {/* Main illustration container */}
                                 <div className="absolute inset-0 flex items-center justify-center">
-                                    {/* Large circle background */}
                                     <div className="absolute w-96 h-96 bg-gradient-to-br from-red-400 to-pink-400 rounded-full opacity-20"></div>
-
-                                    {/* Printer illustration (simplified vector style) */}
                                     <div className="relative">
-                                        {/* Printer body */}
                                         <div className="w-64 h-48 bg-gradient-to-br from-gray-700 to-gray-800 rounded-3xl shadow-2xl relative">
-                                            {/* Screen */}
                                             <div className="absolute top-6 left-6 right-6 h-16 bg-gradient-to-br from-blue-400 to-blue-500 rounded-xl"></div>
-                                            {/* Buttons */}
                                             <div className="absolute bottom-6 left-6 flex gap-2">
                                                 <div className="w-8 h-8 bg-green-400 rounded-full"></div>
                                                 <div className="w-8 h-8 bg-yellow-400 rounded-full"></div>
                                                 <div className="w-8 h-8 bg-red-400 rounded-full"></div>
                                             </div>
                                         </div>
-
-                                        {/* Paper output */}
                                         <div className="absolute -right-8 top-1/2 -translate-y-1/2">
                                             <div className="w-32 h-40 bg-white rounded-lg shadow-xl border-4 border-gray-900 relative overflow-hidden">
                                                 <div className="absolute top-4 left-4 right-4 h-2 bg-red-400 rounded"></div>
@@ -107,8 +115,6 @@ const HomePage: React.FC = () => {
                                         </div>
                                     </div>
                                 </div>
-
-                                {/* Floating elements */}
                                 <div className="absolute top-10 left-10 w-16 h-16 bg-gradient-to-br from-yellow-400 to-orange-400 rounded-2xl rotate-12 animate-bounce shadow-lg"></div>
                                 <div className="absolute bottom-20 right-10 w-20 h-20 bg-gradient-to-br from-blue-400 to-purple-400 rounded-full animate-pulse shadow-lg"></div>
                                 <div className="absolute top-1/2 left-0 w-12 h-12 bg-gradient-to-br from-pink-400 to-red-400 rounded-lg -rotate-12 animate-bounce shadow-lg" style={{ animationDelay: '0.5s' }}></div>
@@ -118,9 +124,8 @@ const HomePage: React.FC = () => {
                 </div>
             </section>
 
-            {/* Features Section - Vector Style */}
+            {/* Features Section */}
             <section className="py-16 lg:py-24 bg-white relative">
-                {/* Background pattern */}
                 <div className="absolute inset-0 opacity-5">
                     <div className="absolute inset-0" style={{
                         backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23000000' fill-opacity='1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
@@ -167,9 +172,8 @@ const HomePage: React.FC = () => {
                 </div>
             </section>
 
-            {/* Categories Section - Vector Style */}
+            {/* Categories Section */}
             <section className="py-16 lg:py-24 bg-gradient-to-br from-purple-50 via-pink-50 to-orange-50 relative overflow-hidden">
-                {/* Decorative elements */}
                 <div className="absolute top-10 right-10 w-32 h-32 bg-yellow-300 rounded-full opacity-20"></div>
                 <div className="absolute bottom-10 left-10 w-40 h-40 bg-blue-300 opacity-20" style={{ clipPath: 'polygon(50% 0%, 100% 100%, 0% 100%)' }}></div>
 
@@ -186,46 +190,58 @@ const HomePage: React.FC = () => {
                         </p>
                     </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
-                        {categories.map((category, index) => {
-                            const gradients = [
-                                'from-red-400 to-pink-500',
-                                'from-blue-400 to-purple-500',
-                                'from-green-400 to-teal-500',
-                                'from-yellow-400 to-orange-500',
-                                'from-purple-400 to-pink-500',
-                                'from-cyan-400 to-blue-500'
-                            ];
-                            const gradient = gradients[index % gradients.length];
+                    {collectionsLoading ? (
+                        <div className="flex justify-center items-center py-20">
+                            <div className="animate-spin rounded-full h-16 w-16 border-b-4 border-red-500"></div>
+                        </div>
+                    ) : categories.length > 0 ? (
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+                            {categories.slice(0, 6).map((category, index) => {
+                                const gradients = [
+                                    'from-red-400 to-pink-500',
+                                    'from-blue-400 to-purple-500',
+                                    'from-green-400 to-teal-500',
+                                    'from-yellow-400 to-orange-500',
+                                    'from-purple-400 to-pink-500',
+                                    'from-cyan-400 to-blue-500'
+                                ];
+                                const gradient = gradients[index % gradients.length];
 
-                            return (
-                                <Link
-                                    key={category.id}
-                                    to={`/products?category=${category.id}`}
-                                    className="group bg-white rounded-3xl border-4 border-gray-900 shadow-xl hover:shadow-2xl transition-all duration-300 overflow-hidden hover:-translate-y-2"
-                                >
-                                    <div className={`bg-gradient-to-br ${gradient} p-6 border-b-4 border-gray-900`}>
-                                        <div className="text-6xl mb-2 group-hover:scale-110 transition-transform duration-300 filter drop-shadow-lg">
-                                            {category.icon}
+                                return (
+                                    <Link
+                                        key={category.id}
+                                        to={`/products?collection=${category.slug}`}
+                                        className="group bg-white rounded-3xl border-4 border-gray-900 shadow-xl hover:shadow-2xl transition-all duration-300 overflow-hidden hover:-translate-y-2"
+                                    >
+                                        <div className={`bg-gradient-to-br ${gradient} p-6 border-b-4 border-gray-900`}>
+                                            <div className="text-6xl mb-2 group-hover:scale-110 transition-transform duration-300 filter drop-shadow-lg">
+                                                {category.icon}
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div className="p-6">
-                                        <h3 className="text-2xl font-black text-gray-900 mb-2 group-hover:text-red-600 transition-colors">
-                                            {category.name}
-                                        </h3>
-                                        <p className="text-sm font-bold text-gray-500 mb-3">
-                                            {category.productCount} products available
-                                        </p>
-                                        <p className="text-gray-700 mb-4 leading-relaxed font-medium">{category.description}</p>
-                                        <span className="inline-flex items-center gap-2 text-red-600 font-black group-hover:gap-3 transition-all">
-                                            Explore Now
-                                            <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" strokeWidth={3} />
-                                        </span>
-                                    </div>
-                                </Link>
-                            );
-                        })}
-                    </div>
+                                        <div className="p-6">
+                                            <h3 className="text-2xl font-black text-gray-900 mb-2 group-hover:text-red-600 transition-colors">
+                                                {category.name}
+                                            </h3>
+                                            <p className="text-sm font-bold text-gray-500 mb-3">
+                                                {category.productCount} products available
+                                            </p>
+                                            <p className="text-gray-700 mb-4 leading-relaxed font-medium line-clamp-2">
+                                                {category.description}
+                                            </p>
+                                            <span className="inline-flex items-center gap-2 text-red-600 font-black group-hover:gap-3 transition-all">
+                                                Explore Now
+                                                <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" strokeWidth={3} />
+                                            </span>
+                                        </div>
+                                    </Link>
+                                );
+                            })}
+                        </div>
+                    ) : (
+                        <div className="text-center py-12">
+                            <p className="text-gray-600 text-lg">No collections available</p>
+                        </div>
+                    )}
                 </div>
             </section>
 
@@ -245,27 +261,43 @@ const HomePage: React.FC = () => {
                         </p>
                     </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 lg:gap-8">
-                        {featuredProducts.map((product) => (
-                            <ProductCard key={product.id} product={product} />
-                        ))}
-                    </div>
+                    {productsLoading ? (
+                        <div className="flex justify-center items-center py-20">
+                            <div className="animate-spin rounded-full h-16 w-16 border-b-4 border-red-500"></div>
+                        </div>
+                    ) : productsError ? (
+                        <div className="text-center py-20 bg-red-50 rounded-3xl">
+                            <p className="text-red-600 text-lg font-bold">Error loading products</p>
+                            <p className="text-gray-600 mt-2">{productsError}</p>
+                        </div>
+                    ) : featuredProducts.length > 0 ? (
+                        <>
+                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 lg:gap-8">
+                                {featuredProducts.slice(0, 8).map((product) => (
+                                    <ProductCard key={product.id} product={product} />
+                                ))}
+                            </div>
 
-                    <div className="text-center mt-12">
-                        <Link
-                            to="/products"
-                            className="inline-flex items-center gap-3 bg-gradient-to-r from-red-500 to-pink-500 hover:from-red-600 hover:to-pink-600 text-white px-10 py-5 rounded-2xl font-black text-lg shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105 border-4 border-gray-900"
-                        >
-                            <span>View All Products</span>
-                            <ArrowRight size={22} strokeWidth={3} />
-                        </Link>
-                    </div>
+                            <div className="text-center mt-12">
+                                <Link
+                                    to="/products"
+                                    className="inline-flex items-center gap-3 bg-gradient-to-r from-red-500 to-pink-500 hover:from-red-600 hover:to-pink-600 text-white px-10 py-5 rounded-2xl font-black text-lg shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105 border-4 border-gray-900"
+                                >
+                                    <span>View All Products</span>
+                                    <ArrowRight size={22} strokeWidth={3} />
+                                </Link>
+                            </div>
+                        </>
+                    ) : (
+                        <div className="text-center py-20">
+                            <p className="text-gray-600 text-lg">No featured products available</p>
+                        </div>
+                    )}
                 </div>
             </section>
 
-            {/* Special Offer Banner - Vector Style */}
+            {/* Special Offer Banner */}
             <section className="py-16 lg:py-24 bg-gradient-to-r from-red-500 via-pink-500 to-purple-500 relative overflow-hidden">
-                {/* Geometric decorations */}
                 <div className="absolute inset-0 opacity-20">
                     <div className="absolute top-0 left-1/4 w-64 h-64 bg-yellow-300 rounded-full"></div>
                     <div className="absolute bottom-0 right-1/4 w-48 h-48 bg-blue-300" style={{ clipPath: 'polygon(50% 0%, 100% 100%, 0% 100%)' }}></div>
@@ -295,7 +327,7 @@ const HomePage: React.FC = () => {
                             Business Cards
                         </Link>
                         <Link
-                            to="/products?category=flyers-brochures"
+                            to="/products?category=flyers"
                             className="inline-flex items-center gap-2 bg-gray-900 text-white hover:bg-gray-800 px-8 py-4 rounded-2xl font-black text-lg shadow-xl hover:shadow-2xl transition-all duration-300 border-4 border-white"
                         >
                             Flyers & Brochures
@@ -304,7 +336,7 @@ const HomePage: React.FC = () => {
                 </div>
             </section>
 
-            {/* Why Choose Us - Vector Style */}
+            {/* Why Choose Us */}
             <section className="py-16 lg:py-24 bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="text-center mb-12 lg:mb-16">
@@ -365,11 +397,10 @@ const HomePage: React.FC = () => {
                 </div>
             </section>
 
-            {/* CTA Section - Vector Style */}
+            {/* CTA Section */}
             <section className="py-16 lg:py-24 bg-white">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="bg-gradient-to-r from-gray-900 to-gray-800 text-white rounded-3xl p-10 lg:p-16 text-center relative overflow-hidden border-4 border-gray-900 shadow-2xl">
-                        {/* Decorative elements */}
                         <div className="absolute top-10 right-10 w-24 h-24 bg-yellow-400 rounded-full opacity-20"></div>
                         <div className="absolute bottom-10 left-10 w-32 h-32 bg-red-400 opacity-20" style={{ clipPath: 'polygon(50% 0%, 100% 100%, 0% 100%)' }}></div>
 
