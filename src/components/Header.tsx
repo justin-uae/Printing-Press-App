@@ -1,0 +1,230 @@
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { Menu, X, Search, ShoppingCart, Phone, ChevronDown } from 'lucide-react';
+import { toggleMobileMenu, closeMobileMenu, toggleCart } from '../store/slices/uiSlice';
+import { selectCartTotalItems } from '../store/slices/cartSlice';
+import { categories } from '../data/mockData';
+import type { RootState } from '../types';
+
+const Header: React.FC = () => {
+  const dispatch = useDispatch();
+  const [searchOpen, setSearchOpen] = useState<boolean>(false);
+  const [searchQuery, setSearchQuery] = useState<string>('');
+  const cartItems = useSelector(selectCartTotalItems);
+  const isMobileMenuOpen = useSelector((state: RootState) => state.ui.isMobileMenuOpen);
+
+  return (
+    <header className="bg-white shadow-lg sticky top-0 z-50">
+      {/* Main Header */}
+      <div className="bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+          <div className="flex items-center justify-between gap-4">
+            {/* Logo */}
+            <Link to="/" className="flex items-center gap-3 group" onClick={() => dispatch(closeMobileMenu())}>
+              <div className="relative">
+                <div className="bg-gradient-to-br from-red-500 to-pink-500 text-white w-12 h-12 sm:w-14 sm:h-14 flex items-center justify-center rounded-2xl font-black text-xl sm:text-2xl shadow-lg group-hover:shadow-xl transition-all duration-300 group-hover:scale-105">
+                  DP
+                </div>
+                <div className="absolute -bottom-1 -right-1 bg-yellow-400 w-4 h-4 rounded-full"></div>
+              </div>
+              <div className="hidden sm:block">
+                <h1 className="text-xl lg:text-2xl font-black text-gray-900">
+                  Diamond Press
+                </h1>
+                <p className="text-xs text-gray-500 font-bold">Professional Printing</p>
+              </div>
+            </Link>
+
+            {/* Desktop Navigation */}
+            <nav className="hidden lg:flex items-center gap-2">
+              <Link
+                to="/"
+                className="px-4 py-2 text-gray-700 hover:text-red-600 font-bold transition-all duration-200 rounded-xl hover:bg-red-50"
+              >
+                Home
+              </Link>
+              <Link
+                to="/products"
+                className="px-4 py-2 text-gray-700 hover:text-red-600 font-bold transition-all duration-200 rounded-xl hover:bg-red-50"
+              >
+                Products
+              </Link>
+
+              {/* Categories Dropdown */}
+              <div className="relative group">
+                <button className="px-4 py-2 text-gray-700 hover:text-red-600 font-bold transition-all duration-200 rounded-xl hover:bg-red-50 flex items-center gap-1">
+                  Categories
+                  <ChevronDown size={16} className="group-hover:rotate-180 transition-transform duration-300" />
+                </button>
+                <div className="absolute top-full left-0 mt-2 w-72 bg-white shadow-2xl rounded-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 overflow-hidden">
+                  {categories.map((category) => (
+                    <Link
+                      key={category.id}
+                      to={`/products?category=${category.id}`}
+                      className="flex items-center gap-3 px-4 py-3 hover:bg-red-50 transition-all duration-200 border-b last:border-b-0"
+                    >
+                      <div className="text-3xl">
+                        {category.icon}
+                      </div>
+                      <div className="flex-1">
+                        <p className="font-bold text-gray-900">{category.name}</p>
+                        <p className="text-xs text-gray-500">{category.productCount} products</p>
+                      </div>
+                    </Link>
+                  ))}
+                </div>
+              </div>
+
+              <Link
+                to="/about"
+                className="px-4 py-2 text-gray-700 hover:text-red-600 font-bold transition-all duration-200 rounded-xl hover:bg-red-50"
+              >
+                About
+              </Link>
+              <Link
+                to="/contact"
+                className="px-4 py-2 text-gray-700 hover:text-red-600 font-bold transition-all duration-200 rounded-xl hover:bg-red-50"
+              >
+                Contact
+              </Link>
+            </nav>
+
+            {/* Actions */}
+            <div className="flex items-center gap-2 sm:gap-3">
+              {/* Search Button */}
+              <button
+                onClick={() => setSearchOpen(!searchOpen)}
+                className={`p-2.5 hover:bg-gray-100 rounded-xl transition-all duration-200 ${searchOpen ? 'bg-red-50 text-red-600' : 'text-gray-700'
+                  }`}
+              >
+                <Search size={20} />
+              </button>
+
+              {/* Cart Button */}
+              <button
+                onClick={() => dispatch(toggleCart())}
+                className="relative p-2.5 hover:bg-gray-100 rounded-xl transition-all duration-200 group"
+              >
+                <ShoppingCart size={20} className="text-gray-700 group-hover:text-red-600 transition-colors" />
+                {cartItems > 0 && (
+                  <span className="absolute -top-1 -right-1 bg-gradient-to-r from-red-500 to-pink-500 text-white text-xs w-5 h-5 flex items-center justify-center rounded-full font-black shadow-lg">
+                    {cartItems > 9 ? '9+' : cartItems}
+                  </span>
+                )}
+              </button>
+
+              {/* Mobile Menu Toggle */}
+              <button
+                onClick={() => dispatch(toggleMobileMenu())}
+                className="lg:hidden p-2.5 hover:bg-gray-100 rounded-xl transition-all duration-200"
+              >
+                {isMobileMenuOpen ? (
+                  <X size={24} className="text-gray-700" />
+                ) : (
+                  <Menu size={24} className="text-gray-700" />
+                )}
+              </button>
+            </div>
+          </div>
+
+          {/* Search Bar */}
+          {searchOpen && (
+            <div className="mt-4 transition-all duration-300 ease-out">
+              <div className="relative">
+                <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
+                <input
+                  type="text"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  placeholder="Search for products..."
+                  className="w-full pl-12 pr-4 py-3 border-2 border-gray-200 rounded-2xl focus:border-red-500 focus:ring-4 focus:ring-red-100 outline-none transition-all duration-200 text-gray-700 placeholder:text-gray-400"
+                  autoFocus
+                />
+                {searchQuery && (
+                  <button
+                    onClick={() => setSearchQuery('')}
+                    className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                  >
+                    <X size={20} />
+                  </button>
+                )}
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* Mobile Menu */}
+      {isMobileMenuOpen && (
+        <div className="lg:hidden bg-white border-t shadow-lg">
+          <nav className="max-w-7xl mx-auto px-4 sm:px-6 py-6 space-y-1">
+            <Link
+              to="/"
+              onClick={() => dispatch(closeMobileMenu())}
+              className="flex items-center justify-between px-4 py-3 text-gray-700 hover:text-red-600 hover:bg-red-50 font-bold rounded-xl transition-all duration-200"
+            >
+              <span>Home</span>
+            </Link>
+            <Link
+              to="/products"
+              onClick={() => dispatch(closeMobileMenu())}
+              className="flex items-center justify-between px-4 py-3 text-gray-700 hover:text-red-600 hover:bg-red-50 font-bold rounded-xl transition-all duration-200"
+            >
+              <span>All Products</span>
+            </Link>
+
+            {/* Categories in Mobile */}
+            <div className="space-y-1">
+              <p className="px-4 py-2 font-black text-gray-900 text-sm uppercase tracking-wide">Categories</p>
+              <div className="space-y-1 pl-4">
+                {categories.map(category => (
+                  <Link
+                    key={category.id}
+                    to={`/products?category=${category.id}`}
+                    onClick={() => dispatch(closeMobileMenu())}
+                    className="flex items-center gap-3 px-4 py-3 text-gray-600 hover:text-red-600 hover:bg-red-50 rounded-xl transition-all duration-200"
+                  >
+                    <span className="text-2xl">{category.icon}</span>
+                    <div className="flex-1">
+                      <p className="font-bold">{category.name}</p>
+                      <p className="text-xs text-gray-400">{category.productCount} products</p>
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            </div>
+
+            <Link
+              to="/about"
+              onClick={() => dispatch(closeMobileMenu())}
+              className="flex items-center justify-between px-4 py-3 text-gray-700 hover:text-red-600 hover:bg-red-50 font-bold rounded-xl transition-all duration-200"
+            >
+              <span>About Us</span>
+            </Link>
+            <Link
+              to="/contact"
+              onClick={() => dispatch(closeMobileMenu())}
+              className="flex items-center justify-between px-4 py-3 text-gray-700 hover:text-red-600 hover:bg-red-50 font-bold rounded-xl transition-all duration-200"
+            >
+              <span>Contact</span>
+            </Link>
+
+            {/* Mobile CTA */}
+            <div className="pt-4 mt-4 border-t">
+
+              <a href="tel:+971XXXXXXXX"
+                className="flex items-center justify-center gap-2 w-full bg-gradient-to-r from-red-500 to-pink-500 text-white font-black py-3 px-6 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-105"
+              >
+                <Phone size={18} />
+                <span>Call Us Now</span>
+              </a>
+            </div>
+          </nav>
+        </div>
+      )}
+    </header>
+  );
+};
+
+export default Header;
