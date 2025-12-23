@@ -19,7 +19,7 @@ const Footer: React.FC = () => {
                                 DP
                             </div>
                             <div>
-                                <h3 className="text-xl font-black">Diamond Press</h3>
+                                <h3 className="text-xl font-black">Dubai Print & Design</h3>
                                 <p className="text-xs text-gray-400 font-medium">Printing Excellence</p>
                             </div>
                         </div>
@@ -58,7 +58,8 @@ const Footer: React.FC = () => {
                         <ul className="space-y-3">
                             <li className="flex items-center gap-2 text-gray-400 text-sm">
                                 <MapPin size={16} className="text-red-500" />
-                                <span className="font-medium">Dubai, UAE</span>
+                                <span className="font-medium">
+                                    Exchange Tower, Business Bay, Dubai, UAE</span>
                             </li>
                             <li className="flex items-center gap-2 text-gray-400 text-sm">
                                 <Phone size={16} className="text-red-500" />
@@ -79,7 +80,7 @@ const Footer: React.FC = () => {
                 {/* Bottom Bar */}
                 <div className="border-t border-gray-800 pt-6 flex flex-col md:flex-row justify-center items-center gap-4">
                     <p className="text-sm text-gray-400 font-medium flex items-center gap-2">
-                        © {new Date().getFullYear()} Diamond Press.
+                        © {new Date().getFullYear()} Dubai Print & Design.
                     </p>
                 </div>
             </div>

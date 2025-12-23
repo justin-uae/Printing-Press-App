@@ -1,10 +1,11 @@
 import React, { useEffect, useMemo } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight, Star, Clock, Shield, TrendingDown } from 'lucide-react';
+import { ArrowRight, Star, Clock, Shield, TrendingDown, CheckCircle } from 'lucide-react';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
 import { fetchProducts } from '../store/productsSlice';
 import ProductCard from '../components/ProductCard';
 import type { Product } from '..';
+import Banner from '../assets/Banner.jpg'
 
 const HomePage: React.FC = () => {
     const dispatch = useAppDispatch();
@@ -36,67 +37,75 @@ const HomePage: React.FC = () => {
     return (
         <div className="min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50">
             {/* Hero Section */}
-            <section className="relative overflow-hidden bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950">
-                {/* Background glows */}
-                <div className="absolute inset-0">
-                    <div className="absolute -top-32 -right-32 w-[520px] h-[520px] bg-red-500/20 rounded-full blur-[140px]" />
-                    <div className="absolute -bottom-32 -left-32 w-[520px] h-[520px] bg-blue-500/20 rounded-full blur-[140px]" />
+            <section className="relative overflow-hidden bg-gradient-to-br from-gray-100 via-gray-50 to-white">
+                {/* Subtle pattern overlay */}
+                <div className="absolute inset-0 opacity-[0.03]">
+                    <div className="absolute inset-0" style={{
+                        backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23000000' fill-opacity='1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
+                        backgroundSize: '60px 60px'
+                    }}></div>
                 </div>
 
-                {/* Subtle grid texture */}
-                <div className="absolute inset-0 bg-[radial-gradient(circle_at_1px_1px,rgba(255,255,255,0.05)_1px,transparent_0)] [background-size:32px_32px]" />
+                {/* Gradient accents - matching banner gray tones */}
+                <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-br from-gray-200 to-gray-100 opacity-30 rounded-full blur-3xl"></div>
+                <div className="absolute bottom-0 left-0 w-96 h-96 bg-gradient-to-tr from-gray-100 to-gray-200 opacity-20 rounded-full blur-3xl"></div>
 
-                <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-28">
-                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-14 items-center">
+                <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-24">
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
 
                         {/* LEFT CONTENT */}
-                        <div className="text-white">
-                            <h1 className="text-4xl sm:text-5xl xl:text-6xl font-extrabold leading-tight">
+                        <div>
+                            {/* Badge */}
+                            <div className="inline-flex items-center gap-2 bg-red-600 text-white px-4 py-2 rounded-lg text-sm font-bold mb-6 shadow-md">
+                                <span className="w-2 h-2 bg-white rounded-full animate-pulse"></span>
+                                UAE's Trusted Printing Partner
+                            </div>
+
+                            <h1 className="text-4xl sm:text-5xl xl:text-6xl font-bold leading-tight text-gray-900">
                                 Diamond Press
-                                <span className="block mt-3 bg-gradient-to-r from-red-500 to-orange-500 bg-clip-text text-transparent">
-                                    Quality That Prints Confidence
+                                <span className="block mt-3 text-transparent bg-clip-text bg-gradient-to-r from-red-600 to-orange-600">
+                                    Quality Printing Services
                                 </span>
                             </h1>
 
-                            <p className="mt-6 max-w-xl text-lg text-slate-300 leading-relaxed">
-                                Professional printing solutions across the UAE — from business cards
-                                to large-format banners. Precision, speed, and unmatched quality.
+                            <p className="mt-6 max-w-xl text-lg sm:text-xl text-gray-600 leading-relaxed">
+                                Professional printing solutions across the UAE. From business cards to large-format banners — delivered with precision, speed, and unmatched quality.
                             </p>
 
-                            {/* CTA */}
+                            {/* CTA Buttons */}
                             <div className="mt-10 flex flex-col sm:flex-row gap-4">
                                 <Link
                                     to="/products"
-                                    className="inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-red-600 to-orange-500 px-8 py-4 font-bold text-lg text-white shadow-xl hover:scale-[1.03] transition"
+                                    className="group inline-flex items-center justify-center gap-2 rounded-lg bg-red-600 hover:bg-red-700 px-8 py-4 font-bold text-lg text-white shadow-lg hover:shadow-xl transition-all duration-300"
                                 >
                                     View Products
-                                    <ArrowRight size={20} />
+                                    <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
                                 </Link>
 
                                 <Link
                                     to="/contact"
-                                    className="inline-flex items-center justify-center rounded-xl border border-white/20 bg-white/5 px-8 py-4 font-bold text-lg text-white backdrop-blur hover:bg-white/10 transition"
+                                    className="inline-flex items-center justify-center rounded-lg border-2 border-gray-300 bg-white hover:bg-gray-50 px-8 py-4 font-bold text-lg text-gray-900 shadow-md hover:shadow-lg transition-all duration-300"
                                 >
                                     Request Quote
                                 </Link>
                             </div>
 
                             {/* STATS */}
-                            <div className="mt-14 grid grid-cols-2 sm:grid-cols-4 gap-4">
+                            <div className="mt-12 grid grid-cols-2 sm:grid-cols-4 gap-4">
                                 {[
+                                    { value: '15+', label: 'Years' },
+                                    { value: `${allProducts.length || '100'}+`, label: 'Products' },
                                     { value: '10K+', label: 'Clients' },
-                                    { value: `${allProducts.length || 50}+`, label: 'Products' },
-                                    { value: '6 Hrs', label: 'Express' },
                                     { value: '24/7', label: 'Support' }
                                 ].map((stat, idx) => (
                                     <div
                                         key={idx}
-                                        className="rounded-xl bg-white/5 border border-white/10 p-4 text-center backdrop-blur"
+                                        className="rounded-lg bg-white border border-gray-200 p-4 text-center shadow-sm hover:shadow-md transition-shadow"
                                     >
-                                        <div className="text-2xl font-extrabold text-white">
+                                        <div className="text-2xl sm:text-3xl font-bold text-red-600">
                                             {stat.value}
                                         </div>
-                                        <div className="mt-1 text-xs uppercase tracking-wide text-slate-400">
+                                        <div className="mt-1 text-xs sm:text-sm font-medium text-gray-600">
                                             {stat.label}
                                         </div>
                                     </div>
@@ -104,40 +113,48 @@ const HomePage: React.FC = () => {
                             </div>
                         </div>
 
-                        {/* RIGHT VISUAL */}
-                        <div className="relative hidden lg:block">
-                            <div className="relative rounded-3xl bg-gradient-to-br from-gray-900 to-gray-800 p-8 shadow-2xl border border-gray-700">
-                                <div className="grid grid-cols-2 gap-5">
+                        {/* RIGHT VISUAL - Real Printing Press Image - Now visible on all devices */}
+                        <div className="relative">
+                            <div className="relative">
+                                {/* Main image container */}
+                                <div className="relative rounded-2xl overflow-hidden shadow-2xl border-4 border-white">
+                                    {/* Replace this src with your actual printing press image */}
+                                    <img
+                                        src={Banner}
+                                        alt="Professional Printing Press"
+                                        className="w-full h-[400px] lg:h-[500px] object-cover"
+                                    />
 
-                                    {[
-                                        { title: 'Business Cards', color: 'from-blue-500 to-cyan-500' },
-                                        { title: 'Brochures', color: 'from-emerald-500 to-teal-500' },
-                                        { title: 'Labels', color: 'from-amber-500 to-orange-500' },
-                                        { title: 'Banners', color: 'from-purple-500 to-fuchsia-500' }
-                                    ].map((item, i) => (
-                                        <div
-                                            key={i}
-                                            className="group rounded-xl bg-gray-900 p-5 shadow-lg hover:shadow-2xl transition hover:-translate-y-1 border border-gray-700"
-                                        >
-                                            <div
-                                                className={`h-10 w-16 rounded-lg bg-gradient-to-r ${item.color} mb-4`}
-                                            />
-                                            <div className="font-semibold text-gray-100">
-                                                {item.title}
-                                            </div>
-                                            <div className="mt-3 h-2 w-20 rounded bg-gray-700" />
-                                        </div>
-                                    ))}
+                                    {/* Overlay gradient for better badge visibility */}
+                                    <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
                                 </div>
 
-                                {/* Premium tag */}
-                                <div className="absolute -top-4 -right-4 rounded-full bg-gradient-to-r from-red-500 to-orange-500 px-5 py-2 text-xs font-bold text-white shadow-xl">
-                                    Premium Quality
+                                {/* Quality badge */}
+                                <div className="absolute -top-4 -right-4 bg-gradient-to-r from-red-600 to-orange-600 text-white px-6 py-3 rounded-full shadow-xl transform rotate-12 z-10">
+                                    <div className="text-sm font-bold">Premium Quality</div>
                                 </div>
+
+                                {/* Fast Delivery badge */}
+                                <div className="absolute -bottom-4 -left-4 bg-white border-2 border-red-600 rounded-lg px-4 py-2 shadow-lg z-10">
+                                    <div className="flex items-center gap-2">
+                                        <CheckCircle size={16} className="text-green-500" />
+                                        <span className="text-sm font-bold text-gray-900">Fast Delivery</span>
+                                    </div>
+                                </div>
+
+                                {/* CMYK Color indicators overlay */}
+                                <div className="absolute bottom-6 right-6 flex gap-2 z-10">
+                                    <div className="w-10 h-10 bg-cyan-500 rounded-full shadow-lg border-2 border-white"></div>
+                                    <div className="w-10 h-10 bg-pink-500 rounded-full shadow-lg border-2 border-white"></div>
+                                    <div className="w-10 h-10 bg-yellow-400 rounded-full shadow-lg border-2 border-white"></div>
+                                    <div className="w-10 h-10 bg-gray-900 rounded-full shadow-lg border-2 border-white"></div>
+                                </div>
+
+                                {/* Decorative blur elements */}
+                                <div className="absolute -top-6 -left-6 w-16 h-16 bg-red-600 opacity-20 rounded-full blur-xl animate-pulse"></div>
+                                <div className="absolute -bottom-6 -right-6 w-20 h-20 bg-blue-600 opacity-20 rounded-full blur-xl animate-pulse" style={{ animationDelay: '1s' }}></div>
                             </div>
                         </div>
-
-
                     </div>
                 </div>
             </section>
@@ -425,7 +442,7 @@ const HomePage: React.FC = () => {
                     <p className="text-2xl lg:text-3xl mb-10 max-w-3xl mx-auto text-white font-bold drop-shadow-lg">
                         Business cards from <span className="bg-white text-red-600 px-4 py-2 rounded-xl inline-block">37 AED</span> for 1000 pcs!
                         <br className="hidden sm:block" />
-                        Packaging products from <span className="bg-white text-red-600 px-4 py-2 rounded-xl inline-block mt-2">50 AED</span>!
+                        Flyers and Brochures from <span className="bg-white text-red-600 px-4 py-2 rounded-xl inline-block mt-2">50 AED</span>!
                     </p>
 
                     <div className="flex flex-wrap justify-center gap-4">
@@ -436,10 +453,10 @@ const HomePage: React.FC = () => {
                             Business Cards
                         </Link>
                         <Link
-                            to="/products?category=Packaging"
+                            to="/products?category=Flyers and Brochures"
                             className="inline-flex items-center gap-2 bg-gray-900 text-white hover:bg-gray-800 px-8 py-4 rounded-2xl font-black text-lg shadow-xl hover:shadow-2xl transition-all duration-300"
                         >
-                            Packaging products
+                            Flyers and Brochures
                         </Link>
                     </div>
                 </div>
@@ -450,7 +467,7 @@ const HomePage: React.FC = () => {
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="text-center mb-12 lg:mb-16">
                         <h2 className="text-4xl sm:text-5xl lg:text-6xl font-black text-gray-900 mb-4">
-                            Why Choose Diamond Press?
+                            Why Choose Dubai Print & Design?
                         </h2>
                         <p className="text-xl text-gray-700 max-w-2xl mx-auto font-medium">
                             The leading printing service in UAE
