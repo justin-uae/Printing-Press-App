@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { Menu, X, Phone, ChevronDown, MessageCircle } from 'lucide-react';
@@ -6,6 +6,7 @@ import { toggleMobileMenu, closeMobileMenu } from '../store/slices/uiSlice';
 // import { selectCartTotalItems } from '../store/slices/cartSlice';
 import type { RootState } from '../types';
 import { useCategories } from '../hooks/useCategories';
+import Logo from '../assets/Logo.png'
 
 const Header: React.FC = () => {
   const dispatch = useDispatch();
@@ -13,6 +14,7 @@ const Header: React.FC = () => {
   const isMobileMenuOpen = useSelector((state: RootState) => state.ui.isMobileMenuOpen);
   const categories = useCategories()
   const phoneNumber = import.meta.env.VITE_CONTACT_NUMBER;
+  const [isCategoryOpen, setIsCategoryOpen] = useState(false);
 
   return (
     <header className="bg-white shadow-lg sticky top-0 z-50">
@@ -21,21 +23,19 @@ const Header: React.FC = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex items-center justify-between gap-4">
             {/* Logo */}
-            <Link to="/" className="flex items-center gap-3 group" onClick={() => dispatch(closeMobileMenu())}>
-              <div className="relative">
-                <div className="bg-gradient-to-r from-red-600 to-orange-600 text-white w-12 h-12 sm:w-14 sm:h-14 flex items-center justify-center rounded-2xl font-black text-xl sm:text-2xl shadow-lg group-hover:shadow-xl transition-all duration-300 group-hover:scale-105">
-                  PP
-                </div>
-                <div className="absolute -bottom-1 -right-1 bg-yellow-400 w-4 h-4 rounded-full"></div>
-              </div>
-              <div className="hidden sm:block">
-                <h1 className="text-xl lg:text-2xl font-black text-gray-900">
-                  Dubai Print & Design
-                </h1>
-                <p className="text-xs text-gray-500 font-bold">Professional Printing</p>
-              </div>
+            <Link to="/" className="flex items-center space-x-2 sm:space-x-3 group" onClick={() => dispatch(closeMobileMenu())}>
+              {/* Logo Image */}
+              <img
+                src={Logo}
+                loading='lazy'
+                alt="UAE Luxury Car Hire Logo"
+                className="h-8 sm:h-12 md:h-14 w-auto transition-transform duration-300 group-hover:scale-105"
+              />
+              {/* Brand Text */}
+              <span className="text-lg sm:text-xl md:text-2xl lg:text-2xl font-bold text-gray-800 group-hover:text-red-600 transition-colors duration-300">
+                Dubai<span className="text-red-600"> Print & Design</span>
+              </span>
             </Link>
-
             {/* Desktop Navigation */}
             <nav className="hidden lg:flex items-center gap-2">
               <Link
@@ -153,22 +153,38 @@ const Header: React.FC = () => {
               <span>All Products</span>
             </Link>
 
-            {/* Categories in Mobile */}
+            {/* Collapsible Categories in Mobile */}
             <div className="space-y-1">
-              <p className="px-4 py-2 font-black text-gray-900 text-sm uppercase tracking-wide">Categories</p>
-              <div className="space-y-1 pl-4">
-                {categories.map(category => (
-                  <Link
-                    key={category.id}
-                    to={`/products?category=${category.slug}`}
-                    onClick={() => dispatch(closeMobileMenu())}
-                    className="flex items-center gap-3 px-4 py-3 text-gray-600 hover:text-red-600 hover:bg-red-50 rounded-xl transition-all duration-200"
-                  >
-                    <div className="flex-1">
-                      <p className="font-bold">{category.name}</p>
-                    </div>
-                  </Link>
-                ))}
+              <button
+                onClick={() => setIsCategoryOpen(!isCategoryOpen)}
+                className="w-full flex items-center justify-between px-4 py-3 text-gray-700 hover:text-red-600 hover:bg-red-50 font-bold rounded-xl transition-all duration-200"
+              >
+                <span>Categories</span>
+                <ChevronDown
+                  size={20}
+                  className={`transition-transform duration-300 ${isCategoryOpen ? 'rotate-180' : ''}`}
+                />
+              </button>
+
+              {/* Collapsible category list */}
+              <div
+                className={`overflow-hidden transition-all duration-300 ${isCategoryOpen ? 'max-h-[1000px] opacity-100' : 'max-h-0 opacity-0'
+                  }`}
+              >
+                <div className="space-y-1 pl-4 pt-1">
+                  {categories.map(category => (
+                    <Link
+                      key={category.id}
+                      to={`/products?category=${category.slug}`}
+                      onClick={() => dispatch(closeMobileMenu())}
+                      className="flex items-center gap-3 px-4 py-3 text-gray-600 hover:text-red-600 hover:bg-red-50 rounded-xl transition-all duration-200"
+                    >
+                      <div className="flex-1">
+                        <p className="font-bold">{category.name}</p>
+                      </div>
+                    </Link>
+                  ))}
+                </div>
               </div>
             </div>
 
@@ -190,7 +206,7 @@ const Header: React.FC = () => {
             {/* Mobile CTA */}
             <div className="pt-4 mt-4 border-t space-y-3">
               <a
-                href="https://wa.me/"
+                href={`https://wa.me/${phoneNumber}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center justify-center gap-2 w-full bg-gradient-to-r from-green-500 to-green-600 text-white font-black py-3 px-6 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-105"
@@ -199,7 +215,7 @@ const Header: React.FC = () => {
                 <span>WhatsApp Us</span>
               </a>
 
-              <a href="tel:+971XXXXXXXX"
+              <a href={`tel:${phoneNumber}`}
                 className="flex items-center justify-center gap-2 w-full bg-gradient-to-r from-red-500 to-pink-500 text-white font-black py-3 px-6 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-105"
               >
                 <Phone size={18} />
