@@ -1,5 +1,5 @@
 import React from 'react';
-import { Award, Users, Target, Zap, Star, TrendingDown, Clock, Shield, Sparkles } from 'lucide-react';
+import { Award, Users, Target, Zap, Star, TrendingDown, Clock, Shield } from 'lucide-react';
 
 const AboutPage: React.FC = () => {
     return (
@@ -12,7 +12,6 @@ const AboutPage: React.FC = () => {
 
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
                     <div className="inline-block bg-white text-red-600 px-6 py-3 rounded-2xl font-black text-sm mb-6 shadow-lg">
-                        <Sparkles size={16} className="inline mr-2" />
                         TRUSTED BY THOUSANDS
                     </div>
                     <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black mb-6">About Diamond Press</h1>
@@ -141,7 +140,7 @@ const AboutPage: React.FC = () => {
                             Why Businesses Trust Us
                         </h2>
                         <p className="text-lg sm:text-xl text-gray-600 max-w-2xl mx-auto font-medium">
-                            The leading printing service in UAE 🏆
+                            The leading printing service in UAE
                         </p>
                     </div>
 

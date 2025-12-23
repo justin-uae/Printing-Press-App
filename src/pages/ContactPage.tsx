@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
-import { MapPin, Phone, Mail, Clock, Send, MessageCircle } from 'lucide-react';
+import { MapPin, Phone, Mail, Clock, Send } from 'lucide-react';
 
 interface FormData {
     name: string;
     email: string;
     phone: string;
-    subject: string;
     message: string;
 }
 
@@ -14,7 +13,6 @@ const ContactPage: React.FC = () => {
         name: '',
         email: '',
         phone: '',
-        subject: '',
         message: ''
     });
 
@@ -32,10 +30,12 @@ const ContactPage: React.FC = () => {
             name: '',
             email: '',
             phone: '',
-            subject: '',
             message: ''
         });
     };
+
+    const phoneNumber = import.meta.env.VITE_CONTACT_NUMBER;
+    const pressEmail = import.meta.env.VITE_COMPANY_EMAIL;
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-gray-50 to-white">
@@ -46,7 +46,6 @@ const ContactPage: React.FC = () => {
 
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
                     <div className="inline-block bg-white text-red-600 px-6 py-3 rounded-2xl font-black text-sm mb-6 shadow-lg">
-                        <MessageCircle size={16} className="inline mr-2" />
                         WE'RE HERE TO HELP
                     </div>
                     <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black mb-6">Get In Touch</h1>
@@ -80,8 +79,8 @@ const ContactPage: React.FC = () => {
                                     <Phone size={28} className="text-white" />
                                 </div>
                                 <h3 className="text-xl font-black mb-3 text-gray-900">Call Us</h3>
-                                <a href="tel:+971XXXXXXXX" className="text-red-600 hover:text-red-700 font-black text-lg transition-colors">
-                                    +971 XX XXX XXXX
+                                <a href={`tel:+${phoneNumber}`} className="text-red-600 hover:text-red-700 font-black text-lg transition-colors">
+                                    +{phoneNumber}
                                 </a>
                                 <p className="text-sm text-gray-500 mt-2 font-medium">Mon-Sat, 9AM-6PM</p>
                             </div>
@@ -92,8 +91,8 @@ const ContactPage: React.FC = () => {
                                     <Mail size={28} className="text-white" />
                                 </div>
                                 <h3 className="text-xl font-black mb-3 text-gray-900">Email Us</h3>
-                                <a href="mailto:uaediamondpp@gmail.com" className="text-red-600 hover:text-red-700 font-bold break-all transition-colors">
-                                    uaediamondpp@gmail.com
+                                <a href={`mailto:${pressEmail}`} className="text-red-600 hover:text-red-700 font-bold break-all transition-colors">
+                                    {pressEmail}
                                 </a>
                                 <p className="text-sm text-gray-500 mt-2 font-medium">Reply within 24 hours</p>
                             </div>
@@ -180,28 +179,6 @@ const ContactPage: React.FC = () => {
                                         </div>
                                     </div>
 
-                                    {/* Subject */}
-                                    <div>
-                                        <label htmlFor="subject" className="block text-sm font-black text-gray-700 mb-2">
-                                            Subject *
-                                        </label>
-                                        <select
-                                            id="subject"
-                                            name="subject"
-                                            value={formData.subject}
-                                            onChange={handleChange}
-                                            required
-                                            className="w-full px-4 py-3 border-2 border-gray-200 rounded-2xl focus:border-red-500 focus:ring-4 focus:ring-red-100 outline-none transition-all appearance-none cursor-pointer font-medium"
-                                        >
-                                            <option value="">Select a subject</option>
-                                            <option value="quote">Request a Quote</option>
-                                            <option value="order">Order Inquiry</option>
-                                            <option value="support">Customer Support</option>
-                                            <option value="custom">Custom Print Job</option>
-                                            <option value="other">Other</option>
-                                        </select>
-                                    </div>
-
                                     {/* Message */}
                                     <div>
                                         <label htmlFor="message" className="block text-sm font-black text-gray-700 mb-2">
@@ -233,7 +210,7 @@ const ContactPage: React.FC = () => {
                             {/* Quick Contact Options */}
                             <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6">
 
-                                <a href="tel:+971XXXXXXXX"
+                                <a href={`tel:+${phoneNumber}`}
                                     className="group bg-white rounded-3xl shadow-lg hover:shadow-xl p-6 lg:p-8 transition-all duration-300 text-center hover:-translate-y-1"
                                 >
                                     <div className="w-16 h-16 bg-gradient-to-br from-green-400 to-teal-500 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 group-hover:rotate-3 transition-all duration-300 shadow-md">
@@ -243,7 +220,7 @@ const ContactPage: React.FC = () => {
                                     <p className="text-sm text-gray-600 font-medium">Speak to our team</p>
                                 </a>
 
-                                <a href="mailto:uaediamondpp@gmail.com"
+                                <a href={`mailto:${pressEmail}`}
                                     className="group bg-white rounded-3xl shadow-lg hover:shadow-xl p-6 lg:p-8 transition-all duration-300 text-center hover:-translate-y-1"
                                 >
                                     <div className="w-16 h-16 bg-gradient-to-br from-blue-400 to-purple-500 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 group-hover:rotate-3 transition-all duration-300 shadow-md">
@@ -276,11 +253,6 @@ const ContactPage: React.FC = () => {
                                 gradient: 'from-purple-50 to-pink-50'
                             },
                             {
-                                q: 'What file formats do you accept?',
-                                a: 'We accept PDF, AI, PSD, and high-resolution JPG/PNG files. For best results, provide PDF files with embedded fonts and images in CMYK color mode.',
-                                gradient: 'from-blue-50 to-purple-50'
-                            },
-                            {
                                 q: 'Do you offer design services?',
                                 a: 'Yes! Our design team can help create custom designs for your printing needs. Contact us for a quote on design services.',
                                 gradient: 'from-green-50 to-teal-50'
@@ -296,25 +268,6 @@ const ContactPage: React.FC = () => {
                                 <p className="text-gray-700 leading-relaxed font-medium">{faq.a}</p>
                             </div>
                         ))}
-                    </div>
-                </div>
-            </section>
-
-            {/* Map Section */}
-            <section className="py-16 lg:py-24 bg-gradient-to-br from-gray-50 to-white">
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div className="text-center mb-12">
-                        <h2 className="text-3xl sm:text-4xl font-black text-gray-900 mb-4">Find Us on the Map</h2>
-                        <p className="text-lg text-gray-600 font-medium">Visit our location in Dubai</p>
-                    </div>
-                    <div className="bg-white rounded-3xl shadow-xl overflow-hidden">
-                        <div className="aspect-video bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center">
-                            <div className="text-center text-gray-500">
-                                <MapPin size={64} className="mx-auto mb-6 text-red-600" />
-                                <p className="text-xl font-black text-gray-700 mb-2">Map integration coming soon</p>
-                                <p className="text-sm font-medium">Dubai, United Arab Emirates</p>
-                            </div>
-                        </div>
                     </div>
                 </div>
             </section>

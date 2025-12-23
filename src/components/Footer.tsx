@@ -3,6 +3,10 @@ import { Link } from 'react-router-dom';
 import { Phone, Mail, MapPin, Facebook, Instagram, Twitter } from 'lucide-react';
 
 const Footer: React.FC = () => {
+
+    const phoneNumber = import.meta.env.VITE_CONTACT_NUMBER;
+    const pressEmail = import.meta.env.VITE_COMPANY_EMAIL;
+
     return (
         <footer className="bg-gray-900 text-white">
             {/* Main Footer */}
@@ -58,14 +62,14 @@ const Footer: React.FC = () => {
                             </li>
                             <li className="flex items-center gap-2 text-gray-400 text-sm">
                                 <Phone size={16} className="text-red-500" />
-                                <a href="tel:+971XXXXXXXX" className="hover:text-white transition-colors font-medium">
-                                    +971 XX XXX XXXX
+                                <a href={`tel:+${phoneNumber}`} className="hover:text-white transition-colors font-medium">
+                                    +{phoneNumber}
                                 </a>
                             </li>
                             <li className="flex items-center gap-2 text-gray-400 text-sm">
                                 <Mail size={16} className="text-red-500" />
-                                <a href="mailto:uaediamondpp@gmail.com" className="hover:text-white transition-colors font-medium break-all">
-                                    uaediamondpp@gmail.com
+                                <a href={`mailto:${pressEmail}`} className="hover:text-white transition-colors font-medium break-all">
+                                    {pressEmail}
                                 </a>
                             </li>
                         </ul>
@@ -73,14 +77,10 @@ const Footer: React.FC = () => {
                 </div>
 
                 {/* Bottom Bar */}
-                <div className="border-t border-gray-800 pt-6 flex flex-col md:flex-row justify-between items-center gap-4">
+                <div className="border-t border-gray-800 pt-6 flex flex-col md:flex-row justify-center items-center gap-4">
                     <p className="text-sm text-gray-400 font-medium flex items-center gap-2">
                         © {new Date().getFullYear()} Diamond Press.
                     </p>
-                    <div className="flex gap-6 text-sm">
-                        <Link to="/privacy" className="text-gray-400 hover:text-white transition-colors font-medium">Privacy</Link>
-                        <Link to="/terms" className="text-gray-400 hover:text-white transition-colors font-medium">Terms</Link>
-                    </div>
                 </div>
             </div>
         </footer>
