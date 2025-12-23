@@ -11,6 +11,7 @@ import AboutPage from './pages/AboutPage';
 import ContactPage from './pages/ContactPage';
 import Cart from './components/Cart';
 import ScrollToTop from './components/ScrollToTop';
+import { WhatsAppButton } from './components/WhatsAppButton';
 
 const App: React.FC = () => {
   return (
@@ -28,6 +29,7 @@ const App: React.FC = () => {
               <Route path="/contact" element={<ContactPage />} />
             </Routes>
           </main>
+          <WhatsAppButton />
           <Footer />
           <Cart />
         </div>

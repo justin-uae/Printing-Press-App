@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { X, Trash2, Plus, Minus, ShoppingBag, Package, CreditCard, ArrowRight } from 'lucide-react';
 import { closeCart } from '../store/slices/uiSlice';
@@ -9,26 +9,46 @@ import {
     selectCartItems,
     selectCartTotalPrice
 } from '../store/slices/cartSlice';
-import type { RootState } from '../types';
+import { createCart, cartItemsToLineInputs } from '../services/shopifyCart';
+import type { RootState } from '../store/store';
 
 const Cart: React.FC = () => {
     const dispatch = useDispatch();
     const isCartOpen = useSelector((state: RootState) => state.ui.isCartOpen);
     const cartItems = useSelector(selectCartItems);
     const totalPrice = useSelector(selectCartTotalPrice);
+    const [isCheckingOut, setIsCheckingOut] = useState(false);
 
     if (!isCartOpen) return null;
 
-    const handleQuantityChange = (itemId: number, newQuantity: number): void => {
+    const handleQuantityChange = (itemId: string, newQuantity: number): void => {
         if (newQuantity < 1) return;
         dispatch(updateQuantity({ itemId, quantity: newQuantity }));
     };
 
-    const handleRemoveItem = (itemId: number): void => {
+    const handleRemoveItem = (itemId: string): void => {
         dispatch(removeFromCart(itemId));
     };
 
-    const handleCheckout = (): void => {
+    const handleCheckout = async (): Promise<void> => {
+        if (cartItems.length === 0) return;
+
+        setIsCheckingOut(true);
+
+        try {
+            // Convert cart items to Shopify cart line inputs
+            const lines = cartItemsToLineInputs(cartItems);
+
+            // Create Shopify cart and get checkout URL
+            const checkoutUrl = await createCart(lines);
+
+            // Redirect to Shopify checkout
+            window.location.href = checkoutUrl;
+        } catch (error) {
+            console.error('Checkout error:', error);
+            alert('Failed to create checkout. Please try again.');
+            setIsCheckingOut(false);
+        }
     };
 
     return (
@@ -80,11 +100,10 @@ const Cart: React.FC = () => {
                     ) : (
                         <div className="space-y-4">
                             {cartItems.map((item) => {
-                                const pricing = item.product.pricing.find(
-                                    p => p.quantity === item.selectedOptions.quantity &&
-                                        p.type === item.selectedOptions.priceType
-                                );
-                                const itemTotal = pricing ? pricing.price * item.quantity : 0;
+                                const price = item.selectedOptions.priceType === 'online'
+                                    ? item.variant.price
+                                    : item.variant.compareAtPrice || item.variant.price;
+                                const itemTotal = price * item.quantity;
 
                                 return (
                                     <div key={item.id} className="bg-white rounded-2xl p-4 shadow-md hover:shadow-lg transition-all duration-300">
@@ -106,18 +125,12 @@ const Cart: React.FC = () => {
                                                 <h4 className="font-black text-gray-900 mb-1 line-clamp-2 leading-tight">
                                                     {item.product.title}
                                                 </h4>
-                                                <div className="flex flex-wrap gap-2 mb-3">
-                                                    <span className="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded-full font-bold">
-                                                        {item.selectedOptions.quantity} pcs
-                                                    </span>
-                                                    <span className="text-xs bg-green-100 text-green-700 px-2 py-1 rounded-full font-bold">
-                                                        {item.selectedOptions.priceType}
-                                                    </span>
-                                                </div>
-
+                                                <p className="text-xs text-gray-600 mb-2 font-medium">
+                                                    {item.variant.title}
+                                                </p>
                                                 <div className="flex items-center justify-between">
                                                     <div className="text-lg font-black text-red-600">
-                                                        {pricing?.price} AED
+                                                        {price.toFixed(2)} AED
                                                     </div>
 
                                                     {/* Quantity Controls */}
@@ -185,10 +198,10 @@ const Cart: React.FC = () => {
                                 <span className="text-gray-600 font-bold">Subtotal:</span>
                                 <span className="text-xl font-black text-gray-900">{totalPrice.toFixed(2)} AED</span>
                             </div>
-                            <div className="flex items-center justify-between text-sm text-gray-500 mb-3 font-medium">
+                            {/* <div className="flex items-center justify-between text-sm text-gray-500 mb-3 font-medium">
                                 <span>Shipping:</span>
                                 <span>Calculated at checkout</span>
-                            </div>
+                            </div> */}
                             <div className="border-t-2 border-gray-200 pt-3 flex items-center justify-between">
                                 <span className="text-lg font-black text-gray-900">Total:</span>
                                 <span className="text-2xl font-black text-red-600">{totalPrice.toFixed(2)} AED</span>
@@ -198,10 +211,20 @@ const Cart: React.FC = () => {
                         {/* Checkout Button */}
                         <button
                             onClick={handleCheckout}
-                            className="w-full bg-gradient-to-r from-red-500 to-pink-500 hover:from-red-600 hover:to-pink-600 text-white font-black py-4 px-6 rounded-2xl text-lg shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105 flex items-center justify-center gap-3"
+                            disabled={isCheckingOut}
+                            className="w-full bg-gradient-to-r from-red-500 to-pink-500 hover:from-red-600 hover:to-pink-600 text-white font-black py-4 px-6 rounded-2xl text-lg shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105 flex items-center justify-center gap-3 disabled:opacity-50 disabled:cursor-not-allowed"
                         >
-                            <CreditCard size={22} />
-                            Proceed to Checkout
+                            {isCheckingOut ? (
+                                <>
+                                    <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
+                                    <span>Processing...</span>
+                                </>
+                            ) : (
+                                <>
+                                    <CreditCard size={22} />
+                                    <span>Proceed to Checkout</span>
+                                </>
+                            )}
                         </button>
 
                         {/* Continue Shopping */}

@@ -10,6 +10,8 @@ import {
 } from 'lucide-react';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
 import { fetchProductByHandle } from '../store/productsSlice';
+import { addToCart } from '../store/slices/cartSlice';
+import { openCart } from '../store/slices/uiSlice';
 import { getLowestOnlinePrice, getLowestNormalPrice } from '../utils/transformers';
 import type { ProductVariant } from '../';
 
@@ -118,14 +120,23 @@ const ProductDetailPage: React.FC = () => {
             return;
         }
 
-        // You can implement cart functionality here
-        alert(`Added ${product.title} (${selectedVariant.title}) to cart!`);
+        // Add to cart using Redux
+        dispatch(addToCart({
+            product,
+            variant: selectedVariant,
+            quantity: 1,
+            priceType,
+            turnaroundType,
+        }));
+
+        // Open cart sidebar
+        dispatch(openCart());
     };
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-gray-50 to-white">
             {/* Breadcrumb */}
-            <div className="bg-white border-b-4 ">
+            <div className="bg-white border-b-4 border-gray-900">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
                     <div className="flex items-center gap-2 text-sm">
                         <Link to="/" className="text-gray-600 hover:text-red-600 font-bold transition-colors">Home</Link>
@@ -182,7 +193,7 @@ const ProductDetailPage: React.FC = () => {
 
                         {/* Features */}
                         {product.features && product.features.length > 0 && (
-                            <div className="bg-white rounded-3xl shadow-lg p-6 lg:p-8 border-4 ">
+                            <div className="bg-white rounded-3xl shadow-lg p-6 lg:p-8">
                                 <h3 className="text-xl font-black mb-6 flex items-center gap-2 text-gray-900">
                                     <Check size={24} className="text-green-500" />
                                     Product Features
@@ -251,7 +262,7 @@ const ProductDetailPage: React.FC = () => {
                         <div>
                             <div className="flex items-center gap-3 mb-3">
                                 {product.badge && (
-                                    <span className={`inline-flex items-center gap-1 px-4 py-2 rounded-full text-sm font-black shadow-md border-2  ${product.badge === 'POPULAR' ? 'bg-blue-400 text-white' :
+                                    <span className={`inline-flex items-center gap-1 px-4 py-2 rounded-full text-sm font-black shadow-md ${product.badge === 'POPULAR' ? 'bg-blue-400 text-white' :
                                         product.badge === 'NEW' ? 'bg-green-400 text-white' :
                                             product.badge === 'BESTSELLER' ? 'bg-yellow-400 text-gray-900' :
                                                 product.badge === 'HOT' ? 'bg-red-400 text-white' :
@@ -261,7 +272,7 @@ const ProductDetailPage: React.FC = () => {
                                     </span>
                                 )}
                                 {product.productCode && (
-                                    <span className="bg-red-100 text-red-600 px-3 py-1.5 rounded-full font-black text-sm border-2 border-red-300">
+                                    <span className="bg-red-100 text-red-600 px-3 py-1.5 rounded-full font-black text-sm border-red-300">
                                         {product.productCode}
                                     </span>
                                 )}
@@ -282,7 +293,7 @@ const ProductDetailPage: React.FC = () => {
                         </div>
 
                         {/* Price Calculator Card */}
-                        <div className="bg-gradient-to-br from-red-50 to-pink-50 rounded-3xl shadow-xl p-6 lg:p-8 border-4 ">
+                        <div className="bg-gradient-to-br from-red-50 to-pink-50 rounded-3xl shadow-xl p-6 lg:p-8">
                             <h3 className="text-xl font-black mb-6 text-gray-900">
                                 Configure Your Order
                             </h3>
@@ -292,15 +303,15 @@ const ProductDetailPage: React.FC = () => {
                                 <label className="block text-sm font-black text-gray-700 mb-3">
                                     Select Variant
                                 </label>
-                                <div className="grid grid-cols-2 sm:grid-cols-2 gap-3">
+                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                                     {product.variants.filter(v => v.available).map((variant) => (
                                         <button
                                             key={variant.id}
                                             onClick={() => handleVariantSelect(variant)}
                                             disabled={!variant.available}
-                                            className={`p-3 rounded-2xl font-black transition-all duration-300 text-center border-3 ${selectedVariant?.id === variant.id
-                                                ? 'bg-gradient-to-r from-red-500 to-pink-500 text-white scale-105 shadow-lg border-red-600'
-                                                : 'bg-white text-gray-700 hover:bg-gray-50 shadow-md '
+                                            className={`p-3 rounded-2xl font-black transition-all duration-300 text-center min-h-[70px] flex flex-col items-center justify-center ${selectedVariant?.id === variant.id
+                                                ? 'bg-gradient-to-r from-red-500 to-pink-500 text-white scale-105 shadow-lg'
+                                                : 'bg-white text-gray-700 hover:bg-gray-50 shadow-md'
                                                 } ${!variant.available ? 'opacity-50 cursor-not-allowed' : ''}`}
                                         >
                                             <div className="text-sm lg:text-base">
@@ -312,7 +323,7 @@ const ProductDetailPage: React.FC = () => {
                             </div>
 
                             {/* Price Display */}
-                            <div className="bg-white rounded-2xl p-5 lg:p-6 mb-6 shadow-md border-3 ">
+                            <div className="bg-white rounded-2xl p-5 lg:p-6 mb-6 shadow-md">
                                 <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 mb-4">
                                     <div>
                                         <div className="text-xs text-gray-600 mb-2 font-bold uppercase">Total Price</div>
@@ -325,7 +336,7 @@ const ProductDetailPage: React.FC = () => {
                                             <div className="text-sm text-gray-500 line-through mb-1 font-medium">
                                                 {getNormalPrice()} AED
                                             </div>
-                                            <div className="inline-flex items-center gap-1 bg-green-100 text-green-700 px-3 py-1.5 rounded-full text-xs font-black border-2 border-green-300">
+                                            <div className="inline-flex items-center gap-1 bg-green-100 text-green-700 px-3 py-1.5 rounded-full text-xs font-black border-green-300">
                                                 Save {getSavings()} AED!
                                             </div>
                                         </div>
@@ -338,7 +349,7 @@ const ProductDetailPage: React.FC = () => {
 
                             {/* Variant Stock Info */}
                             {selectedVariant && (
-                                <div className="bg-blue-50 border-2 border-blue-200 rounded-xl p-3 mb-4">
+                                <div className="bg-blue-50 border-blue-200 rounded-xl p-3 mb-4">
                                     <div className="flex items-center justify-between text-sm">
                                         <span className="font-bold text-gray-700">Stock:</span>
                                         <span className={`font-black ${selectedVariant.quantity > 10 ? 'text-green-600' : 'text-orange-600'}`}>
@@ -354,9 +365,9 @@ const ProductDetailPage: React.FC = () => {
                             <button
                                 onClick={handleAddToCart}
                                 disabled={!selectedVariant || !selectedVariant.available}
-                                className={`w-full font-black py-4 px-6 rounded-2xl text-base lg:text-lg shadow-xl hover:shadow-2xl transition-all duration-300 flex items-center justify-center gap-3 border-4 ${!selectedVariant || !selectedVariant.available
+                                className={`w-full font-black py-4 px-6 rounded-2xl text-base lg:text-lg shadow-xl hover:shadow-2xl transition-all duration-300 flex items-center justify-center gap-3 border-2 ${!selectedVariant || !selectedVariant.available
                                     ? 'bg-gray-300 text-gray-500 cursor-not-allowed border-gray-400'
-                                    : 'bg-gradient-to-r from-red-500 to-pink-500 hover:from-red-600 hover:to-pink-600 text-white hover:scale-105 '
+                                    : 'bg-gradient-to-r from-red-500 to-pink-500 hover:from-red-600 hover:to-pink-600 text-white hover:scale-105 border-gray-900'
                                     }`}
                             >
                                 <ShoppingCart size={22} />
@@ -366,7 +377,7 @@ const ProductDetailPage: React.FC = () => {
                             {/* Additional Info */}
                             <div className="mt-6 space-y-2">
                                 {product.turnaround && (
-                                    <div className="flex items-center gap-3 text-xs sm:text-sm font-bold bg-white px-4 py-3 rounded-xl border-2 ">
+                                    <div className="flex items-center gap-3 text-xs sm:text-sm font-bold bg-white px-4 py-3 rounded-xl">
                                         <Clock size={16} className="text-blue-600 flex-shrink-0" />
                                         <span className="text-gray-700">
                                             Delivery: {turnaroundType === 'express'
@@ -376,12 +387,12 @@ const ProductDetailPage: React.FC = () => {
                                     </div>
                                 )}
                                 {product.minOrderQuantity && (
-                                    <div className="flex items-center gap-3 text-xs sm:text-sm font-bold bg-white px-4 py-3 rounded-xl border-2 ">
+                                    <div className="flex items-center gap-3 text-xs sm:text-sm font-bold bg-white px-4 py-3 rounded-xl">
                                         <Package size={16} className="text-purple-600 flex-shrink-0" />
                                         <span className="text-gray-700">Min order: {product.minOrderQuantity} pcs</span>
                                     </div>
                                 )}
-                                <div className="flex items-center gap-3 text-xs sm:text-sm font-bold bg-white px-4 py-3 rounded-xl border-2 ">
+                                <div className="flex items-center gap-3 text-xs sm:text-sm font-bold bg-white px-4 py-3 rounded-xl">
                                     <Shield size={16} className="text-green-600 flex-shrink-0" />
                                     <span className="text-gray-700">Quality Guaranteed</span>
                                 </div>
@@ -392,13 +403,13 @@ const ProductDetailPage: React.FC = () => {
 
                 {/* Pricing Table */}
                 {product.pricing.length > 0 && (
-                    <div className="mt-12 bg-white rounded-3xl shadow-lg p-6 lg:p-8 border-4 ">
+                    <div className="mt-12 bg-white rounded-3xl shadow-lg p-6 lg:p-8">
                         <h3 className="text-2xl lg:text-3xl font-black mb-6 text-gray-900">Pricing Table</h3>
                         <div className="overflow-x-auto -mx-6 lg:mx-0">
                             <div className="inline-block min-w-full align-middle px-6 lg:px-0">
                                 <table className="min-w-full">
                                     <thead>
-                                        <tr className="border-b-4  bg-gray-50">
+                                        <tr className="border-b-4 border-gray-900 bg-gray-50">
                                             <th className="text-left py-4 px-3 lg:px-4 font-black text-gray-900 text-sm lg:text-base">Quantity</th>
                                             <th className="text-right py-4 px-3 lg:px-4 font-black text-gray-900 text-sm lg:text-base whitespace-nowrap">Normal</th>
                                             <th className="text-right py-4 px-3 lg:px-4 font-black text-green-600 text-sm lg:text-base whitespace-nowrap">Online</th>

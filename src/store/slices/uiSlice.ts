@@ -1,47 +1,47 @@
-import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
-import type { UIState, Product } from '../../types';
+import { createSlice } from '@reduxjs/toolkit';
+
+interface UIState {
+    isCartOpen: boolean;
+    isMobileMenuOpen: boolean;
+}
 
 const initialState: UIState = {
-    isMobileMenuOpen: false,
     isCartOpen: false,
-    isQuickViewOpen: false,
-    quickViewProduct: null
+    isMobileMenuOpen: false,
 };
 
 const uiSlice = createSlice({
     name: 'ui',
     initialState,
     reducers: {
-        toggleMobileMenu: (state) => {
-            state.isMobileMenuOpen = !state.isMobileMenuOpen;
+        openCart: state => {
+            state.isCartOpen = true;
         },
-        closeMobileMenu: (state) => {
-            state.isMobileMenuOpen = false;
-        },
-        toggleCart: (state) => {
-            state.isCartOpen = !state.isCartOpen;
-        },
-        closeCart: (state) => {
+        closeCart: state => {
             state.isCartOpen = false;
         },
-        openQuickView: (state, action: PayloadAction<Product>) => {
-            state.isQuickViewOpen = true;
-            state.quickViewProduct = action.payload;
+        toggleCart: state => {
+            state.isCartOpen = !state.isCartOpen;
         },
-        closeQuickView: (state) => {
-            state.isQuickViewOpen = false;
-            state.quickViewProduct = null;
-        }
-    }
+        openMobileMenu: state => {
+            state.isMobileMenuOpen = true;
+        },
+        closeMobileMenu: state => {
+            state.isMobileMenuOpen = false;
+        },
+        toggleMobileMenu: state => {
+            state.isMobileMenuOpen = !state.isMobileMenuOpen;
+        },
+    },
 });
 
 export const {
-    toggleMobileMenu,
-    closeMobileMenu,
-    toggleCart,
+    openCart,
     closeCart,
-    openQuickView,
-    closeQuickView
+    toggleCart,
+    openMobileMenu,
+    closeMobileMenu,
+    toggleMobileMenu,
 } = uiSlice.actions;
 
 export default uiSlice.reducer;

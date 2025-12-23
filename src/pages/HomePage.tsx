@@ -6,15 +6,6 @@ import { fetchProducts } from '../store/productsSlice';
 import ProductCard from '../components/ProductCard';
 import type { Product } from '..';
 
-interface Category {
-    id: string;
-    name: string;
-    slug: string;
-    icon: string;
-    productCount: number;
-    description: string;
-}
-
 const HomePage: React.FC = () => {
     const dispatch = useAppDispatch();
 
@@ -27,79 +18,6 @@ const HomePage: React.FC = () => {
     useEffect(() => {
         dispatch(fetchProducts({ first: 100 }));
     }, [dispatch]);
-
-    // Generate categories from products
-    const categories = useMemo((): Category[] => {
-        if (!allProducts.length) return [];
-
-        const categoryMap = new Map<string, { count: number; products: Product[] }>();
-
-        allProducts.forEach(product => {
-            if (product.category) {
-                const existing = categoryMap.get(product.category) || { count: 0, products: [] };
-                categoryMap.set(product.category, {
-                    count: existing.count + 1,
-                    products: [...existing.products, product]
-                });
-            }
-        });
-
-        const categoryIcons: Record<string, string> = {
-            'business-cards-stationery': '💼',
-            'business-cards': '💼',
-            'flyers-brochures': '📄',
-            'flyers': '📄',
-            'brochures': '📄',
-            'stickers-labels': '🏷️',
-            'stickers': '🏷️',
-            'labels': '🏷️',
-            'packaging': '📦',
-            'marketing-materials': '📢',
-            'marketing': '📢',
-            'banners': '🎌',
-            'posters': '🖼️',
-            'catalogs': '📚',
-            'letterheads': '📝',
-            'envelopes': '✉️',
-        };
-
-        const categoryDescriptions: Record<string, string> = {
-            'business-cards-stationery': 'Professional business cards and stationery',
-            'business-cards': 'High-quality business cards for your business',
-            'flyers-brochures': 'Eye-catching flyers and brochures',
-            'flyers': 'Promotional flyers that get attention',
-            'brochures': 'Informative brochures for your business',
-            'stickers-labels': 'Custom stickers and labels',
-            'stickers': 'Custom stickers for any purpose',
-            'labels': 'Professional product labels',
-            'packaging': 'Custom packaging solutions',
-            'marketing-materials': 'Complete marketing materials suite',
-            'marketing': 'Marketing materials that convert',
-            'banners': 'Large format banners',
-            'posters': 'Eye-catching posters',
-            'catalogs': 'Professional product catalogs',
-            'letterheads': 'Branded letterheads',
-            'envelopes': 'Custom printed envelopes',
-        };
-
-        return Array.from(categoryMap.entries())
-            .map(([categorySlug, data]) => {
-                const name = categorySlug
-                    .split('-')
-                    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-                    .join(' ');
-
-                return {
-                    id: categorySlug,
-                    name,
-                    slug: categorySlug,
-                    icon: categoryIcons[categorySlug] || '🖨️',
-                    productCount: data.count,
-                    description: categoryDescriptions[categorySlug] || `${name} products`
-                };
-            })
-            .sort((a, b) => b.productCount - a.productCount);
-    }, [allProducts]);
 
     // Get featured products (products with POPULAR, BESTSELLER, or NEW badge)
     const featuredProducts = useMemo((): Product[] => {
@@ -118,96 +36,112 @@ const HomePage: React.FC = () => {
     return (
         <div className="min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50">
             {/* Hero Section */}
-            <section className="relative overflow-hidden py-20 lg:py-32">
-                <div className="absolute inset-0 overflow-hidden">
-                    <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-br from-red-400/20 to-pink-400/20 rounded-full blur-3xl"></div>
-                    <div className="absolute bottom-0 left-0 w-96 h-96 bg-gradient-to-tr from-blue-400/20 to-purple-400/20 rounded-full blur-3xl"></div>
-                    <div className="absolute top-20 left-10 w-20 h-20 bg-yellow-300 rounded-lg rotate-12 opacity-30"></div>
-                    <div className="absolute top-40 right-20 w-16 h-16 bg-red-400 rounded-full opacity-30"></div>
-                    <div className="absolute bottom-40 left-1/4 w-24 h-24 border-4 border-blue-400 rounded-lg rotate-45 opacity-30"></div>
-                    <div className="absolute bottom-20 right-1/3 w-20 h-20 bg-purple-400 opacity-30 transform rotate-12" style={{ clipPath: 'polygon(50% 0%, 100% 100%, 0% 100%)' }}></div>
+            <section className="relative overflow-hidden bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950">
+                {/* Background glows */}
+                <div className="absolute inset-0">
+                    <div className="absolute -top-32 -right-32 w-[520px] h-[520px] bg-red-500/20 rounded-full blur-[140px]" />
+                    <div className="absolute -bottom-32 -left-32 w-[520px] h-[520px] bg-blue-500/20 rounded-full blur-[140px]" />
                 </div>
 
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-                        <div>
-                            <h1 className="text-5xl sm:text-6xl lg:text-7xl font-black mb-6 leading-tight">
-                                <span className="bg-gradient-to-r from-red-600 to-pink-600 bg-clip-text text-transparent">Professional</span>
-                                <br />
-                                <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">Printing</span>
-                                <br />
-                                <span className="text-gray-900">Services</span>
+                {/* Subtle grid texture */}
+                <div className="absolute inset-0 bg-[radial-gradient(circle_at_1px_1px,rgba(255,255,255,0.05)_1px,transparent_0)] [background-size:32px_32px]" />
+
+                <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-28">
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-14 items-center">
+
+                        {/* LEFT CONTENT */}
+                        <div className="text-white">
+                            <h1 className="text-4xl sm:text-5xl xl:text-6xl font-extrabold leading-tight">
+                                Diamond Press
+                                <span className="block mt-3 bg-gradient-to-r from-red-500 to-orange-500 bg-clip-text text-transparent">
+                                    Quality That Prints Confidence
+                                </span>
                             </h1>
 
-                            <p className="text-xl text-gray-700 mb-8 max-w-xl">
-                                High-quality printing at prices you won't believe. From business cards to banners, we've got you covered!
+                            <p className="mt-6 max-w-xl text-lg text-slate-300 leading-relaxed">
+                                Professional printing solutions across the UAE — from business cards
+                                to large-format banners. Precision, speed, and unmatched quality.
                             </p>
 
-                            <div className="flex flex-wrap gap-4">
+                            {/* CTA */}
+                            <div className="mt-10 flex flex-col sm:flex-row gap-4">
                                 <Link
                                     to="/products"
-                                    className="group inline-flex items-center gap-2 bg-gradient-to-r from-red-500 to-pink-500 hover:from-red-600 hover:to-pink-600 text-white px-8 py-4 rounded-2xl font-bold text-lg shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105"
+                                    className="inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-red-600 to-orange-500 px-8 py-4 font-bold text-lg text-white shadow-xl hover:scale-[1.03] transition"
                                 >
-                                    <span>Browse Products</span>
-                                    <ArrowRight className="group-hover:translate-x-1 transition-transform" size={20} />
+                                    View Products
+                                    <ArrowRight size={20} />
                                 </Link>
+
                                 <Link
                                     to="/contact"
-                                    className="inline-flex items-center gap-2 bg-white text-gray-900 hover:bg-gray-900 hover:text-white px-8 py-4 rounded-2xl font-bold text-lg shadow-xl hover:shadow-2xl transition-all duration-300"
+                                    className="inline-flex items-center justify-center rounded-xl border border-white/20 bg-white/5 px-8 py-4 font-bold text-lg text-white backdrop-blur hover:bg-white/10 transition"
                                 >
-                                    Get a Quote
+                                    Request Quote
                                 </Link>
                             </div>
 
-                            <div className="grid grid-cols-4 gap-4 mt-12">
+                            {/* STATS */}
+                            <div className="mt-14 grid grid-cols-2 sm:grid-cols-4 gap-4">
                                 {[
-                                    { value: '10K+', label: 'Happy Clients', color: 'from-blue-400 to-blue-500' },
-                                    { value: `${allProducts.length || '50'}+`, label: 'Products', color: 'from-purple-400 to-purple-500' },
-                                    { value: '6 Hrs', label: 'Express', color: 'from-pink-400 to-pink-500' },
-                                    { value: '24/7', label: 'Support', color: 'from-orange-400 to-orange-500' }
+                                    { value: '10K+', label: 'Clients' },
+                                    { value: `${allProducts.length || 50}+`, label: 'Products' },
+                                    { value: '6 Hrs', label: 'Express' },
+                                    { value: '24/7', label: 'Support' }
                                 ].map((stat, idx) => (
-                                    <div key={idx} className="text-center">
-                                        <div className={`bg-gradient-to-br ${stat.color} text-white font-black text-2xl py-3 rounded-xl shadow-lg mb-2`}>
+                                    <div
+                                        key={idx}
+                                        className="rounded-xl bg-white/5 border border-white/10 p-4 text-center backdrop-blur"
+                                    >
+                                        <div className="text-2xl font-extrabold text-white">
                                             {stat.value}
                                         </div>
-                                        <div className="text-xs font-bold text-gray-600">{stat.label}</div>
+                                        <div className="mt-1 text-xs uppercase tracking-wide text-slate-400">
+                                            {stat.label}
+                                        </div>
                                     </div>
                                 ))}
                             </div>
                         </div>
 
-                        {/* Right Illustration */}
+                        {/* RIGHT VISUAL */}
                         <div className="relative hidden lg:block">
-                            <div className="relative w-full aspect-square">
-                                <div className="absolute inset-0 flex items-center justify-center">
-                                    <div className="absolute w-96 h-96 bg-gradient-to-br from-red-400 to-pink-400 rounded-full opacity-20"></div>
-                                    <div className="relative">
-                                        <div className="w-64 h-48 bg-gradient-to-br from-gray-700 to-gray-800 rounded-3xl shadow-2xl relative">
-                                            <div className="absolute top-6 left-6 right-6 h-16 bg-gradient-to-br from-blue-400 to-blue-500 rounded-xl"></div>
-                                            <div className="absolute bottom-6 left-6 flex gap-2">
-                                                <div className="w-8 h-8 bg-green-400 rounded-full"></div>
-                                                <div className="w-8 h-8 bg-yellow-400 rounded-full"></div>
-                                                <div className="w-8 h-8 bg-red-400 rounded-full"></div>
+                            <div className="relative rounded-3xl bg-gradient-to-br from-gray-900 to-gray-800 p-8 shadow-2xl border border-gray-700">
+                                <div className="grid grid-cols-2 gap-5">
+
+                                    {[
+                                        { title: 'Business Cards', color: 'from-blue-500 to-cyan-500' },
+                                        { title: 'Brochures', color: 'from-emerald-500 to-teal-500' },
+                                        { title: 'Labels', color: 'from-amber-500 to-orange-500' },
+                                        { title: 'Banners', color: 'from-purple-500 to-fuchsia-500' }
+                                    ].map((item, i) => (
+                                        <div
+                                            key={i}
+                                            className="group rounded-xl bg-gray-900 p-5 shadow-lg hover:shadow-2xl transition hover:-translate-y-1 border border-gray-700"
+                                        >
+                                            <div
+                                                className={`h-10 w-16 rounded-lg bg-gradient-to-r ${item.color} mb-4`}
+                                            />
+                                            <div className="font-semibold text-gray-100">
+                                                {item.title}
                                             </div>
+                                            <div className="mt-3 h-2 w-20 rounded bg-gray-700" />
                                         </div>
-                                        <div className="absolute -right-8 top-1/2 -translate-y-1/2">
-                                            <div className="w-32 h-40 bg-white rounded-lg shadow-xl relative overflow-hidden">
-                                                <div className="absolute top-4 left-4 right-4 h-2 bg-red-400 rounded"></div>
-                                                <div className="absolute top-10 left-4 right-4 h-2 bg-blue-400 rounded"></div>
-                                                <div className="absolute top-16 left-4 right-4 h-2 bg-purple-400 rounded"></div>
-                                                <div className="absolute top-22 left-4 w-16 h-16 bg-gradient-to-br from-yellow-400 to-orange-400 rounded-lg"></div>
-                                            </div>
-                                        </div>
-                                    </div>
+                                    ))}
                                 </div>
-                                <div className="absolute top-10 left-10 w-16 h-16 bg-gradient-to-br from-yellow-400 to-orange-400 rounded-2xl rotate-12 animate-bounce shadow-lg"></div>
-                                <div className="absolute bottom-20 right-10 w-20 h-20 bg-gradient-to-br from-blue-400 to-purple-400 rounded-full animate-pulse shadow-lg"></div>
-                                <div className="absolute top-1/2 left-0 w-12 h-12 bg-gradient-to-br from-pink-400 to-red-400 rounded-lg -rotate-12 animate-bounce shadow-lg" style={{ animationDelay: '0.5s' }}></div>
+
+                                {/* Premium tag */}
+                                <div className="absolute -top-4 -right-4 rounded-full bg-gradient-to-r from-red-500 to-orange-500 px-5 py-2 text-xs font-bold text-white shadow-xl">
+                                    Premium Quality
+                                </div>
                             </div>
                         </div>
+
+
                     </div>
                 </div>
             </section>
+
 
             {/* Features Section */}
             <section className="py-16 lg:py-24 bg-white relative">
@@ -265,68 +199,154 @@ const HomePage: React.FC = () => {
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
                     <div className="text-center mb-12 lg:mb-16">
                         <div className="inline-block bg-gradient-to-r from-purple-500 to-pink-500 text-white px-6 py-3 rounded-2xl font-black text-sm mb-4 shadow-lg">
-                            PRODUCT CATEGORIES
+                            PRODUCT TYPES
                         </div>
                         <h2 className="text-4xl sm:text-5xl lg:text-6xl font-black text-gray-900 mb-4">
-                            Browse by Category
+                            Our Printing Services
                         </h2>
                         <p className="text-xl text-gray-700 max-w-2xl mx-auto font-medium">
-                            Find the perfect printing solution for your needs
+                            Professional printing solutions for every business need
                         </p>
                     </div>
 
-                    {productsLoading ? (
-                        <div className="flex justify-center items-center py-20">
-                            <div className="animate-spin rounded-full h-16 w-16 border-b-4 border-red-500"></div>
-                        </div>
-                    ) : categories.length > 0 ? (
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
-                            {categories.slice(0, 6).map((category, index) => {
-                                const gradients = [
-                                    'from-red-400 to-pink-500',
-                                    'from-blue-400 to-purple-500',
-                                    'from-green-400 to-teal-500',
-                                    'from-yellow-400 to-orange-500',
-                                    'from-purple-400 to-pink-500',
-                                    'from-cyan-400 to-blue-500'
-                                ];
-                                const gradient = gradients[index % gradients.length];
+                    <div className="relative">
+                        {/* Floating cards container with responsive grid */}
+                        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 lg:gap-6">
 
-                                return (
-                                    <Link
-                                        key={category.id}
-                                        to={`/products?category=${category.slug}`}
-                                        className="group bg-white rounded-3xl shadow-xl hover:shadow-2xl transition-all duration-300 overflow-hidden hover:-translate-y-2"
-                                    >
-                                        <div className={`bg-gradient-to-br ${gradient} p-6`}>
-                                            <div className="text-6xl mb-2 group-hover:scale-110 transition-transform duration-300 filter drop-shadow-lg">
-                                                {category.icon}
+                            {/* Business Cards */}
+                            <div className="relative group">
+                                <div className="bg-gradient-to-br from-blue-50 to-white rounded-3xl p-6 shadow-xl hover:shadow-2xl transition-all duration-500 hover:-translate-y-3 border-2 border-blue-100 group-hover:border-blue-300">
+                                    <div className="absolute -top-3 -right-3 w-12 h-12 bg-gradient-to-br from-blue-400 to-cyan-500 rounded-full flex items-center justify-center shadow-lg">
+                                        <span className="text-white font-black text-sm">01</span>
+                                    </div>
+                                    <div className="mb-6">
+                                        <div className="w-16 h-12 bg-white rounded-lg shadow-inner p-2 mx-auto">
+                                            <div className="h-8 bg-gradient-to-r from-blue-500 to-cyan-400 rounded"></div>
+                                        </div>
+                                    </div>
+                                    <h3 className="text-xl font-black text-gray-900 text-center mb-2 group-hover:text-blue-600 transition-colors">
+                                        Business Cards
+                                    </h3>
+                                    <p className="text-sm text-gray-600 text-center font-medium">
+                                        Premium quality cards
+                                    </p>
+                                </div>
+                            </div>
+
+                            {/* Brochures */}
+                            <div className="relative group md:translate-y-4">
+                                <div className="bg-gradient-to-br from-green-50 to-white rounded-3xl p-6 shadow-xl hover:shadow-2xl transition-all duration-500 hover:-translate-y-3 border-2 border-green-100 group-hover:border-green-300">
+                                    <div className="absolute -top-3 -right-3 w-12 h-12 bg-gradient-to-br from-green-400 to-emerald-500 rounded-full flex items-center justify-center shadow-lg">
+                                        <span className="text-white font-black text-sm">02</span>
+                                    </div>
+                                    <div className="mb-6">
+                                        <div className="w-16 h-12 bg-gradient-to-br from-green-100 to-white rounded-lg shadow-inner p-2 mx-auto">
+                                            <div className="h-full flex gap-1">
+                                                <div className="w-1/3 bg-gradient-to-b from-green-400 to-emerald-500 rounded"></div>
+                                                <div className="w-2/3">
+                                                    <div className="h-2 bg-gradient-to-r from-green-300 to-emerald-400 rounded mb-1"></div>
+                                                    <div className="h-2 bg-gradient-to-r from-green-200 to-green-300 rounded w-3/4"></div>
+                                                </div>
                                             </div>
                                         </div>
-                                        <div className="p-6">
-                                            <h3 className="text-2xl font-black text-gray-900 mb-2 group-hover:text-red-600 transition-colors">
-                                                {category.name}
-                                            </h3>
-                                            <p className="text-sm font-bold text-gray-500 mb-3">
-                                                {category.productCount} products available
-                                            </p>
-                                            <p className="text-gray-700 mb-4 leading-relaxed font-medium line-clamp-2">
-                                                {category.description}
-                                            </p>
-                                            <span className="inline-flex items-center gap-2 text-red-600 font-black group-hover:gap-3 transition-all">
-                                                Explore Now
-                                                <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" strokeWidth={3} />
-                                            </span>
+                                    </div>
+                                    <h3 className="text-xl font-black text-gray-900 text-center mb-2 group-hover:text-green-600 transition-colors">
+                                        Brochures
+                                    </h3>
+                                    <p className="text-sm text-gray-600 text-center font-medium">
+                                        Marketing materials
+                                    </p>
+                                </div>
+                            </div>
+
+                            {/* Stickers & Labels */}
+                            <div className="relative group">
+                                <div className="bg-gradient-to-br from-yellow-50 to-white rounded-3xl p-6 shadow-xl hover:shadow-2xl transition-all duration-500 hover:-translate-y-3 border-2 border-yellow-100 group-hover:border-yellow-300">
+                                    <div className="absolute -top-3 -right-3 w-12 h-12 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-full flex items-center justify-center shadow-lg">
+                                        <span className="text-white font-black text-sm">03</span>
+                                    </div>
+                                    <div className="mb-6">
+                                        <div className="flex justify-center gap-2">
+                                            <div className="w-8 h-8 bg-gradient-to-br from-yellow-400 to-orange-400 rounded-full"></div>
+                                            <div className="w-8 h-8 bg-gradient-to-br from-pink-500 to-rose-500 rounded-lg"></div>
+                                            <div className="w-8 h-8 bg-gradient-to-br from-blue-400 to-cyan-500 rounded-lg"></div>
                                         </div>
-                                    </Link>
-                                );
-                            })}
+                                    </div>
+                                    <h3 className="text-xl font-black text-gray-900 text-center mb-2 group-hover:text-orange-600 transition-colors">
+                                        Stickers & Labels
+                                    </h3>
+                                    <p className="text-sm text-gray-600 text-center font-medium">
+                                        Custom adhesive prints
+                                    </p>
+                                </div>
+                            </div>
+
+                            {/* Banners */}
+                            <div className="relative group md:translate-y-4">
+                                <div className="bg-gradient-to-br from-purple-50 to-white rounded-3xl p-6 shadow-xl hover:shadow-2xl transition-all duration-500 hover:-translate-y-3 border-2 border-purple-100 group-hover:border-purple-300">
+                                    <div className="absolute -top-3 -right-3 w-12 h-12 bg-gradient-to-br from-purple-500 to-pink-500 rounded-full flex items-center justify-center shadow-lg">
+                                        <span className="text-white font-black text-sm">04</span>
+                                    </div>
+                                    <div className="mb-6">
+                                        <div className="w-20 h-10 bg-gradient-to-r from-purple-500 to-pink-500 rounded-lg shadow-md mx-auto flex items-center justify-center">
+                                            <span className="text-white text-xs font-black">BANNER</span>
+                                        </div>
+                                    </div>
+                                    <h3 className="text-xl font-black text-gray-900 text-center mb-2 group-hover:text-purple-600 transition-colors">
+                                        Banners
+                                    </h3>
+                                    <p className="text-sm text-gray-600 text-center font-medium">
+                                        Large format printing
+                                    </p>
+                                </div>
+                            </div>
+
+                            {/* Packaging */}
+                            <div className="relative group md:col-span-2 lg:col-span-1">
+                                <div className="bg-gradient-to-br from-red-50 to-white rounded-3xl p-6 shadow-xl hover:shadow-2xl transition-all duration-500 hover:-translate-y-3 border-2 border-red-100 group-hover:border-red-300">
+                                    <div className="absolute -top-3 -right-3 w-12 h-12 bg-gradient-to-br from-red-500 to-orange-500 rounded-full flex items-center justify-center shadow-lg">
+                                        <span className="text-white font-black text-sm">05</span>
+                                    </div>
+                                    <div className="mb-6">
+                                        <div className="flex justify-center gap-3">
+                                            <div className="w-12 h-10 bg-gradient-to-br from-orange-100 to-white border border-orange-200 rounded transform -rotate-6">
+                                                <div className="h-2 bg-gradient-to-r from-orange-400 to-orange-500 rounded-sm mt-2 mx-2"></div>
+                                            </div>
+                                            <div className="w-12 h-10 bg-gradient-to-br from-gray-100 to-white border border-gray-300 rounded transform rotate-6">
+                                                <div className="h-2 bg-gradient-to-r from-gray-600 to-gray-700 rounded-sm mt-2 mx-2"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <h3 className="text-xl font-black text-gray-900 text-center mb-2 group-hover:text-red-600 transition-colors">
+                                        Packaging
+                                    </h3>
+                                    <p className="text-sm text-gray-600 text-center font-medium">
+                                        Custom boxes & packaging
+                                    </p>
+                                </div>
+                            </div>
+
                         </div>
-                    ) : (
-                        <div className="text-center py-12">
-                            <p className="text-gray-600 text-lg">Loading categories...</p>
-                        </div>
-                    )}
+
+                        {/* Floating animation elements */}
+                        <div className="absolute top-1/4 left-5 w-4 h-4 bg-purple-400 rounded-full animate-bounce opacity-50"></div>
+                        <div className="absolute top-1/3 right-10 w-3 h-3 bg-blue-400 rounded-full animate-bounce opacity-50 delay-75"></div>
+                        <div className="absolute bottom-1/4 left-1/4 w-2 h-2 bg-yellow-400 rounded-full animate-bounce opacity-50 delay-150"></div>
+                        <div className="absolute bottom-1/3 right-1/3 w-3 h-3 bg-pink-400 rounded-full animate-bounce opacity-50 delay-300"></div>
+                    </div>
+
+                    {/* View All Products Button */}
+                    <div className="text-center mt-12 lg:mt-16">
+                        <Link
+                            to="/products"
+                            className="group inline-flex items-center gap-3 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white px-8 py-4 rounded-2xl font-black text-lg shadow-xl hover:shadow-2xl transition-all duration-300"
+                        >
+                            View All Products
+                            <div className="group-hover:translate-x-2 transition-transform duration-300">
+                                <ArrowRight size={24} strokeWidth={3} />
+                            </div>
+                        </Link>
+                    </div>
                 </div>
             </section>
 
