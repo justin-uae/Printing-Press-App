@@ -1,18 +1,17 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { Menu, X, Search, ShoppingCart, Phone, ChevronDown } from 'lucide-react';
+import { Menu, X, ShoppingCart, Phone, ChevronDown } from 'lucide-react';
 import { toggleMobileMenu, closeMobileMenu, toggleCart } from '../store/slices/uiSlice';
 import { selectCartTotalItems } from '../store/slices/cartSlice';
-import { categories } from '../data/mockData';
 import type { RootState } from '../types';
+import { useCategories } from '../hooks/useCategories';
 
 const Header: React.FC = () => {
   const dispatch = useDispatch();
-  const [searchOpen, setSearchOpen] = useState<boolean>(false);
-  const [searchQuery, setSearchQuery] = useState<string>('');
   const cartItems = useSelector(selectCartTotalItems);
   const isMobileMenuOpen = useSelector((state: RootState) => state.ui.isMobileMenuOpen);
+  const categories = useCategories()
 
   return (
     <header className="bg-white shadow-lg sticky top-0 z-50">
@@ -57,19 +56,15 @@ const Header: React.FC = () => {
                   Categories
                   <ChevronDown size={16} className="group-hover:rotate-180 transition-transform duration-300" />
                 </button>
-                <div className="absolute top-full left-0 mt-2 w-72 bg-white shadow-2xl rounded-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 overflow-hidden">
+                <div className="absolute top-full left-0 mt-2 w-60 bg-white shadow-2xl rounded-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 overflow-hidden">
                   {categories.map((category) => (
                     <Link
                       key={category.id}
                       to={`/products?category=${category.id}`}
                       className="flex items-center gap-3 px-4 py-3 hover:bg-red-50 transition-all duration-200 border-b last:border-b-0"
                     >
-                      <div className="text-3xl">
-                        {category.icon}
-                      </div>
                       <div className="flex-1">
                         <p className="font-bold text-gray-900">{category.name}</p>
-                        <p className="text-xs text-gray-500">{category.productCount} products</p>
                       </div>
                     </Link>
                   ))}
@@ -92,15 +87,6 @@ const Header: React.FC = () => {
 
             {/* Actions */}
             <div className="flex items-center gap-2 sm:gap-3">
-              {/* Search Button */}
-              <button
-                onClick={() => setSearchOpen(!searchOpen)}
-                className={`p-2.5 hover:bg-gray-100 rounded-xl transition-all duration-200 ${searchOpen ? 'bg-red-50 text-red-600' : 'text-gray-700'
-                  }`}
-              >
-                <Search size={20} />
-              </button>
-
               {/* Cart Button */}
               <button
                 onClick={() => dispatch(toggleCart())}
@@ -127,31 +113,6 @@ const Header: React.FC = () => {
               </button>
             </div>
           </div>
-
-          {/* Search Bar */}
-          {searchOpen && (
-            <div className="mt-4 transition-all duration-300 ease-out">
-              <div className="relative">
-                <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
-                <input
-                  type="text"
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder="Search for products..."
-                  className="w-full pl-12 pr-4 py-3 border-2 border-gray-200 rounded-2xl focus:border-red-500 focus:ring-4 focus:ring-red-100 outline-none transition-all duration-200 text-gray-700 placeholder:text-gray-400"
-                  autoFocus
-                />
-                {searchQuery && (
-                  <button
-                    onClick={() => setSearchQuery('')}
-                    className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
-                  >
-                    <X size={20} />
-                  </button>
-                )}
-              </div>
-            </div>
-          )}
         </div>
       </div>
 
@@ -181,14 +142,12 @@ const Header: React.FC = () => {
                 {categories.map(category => (
                   <Link
                     key={category.id}
-                    to={`/products?category=${category.id}`}
+                    to={`/products?category=${category.slug}`}
                     onClick={() => dispatch(closeMobileMenu())}
                     className="flex items-center gap-3 px-4 py-3 text-gray-600 hover:text-red-600 hover:bg-red-50 rounded-xl transition-all duration-200"
                   >
-                    <span className="text-2xl">{category.icon}</span>
                     <div className="flex-1">
                       <p className="font-bold">{category.name}</p>
-                      <p className="text-xs text-gray-400">{category.productCount} products</p>
                     </div>
                   </Link>
                 ))}

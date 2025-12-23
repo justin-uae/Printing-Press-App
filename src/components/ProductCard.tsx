@@ -9,7 +9,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
     const discount = product.discount || calculateSavings(lowestPrice, normalPrice);
 
     return (
-        <div className="group bg-white rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden hover:-translate-y-2 border-4 border-gray-300">
+        <div className="group bg-white rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden hover:-translate-y-2">
             {/* Image Container */}
             <div className="relative overflow-hidden bg-gradient-to-br from-gray-50 to-gray-100">
                 <Link to={`/product/${product.handle}`}>
@@ -24,14 +24,14 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
                 <div className="absolute top-4 left-4 right-4 flex items-start justify-between gap-2">
                     {/* Product Badge */}
                     {product.badge && (
-                        <div className={`px-3 py-1.5 rounded-xl font-black text-xs shadow-lg border-2 border-gray-900 ${product.badge === 'POPULAR' ? 'bg-blue-400 text-white' :
-                            product.badge === 'NEW' ? 'bg-green-400 text-white' :
-                                product.badge === 'BESTSELLER' ? 'bg-yellow-400 text-gray-900' :
-                                    product.badge === 'HOT' ? 'bg-red-400 text-white' :
-                                        product.badge === 'PREMIUM' ? 'bg-purple-400 text-white' :
-                                            product.badge === 'ECO-FRIENDLY' ? 'bg-green-500 text-white' :
-                                                product.badge === 'BUDGET' ? 'bg-orange-400 text-white' :
-                                                    'bg-gray-400 text-white'
+                        <div className={`px-3 py-1.5 rounded-xl font-black text-xs shadow-lg ${product.badge === 'POPULAR' ? 'bg-blue-400 text-white' :
+                                product.badge === 'NEW' ? 'bg-green-400 text-white' :
+                                    product.badge === 'BESTSELLER' ? 'bg-yellow-400 text-gray-900' :
+                                        product.badge === 'HOT' ? 'bg-red-400 text-white' :
+                                            product.badge === 'PREMIUM' ? 'bg-purple-400 text-white' :
+                                                product.badge === 'ECO-FRIENDLY' ? 'bg-green-500 text-white' :
+                                                    product.badge === 'BUDGET' ? 'bg-orange-400 text-white' :
+                                                        'bg-gray-400 text-white'
                             }`}>
                             {product.badge}
                         </div>
@@ -39,7 +39,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
 
                     {/* Discount Badge */}
                     {discount > 0 && (
-                        <div className="bg-gradient-to-r from-red-500 to-pink-500 text-white px-3 py-1.5 rounded-xl font-black text-sm shadow-lg border-2 border-gray-900">
+                        <div className="bg-gradient-to-r from-red-500 to-pink-500 text-white px-3 py-1.5 rounded-xl font-black text-sm shadow-lg">
                             -{discount}%
                         </div>
                     )}
@@ -75,10 +75,25 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
                         )}
                     </div>
                 </div>
+
+                {/* Features Preview (if available) */}
+                {product.features && product.features.length > 0 && (
+                    <div className="mb-4">
+                        <ul className="text-xs text-gray-600 space-y-1">
+                            {product.features.slice(0, 2).map((feature, idx) => (
+                                <li key={idx} className="flex items-start gap-2">
+                                    <span className="text-green-500 font-bold">✓</span>
+                                    <span className="line-clamp-1">{feature}</span>
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+                )}
+
                 {/* Action Button */}
                 <Link
                     to={`/product/${product.handle}`}
-                    className="block w-full text-center bg-gradient-to-r from-red-500 to-pink-500 hover:from-red-600 hover:to-pink-600 text-white font-black py-3.5 px-4 rounded-2xl transition-all duration-300 shadow-md hover:shadow-xl transform hover:scale-105 border-3 border-gray-900"
+                    className="block w-full text-center bg-gradient-to-r from-red-500 to-pink-500 hover:from-red-600 hover:to-pink-600 text-white font-black py-3.5 px-4 rounded-2xl transition-all duration-300 shadow-md hover:shadow-xl transform hover:scale-105"
                 >
                     View Details
                 </Link>

@@ -215,7 +215,7 @@ const ProductsPage: React.FC = () => {
                 <div className="flex flex-col lg:flex-row gap-8">
                     {/* Filters Sidebar - Desktop */}
                     <aside className="hidden lg:block w-72 flex-shrink-0">
-                        <div className="bg-white rounded-3xl shadow-lg p-6 sticky top-24 border-4 border-gray-900">
+                        <div className="bg-white rounded-3xl shadow-lg p-6 sticky top-24">
                             <div className="flex items-center justify-between mb-6">
                                 <h3 className="text-xl font-black text-gray-900 flex items-center gap-2">
                                     <Filter size={20} className="text-red-600" />
@@ -269,30 +269,32 @@ const ProductsPage: React.FC = () => {
                     {/* Main Content */}
                     <div className="flex-1">
                         {/* Mobile Filter Toggle & Sort */}
-                        <div className="flex items-center justify-between mb-6 gap-4 bg-white rounded-2xl shadow-md p-4 border-3 border-gray-900">
-                            {/* Mobile Filter Button */}
-                            <button
-                                onClick={() => setShowFilters(!showFilters)}
-                                className="lg:hidden inline-flex items-center gap-2 bg-gradient-to-r from-red-500 to-pink-500 text-white px-4 py-2.5 rounded-xl font-bold hover:from-red-600 hover:to-pink-600 transition-all duration-300"
-                            >
-                                <Filter size={18} />
-                                Filters
-                            </button>
+                        <div className="mb-2 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 bg-white rounded-2xl shadow-md p-4">
+                            <div className="flex items-center justify-between gap-3 sm:flex-1">
+                                {/* Mobile Filter Button */}
+                                <button
+                                    onClick={() => setShowFilters(!showFilters)}
+                                    className="lg:hidden inline-flex items-center gap-2 bg-gradient-to-r from-red-500 to-pink-500 text-white px-4 py-2.5 rounded-xl font-bold hover:from-red-600 hover:to-pink-600 transition-all duration-300"
+                                >
+                                    <Filter size={18} />
+                                    <span className="hidden xs:inline">Filters</span>
+                                </button>
 
-                            {/* Results Count */}
-                            <div className="flex items-center gap-2">
-                                <span className="text-sm text-gray-600 font-medium">Found</span>
-                                <span className="bg-red-100 text-red-600 px-3 py-1 rounded-full text-sm font-black">
-                                    {filteredProducts.length}
-                                </span>
+                                {/* Results Count */}
+                                <div className="flex items-center gap-2">
+                                    <span className="text-sm text-gray-600 font-medium hidden sm:inline">Found</span>
+                                    <span className="bg-red-100 text-red-600 px-3 py-1 rounded-full text-sm font-black">
+                                        {filteredProducts.length}
+                                    </span>
+                                </div>
                             </div>
 
                             {/* Sort Dropdown */}
-                            <div className="relative">
+                            <div className="relative sm:w-auto w-full">
                                 <select
                                     value={sortBy}
                                     onChange={(e) => setSortBy(e.target.value)}
-                                    className="appearance-none bg-white border-2 border-gray-200 rounded-xl px-4 py-2.5 pr-10 text-sm font-bold text-gray-700 hover:border-red-300 focus:border-red-500 focus:ring-4 focus:ring-red-100 outline-none transition-all cursor-pointer"
+                                    className="w-full appearance-none bg-white border-2 border-gray-200 rounded-xl px-4 py-2.5 pr-10 text-sm font-bold text-gray-700 hover:border-red-300 focus:border-red-500 focus:ring-4 focus:ring-red-100 outline-none transition-all cursor-pointer"
                                 >
                                     <option value="featured">Featured</option>
                                     <option value="price-low">Price: Low to High</option>
@@ -305,7 +307,7 @@ const ProductsPage: React.FC = () => {
 
                         {/* Mobile Filters */}
                         {showFilters && (
-                            <div className="lg:hidden bg-white rounded-2xl shadow-lg p-6 mb-6 border-3 border-gray-900">
+                            <div className="lg:hidden bg-white rounded-2xl shadow-lg p-6 mb-6">
                                 <div className="flex items-center justify-between mb-6">
                                     <h3 className="text-lg font-black text-gray-900 flex items-center gap-2">
                                         <Filter size={20} className="text-red-600" />
@@ -335,10 +337,8 @@ const ProductsPage: React.FC = () => {
                                                     onChange={() => handleCategoryChange(category.id)}
                                                     className="w-5 h-5 text-red-600 rounded focus:ring-red-500"
                                                 />
-                                                <span className="text-2xl">{category.icon}</span>
                                                 <div className="flex-1">
                                                     <span className="text-sm font-bold">{category.name}</span>
-                                                    <span className="text-xs text-gray-500 ml-2">({category.productCount})</span>
                                                 </div>
                                             </label>
                                         ))}
@@ -379,19 +379,19 @@ const ProductsPage: React.FC = () => {
                                 <div className="animate-spin rounded-full h-16 w-16 border-b-4 border-red-500"></div>
                             </div>
                         ) : error ? (
-                            <div className="text-center py-20 bg-red-50 rounded-3xl border-4 border-gray-900">
+                            <div className="text-center py-20 bg-red-50 rounded-3xl shadow-lg">
                                 <div className="text-6xl mb-4">⚠️</div>
                                 <h3 className="text-2xl font-black text-gray-900 mb-3">Error Loading Products</h3>
                                 <p className="text-gray-600 font-medium">{error}</p>
                             </div>
                         ) : filteredProducts.length > 0 ? (
-                            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 lg:gap-8">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-6">
                                 {filteredProducts.map((product) => (
                                     <ProductCard key={product.id} product={product} />
                                 ))}
                             </div>
                         ) : (
-                            <div className="text-center py-16 lg:py-24 bg-white rounded-3xl shadow-lg border-4 border-gray-900">
+                            <div className="text-center py-16 lg:py-24 bg-white rounded-3xl shadow-lg">
                                 <div className="text-6xl lg:text-7xl mb-6">📦</div>
                                 <h3 className="text-2xl lg:text-3xl font-black mb-3 text-gray-900">No products found</h3>
                                 <p className="text-gray-600 mb-8 text-lg font-medium">
@@ -401,7 +401,7 @@ const ProductsPage: React.FC = () => {
                                 </p>
                                 <button
                                     onClick={handleResetFilters}
-                                    className="inline-flex items-center gap-2 bg-gradient-to-r from-red-500 to-pink-500 hover:from-red-600 hover:to-pink-600 text-white px-8 py-4 rounded-2xl font-black text-lg shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105 border-4 border-gray-900"
+                                    className="inline-flex items-center gap-2 bg-gradient-to-r from-red-500 to-pink-500 hover:from-red-600 hover:to-pink-600 text-white px-8 py-4 rounded-2xl font-black text-lg shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105"
                                 >
                                     Reset Filters
                                 </button>

@@ -1,11 +1,11 @@
 import { createSlice, createAsyncThunk, type PayloadAction } from '@reduxjs/toolkit';
+import type { CollectionsState, Collection } from '..';
 import {
     shopifyFetch,
     GET_COLLECTIONS_QUERY,
     GET_COLLECTION_BY_HANDLE_QUERY,
 } from '../services/shopify';
 import { transformShopifyCollection } from '../utils/transformers';
-import type { Collection, CollectionsState } from '..';
 
 // ============================================
 // INITIAL STATE
@@ -26,7 +26,7 @@ export const fetchCollections = createAsyncThunk(
     'collections/fetchCollections',
     async (first: number = 50) => {
         const data: any = await shopifyFetch(GET_COLLECTIONS_QUERY, { first });
-        return data.collections.edges.map((edge: any) =>
+        return data?.collections?.edges?.map((edge: any) =>
             transformShopifyCollection(edge.node)
         );
     }

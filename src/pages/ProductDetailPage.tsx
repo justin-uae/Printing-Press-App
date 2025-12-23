@@ -7,8 +7,6 @@ import {
     Package,
     Shield,
     ChevronLeft,
-    Zap,
-    Star
 } from 'lucide-react';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
 import { fetchProductByHandle } from '../store/productsSlice';
@@ -27,8 +25,8 @@ const ProductDetailPage: React.FC = () => {
 
     const [selectedImage, setSelectedImage] = useState<number>(0);
     const [selectedVariant, setSelectedVariant] = useState<ProductVariant | null>(null);
-    const [priceType, setPriceType] = useState<'normal' | 'online'>('online');
-    const [turnaroundType, setTurnaroundType] = useState<'normal' | 'express'>('normal');
+    const [priceType] = useState<'normal' | 'online'>('online');
+    const [turnaroundType] = useState<'normal' | 'express'>('normal');
 
     // Fetch product on mount or when handle changes
     useEffect(() => {
@@ -58,7 +56,6 @@ const ProductDetailPage: React.FC = () => {
         return (
             <div className="min-h-screen flex items-center justify-center">
                 <div className="text-center">
-                    <div className="text-6xl mb-4">😞</div>
                     <h2 className="text-2xl font-black text-gray-900 mb-4">Product Not Found</h2>
                     <p className="text-gray-600 mb-6">{error || 'The product you are looking for does not exist.'}</p>
                     <Link
@@ -169,8 +166,8 @@ const ProductDetailPage: React.FC = () => {
                                         key={index}
                                         onClick={() => setSelectedImage(index)}
                                         className={`rounded-2xl overflow-hidden transition-all duration-300 border-3 ${selectedImage === index
-                                                ? 'ring-4 ring-red-500 scale-105 border-red-500'
-                                                : ' hover:border-red-300'
+                                            ? 'ring-4 ring-red-500 scale-105 border-red-500'
+                                            : ' hover:border-red-300'
                                             }`}
                                     >
                                         <img
@@ -202,223 +199,6 @@ const ProductDetailPage: React.FC = () => {
                                 </ul>
                             </div>
                         )}
-                    </div>
-
-                    {/* Right Column - Details & Configuration */}
-                    <div className="space-y-6">
-                        {/* Product Header */}
-                        <div>
-                            <div className="flex items-center gap-3 mb-3">
-                                {product.badge && (
-                                    <span className={`inline-flex items-center gap-1 px-4 py-2 rounded-full text-sm font-black shadow-md border-2  ${product.badge === 'POPULAR' ? 'bg-blue-400 text-white' :
-                                            product.badge === 'NEW' ? 'bg-green-400 text-white' :
-                                                product.badge === 'BESTSELLER' ? 'bg-yellow-400 text-gray-900' :
-                                                    product.badge === 'HOT' ? 'bg-red-400 text-white' :
-                                                        'bg-gray-400 text-white'
-                                        }`}>
-                                        <Star size={14} />
-                                        {product.badge}
-                                    </span>
-                                )}
-                                {product.productCode && (
-                                    <span className="bg-red-100 text-red-600 px-3 py-1.5 rounded-full font-black text-sm border-2 border-red-300">
-                                        {product.productCode}
-                                    </span>
-                                )}
-                            </div>
-
-                            {product.category && (
-                                <span className="text-gray-600 font-bold text-sm uppercase tracking-wide">
-                                    {product.category.replace(/-/g, ' ')}
-                                </span>
-                            )}
-
-                            <h1 className="text-3xl lg:text-4xl font-black text-gray-900 mb-4 leading-tight mt-2">
-                                {product.title}
-                            </h1>
-                            <p className="text-gray-600 text-base lg:text-lg leading-relaxed font-medium">
-                                {product.description}
-                            </p>
-                        </div>
-
-                        {/* Price Calculator Card */}
-                        <div className="bg-gradient-to-br from-red-50 to-pink-50 rounded-3xl shadow-xl p-6 lg:p-8 border-4 ">
-                            <h3 className="text-xl font-black mb-6 text-gray-900">
-                                Configure Your Order
-                            </h3>
-
-                            {/* Variant Selection */}
-                            <div className="mb-6">
-                                <label className="block text-sm font-black text-gray-700 mb-3">
-                                    Select Variant
-                                </label>
-                                <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-                                    {product.variants.filter(v => v.available).map((variant) => (
-                                        <button
-                                            key={variant.id}
-                                            onClick={() => handleVariantSelect(variant)}
-                                            disabled={!variant.available}
-                                            className={`p-3 rounded-2xl font-black transition-all duration-300 text-center border-3 ${selectedVariant?.id === variant.id
-                                                    ? 'bg-gradient-to-r from-red-500 to-pink-500 text-white scale-105 shadow-lg border-red-600'
-                                                    : 'bg-white text-gray-700 hover:bg-gray-50 shadow-md '
-                                                } ${!variant.available ? 'opacity-50 cursor-not-allowed' : ''}`}
-                                        >
-                                            <div className="text-sm lg:text-base">
-                                                {variant.title}
-                                            </div>
-                                            {/* {variant.sku && (
-                                                <div className="text-xs mt-1 opacity-75">
-                                                    {variant.sku}
-                                                </div>
-                                            )} */}
-                                        </button>
-                                    ))}
-                                </div>
-                            </div>
-
-                            {/* Price Type Selection */}
-                            <div className="mb-6">
-                                <label className="block text-sm font-black text-gray-700 mb-3">
-                                    Select Price Type
-                                </label>
-                                <div className="grid grid-cols-2 gap-3">
-                                    <button
-                                        onClick={() => setPriceType('online')}
-                                        className={`p-4 rounded-2xl transition-all duration-300 text-center border-3 ${priceType === 'online'
-                                                ? 'bg-gradient-to-r from-green-400 to-teal-500 text-white scale-105 shadow-lg border-green-600'
-                                                : 'bg-white text-gray-700 hover:bg-gray-50 shadow-md '
-                                            }`}
-                                    >
-                                        <div className="font-black mb-1 text-sm lg:text-base">Online Price</div>
-                                        <div className="text-xs opacity-75">Best Value!</div>
-                                    </button>
-                                    <button
-                                        onClick={() => setPriceType('normal')}
-                                        className={`p-4 rounded-2xl transition-all duration-300 text-center border-3 ${priceType === 'normal'
-                                                ? 'bg-gradient-to-r from-red-500 to-pink-500 text-white scale-105 shadow-lg border-red-600'
-                                                : 'bg-white text-gray-700 hover:bg-gray-50 shadow-md '
-                                            }`}
-                                    >
-                                        <div className="font-black mb-1 text-sm lg:text-base">Normal Price</div>
-                                        <div className="text-xs opacity-75">Standard</div>
-                                    </button>
-                                </div>
-                            </div>
-
-                            {/* Turnaround Time */}
-                            {product.turnaround && product.turnaround.expressAvailable && (
-                                <div className="mb-6">
-                                    <label className="block text-sm font-black text-gray-700 mb-3">
-                                        Turnaround Time
-                                    </label>
-                                    <div className="grid grid-cols-2 gap-3">
-                                        <button
-                                            onClick={() => setTurnaroundType('normal')}
-                                            className={`p-4 rounded-2xl transition-all duration-300 text-center border-3 ${turnaroundType === 'normal'
-                                                    ? 'bg-gradient-to-r from-blue-400 to-purple-500 text-white scale-105 shadow-lg border-blue-600'
-                                                    : 'bg-white text-gray-700 hover:bg-gray-50 shadow-md '
-                                                }`}
-                                        >
-                                            <div className="font-black mb-1 text-sm lg:text-base">Normal</div>
-                                            <div className="text-xs opacity-75">{product.turnaround.normal}</div>
-                                        </button>
-                                        <button
-                                            onClick={() => setTurnaroundType('express')}
-                                            className={`p-4 rounded-2xl transition-all duration-300 text-center border-3 ${turnaroundType === 'express'
-                                                    ? 'bg-gradient-to-r from-yellow-400 to-orange-500 text-white scale-105 shadow-lg border-yellow-600'
-                                                    : 'bg-white text-gray-700 hover:bg-gray-50 shadow-md '
-                                                }`}
-                                        >
-                                            <div className="flex items-center justify-center gap-1 font-black mb-1 text-sm lg:text-base">
-                                                <Zap size={14} />
-                                                Express
-                                            </div>
-                                            <div className="text-xs opacity-75">{product.turnaround.express}</div>
-                                            {product.turnaround.expressCost && (
-                                                <div className="text-xs mt-1 font-black">+{product.turnaround.expressCost} AED</div>
-                                            )}
-                                        </button>
-                                    </div>
-                                </div>
-                            )}
-
-                            {/* Price Display */}
-                            <div className="bg-white rounded-2xl p-5 lg:p-6 mb-6 shadow-md border-3 ">
-                                <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 mb-4">
-                                    <div>
-                                        <div className="text-xs text-gray-600 mb-2 font-bold uppercase">Total Price</div>
-                                        <div className="text-3xl lg:text-4xl font-black text-red-600">
-                                            {getCurrentPrice()}<span className="text-lg lg:text-2xl ml-1">AED</span>
-                                        </div>
-                                    </div>
-                                    {getSavings() > 0 && (
-                                        <div className="text-left sm:text-right">
-                                            <div className="text-sm text-gray-500 line-through mb-1 font-medium">
-                                                {getNormalPrice()} AED
-                                            </div>
-                                            <div className="inline-flex items-center gap-1 bg-green-100 text-green-700 px-3 py-1.5 rounded-full text-xs font-black border-2 border-green-300">
-                                                💰 Save {getSavings()} AED!
-                                            </div>
-                                        </div>
-                                    )}
-                                </div>
-                                <div className="text-xs sm:text-sm text-gray-600 pt-4 border-t font-medium">
-                                    Price per unit: <span className="text-red-600 font-black">{getPricePerUnit().toFixed(3)} AED</span>
-                                </div>
-                            </div>
-
-                            {/* Variant Stock Info */}
-                            {selectedVariant && (
-                                <div className="bg-blue-50 border-2 border-blue-200 rounded-xl p-3 mb-4">
-                                    <div className="flex items-center justify-between text-sm">
-                                        <span className="font-bold text-gray-700">Stock:</span>
-                                        <span className={`font-black ${selectedVariant.quantity > 10 ? 'text-green-600' : 'text-orange-600'}`}>
-                                            {selectedVariant.available
-                                                ? `${selectedVariant.quantity} available`
-                                                : 'Out of stock'}
-                                        </span>
-                                    </div>
-                                </div>
-                            )}
-
-                            {/* Add to Cart Button */}
-                            <button
-                                onClick={handleAddToCart}
-                                disabled={!selectedVariant || !selectedVariant.available}
-                                className={`w-full font-black py-4 px-6 rounded-2xl text-base lg:text-lg shadow-xl hover:shadow-2xl transition-all duration-300 flex items-center justify-center gap-3 border-4 ${!selectedVariant || !selectedVariant.available
-                                        ? 'bg-gray-300 text-gray-500 cursor-not-allowed border-gray-400'
-                                        : 'bg-gradient-to-r from-red-500 to-pink-500 hover:from-red-600 hover:to-pink-600 text-white hover:scale-105 '
-                                    }`}
-                            >
-                                <ShoppingCart size={22} />
-                                {!selectedVariant ? 'Select a Variant' : !selectedVariant.available ? 'Out of Stock' : 'Add to Cart'}
-                            </button>
-
-                            {/* Additional Info */}
-                            <div className="mt-6 space-y-2">
-                                {product.turnaround && (
-                                    <div className="flex items-center gap-3 text-xs sm:text-sm font-bold bg-white px-4 py-3 rounded-xl border-2 ">
-                                        <Clock size={16} className="text-blue-600 flex-shrink-0" />
-                                        <span className="text-gray-700">
-                                            Delivery: {turnaroundType === 'express'
-                                                ? product.turnaround.express
-                                                : product.turnaround.normal}
-                                        </span>
-                                    </div>
-                                )}
-                                {product.minOrderQuantity && (
-                                    <div className="flex items-center gap-3 text-xs sm:text-sm font-bold bg-white px-4 py-3 rounded-xl border-2 ">
-                                        <Package size={16} className="text-purple-600 flex-shrink-0" />
-                                        <span className="text-gray-700">Min order: {product.minOrderQuantity} pcs</span>
-                                    </div>
-                                )}
-                                <div className="flex items-center gap-3 text-xs sm:text-sm font-bold bg-white px-4 py-3 rounded-xl border-2 ">
-                                    <Shield size={16} className="text-green-600 flex-shrink-0" />
-                                    <span className="text-gray-700">Quality Guaranteed</span>
-                                </div>
-                            </div>
-                        </div>
-
                         {/* Specifications */}
                         {product.specifications && (
                             <div className="bg-white rounded-3xl shadow-lg p-6 lg:p-8 border-4 ">
@@ -463,6 +243,150 @@ const ProductDetailPage: React.FC = () => {
                                 </div>
                             </div>
                         )}
+                    </div>
+
+                    {/* Right Column - Details & Configuration */}
+                    <div className="space-y-6">
+                        {/* Product Header */}
+                        <div>
+                            <div className="flex items-center gap-3 mb-3">
+                                {product.badge && (
+                                    <span className={`inline-flex items-center gap-1 px-4 py-2 rounded-full text-sm font-black shadow-md border-2  ${product.badge === 'POPULAR' ? 'bg-blue-400 text-white' :
+                                        product.badge === 'NEW' ? 'bg-green-400 text-white' :
+                                            product.badge === 'BESTSELLER' ? 'bg-yellow-400 text-gray-900' :
+                                                product.badge === 'HOT' ? 'bg-red-400 text-white' :
+                                                    'bg-gray-400 text-white'
+                                        }`}>
+                                        {product.badge}
+                                    </span>
+                                )}
+                                {product.productCode && (
+                                    <span className="bg-red-100 text-red-600 px-3 py-1.5 rounded-full font-black text-sm border-2 border-red-300">
+                                        {product.productCode}
+                                    </span>
+                                )}
+                            </div>
+
+                            {product.category && (
+                                <span className="text-gray-600 font-bold text-sm uppercase tracking-wide">
+                                    {product.category.replace(/-/g, ' ')}
+                                </span>
+                            )}
+
+                            <h1 className="text-3xl lg:text-4xl font-black text-gray-900 mb-4 leading-tight mt-2">
+                                {product.title}
+                            </h1>
+                            <p className="text-gray-600 text-base lg:text-lg leading-relaxed font-medium">
+                                {product.description}
+                            </p>
+                        </div>
+
+                        {/* Price Calculator Card */}
+                        <div className="bg-gradient-to-br from-red-50 to-pink-50 rounded-3xl shadow-xl p-6 lg:p-8 border-4 ">
+                            <h3 className="text-xl font-black mb-6 text-gray-900">
+                                Configure Your Order
+                            </h3>
+
+                            {/* Variant Selection */}
+                            <div className="mb-6">
+                                <label className="block text-sm font-black text-gray-700 mb-3">
+                                    Select Variant
+                                </label>
+                                <div className="grid grid-cols-2 sm:grid-cols-2 gap-3">
+                                    {product.variants.filter(v => v.available).map((variant) => (
+                                        <button
+                                            key={variant.id}
+                                            onClick={() => handleVariantSelect(variant)}
+                                            disabled={!variant.available}
+                                            className={`p-3 rounded-2xl font-black transition-all duration-300 text-center border-3 ${selectedVariant?.id === variant.id
+                                                ? 'bg-gradient-to-r from-red-500 to-pink-500 text-white scale-105 shadow-lg border-red-600'
+                                                : 'bg-white text-gray-700 hover:bg-gray-50 shadow-md '
+                                                } ${!variant.available ? 'opacity-50 cursor-not-allowed' : ''}`}
+                                        >
+                                            <div className="text-sm lg:text-base">
+                                                {variant.title}
+                                            </div>
+                                        </button>
+                                    ))}
+                                </div>
+                            </div>
+
+                            {/* Price Display */}
+                            <div className="bg-white rounded-2xl p-5 lg:p-6 mb-6 shadow-md border-3 ">
+                                <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 mb-4">
+                                    <div>
+                                        <div className="text-xs text-gray-600 mb-2 font-bold uppercase">Total Price</div>
+                                        <div className="text-3xl lg:text-4xl font-black text-red-600">
+                                            {getCurrentPrice()}<span className="text-lg lg:text-2xl ml-1">AED</span>
+                                        </div>
+                                    </div>
+                                    {getSavings() > 0 && (
+                                        <div className="text-left sm:text-right">
+                                            <div className="text-sm text-gray-500 line-through mb-1 font-medium">
+                                                {getNormalPrice()} AED
+                                            </div>
+                                            <div className="inline-flex items-center gap-1 bg-green-100 text-green-700 px-3 py-1.5 rounded-full text-xs font-black border-2 border-green-300">
+                                                Save {getSavings()} AED!
+                                            </div>
+                                        </div>
+                                    )}
+                                </div>
+                                <div className="text-xs sm:text-sm text-gray-600 pt-4 border-t font-medium">
+                                    Price per unit: <span className="text-red-600 font-black">{getPricePerUnit().toFixed(3)} AED</span>
+                                </div>
+                            </div>
+
+                            {/* Variant Stock Info */}
+                            {selectedVariant && (
+                                <div className="bg-blue-50 border-2 border-blue-200 rounded-xl p-3 mb-4">
+                                    <div className="flex items-center justify-between text-sm">
+                                        <span className="font-bold text-gray-700">Stock:</span>
+                                        <span className={`font-black ${selectedVariant.quantity > 10 ? 'text-green-600' : 'text-orange-600'}`}>
+                                            {selectedVariant.available
+                                                ? `${selectedVariant.quantity} available`
+                                                : 'Out of stock'}
+                                        </span>
+                                    </div>
+                                </div>
+                            )}
+
+                            {/* Add to Cart Button */}
+                            <button
+                                onClick={handleAddToCart}
+                                disabled={!selectedVariant || !selectedVariant.available}
+                                className={`w-full font-black py-4 px-6 rounded-2xl text-base lg:text-lg shadow-xl hover:shadow-2xl transition-all duration-300 flex items-center justify-center gap-3 border-4 ${!selectedVariant || !selectedVariant.available
+                                    ? 'bg-gray-300 text-gray-500 cursor-not-allowed border-gray-400'
+                                    : 'bg-gradient-to-r from-red-500 to-pink-500 hover:from-red-600 hover:to-pink-600 text-white hover:scale-105 '
+                                    }`}
+                            >
+                                <ShoppingCart size={22} />
+                                {!selectedVariant ? 'Select a Variant' : !selectedVariant.available ? 'Out of Stock' : 'Add to Cart'}
+                            </button>
+
+                            {/* Additional Info */}
+                            <div className="mt-6 space-y-2">
+                                {product.turnaround && (
+                                    <div className="flex items-center gap-3 text-xs sm:text-sm font-bold bg-white px-4 py-3 rounded-xl border-2 ">
+                                        <Clock size={16} className="text-blue-600 flex-shrink-0" />
+                                        <span className="text-gray-700">
+                                            Delivery: {turnaroundType === 'express'
+                                                ? product.turnaround.express
+                                                : product.turnaround.normal}
+                                        </span>
+                                    </div>
+                                )}
+                                {product.minOrderQuantity && (
+                                    <div className="flex items-center gap-3 text-xs sm:text-sm font-bold bg-white px-4 py-3 rounded-xl border-2 ">
+                                        <Package size={16} className="text-purple-600 flex-shrink-0" />
+                                        <span className="text-gray-700">Min order: {product.minOrderQuantity} pcs</span>
+                                    </div>
+                                )}
+                                <div className="flex items-center gap-3 text-xs sm:text-sm font-bold bg-white px-4 py-3 rounded-xl border-2 ">
+                                    <Shield size={16} className="text-green-600 flex-shrink-0" />
+                                    <span className="text-gray-700">Quality Guaranteed</span>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
