@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { Filter, X, ChevronDown } from 'lucide-react';
+import { Filter, X, ChevronDown, ArrowUp } from 'lucide-react';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
 import { fetchProducts } from '../store/productsSlice';
 import ProductCard from '../components/ProductCard';
@@ -21,6 +21,7 @@ const ProductsPage: React.FC = () => {
     const [showFilters, setShowFilters] = useState<boolean>(false);
     const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
     const [sortBy, setSortBy] = useState<string>('featured');
+    const [showScrollTop, setShowScrollTop] = useState<boolean>(false);
 
     // Get data from Redux store
     const { items: allProducts, loading: productsLoading, error } = useAppSelector(
@@ -41,6 +42,28 @@ const ProductsPage: React.FC = () => {
             setSelectedCategory(null);
         }
     }, [searchParams]);
+
+    // Handle scroll for showing/hiding scroll to top button
+    useEffect(() => {
+        const handleScroll = () => {
+            if (window.scrollY > 400) {
+                setShowScrollTop(true);
+            } else {
+                setShowScrollTop(false);
+            }
+        };
+
+        window.addEventListener('scroll', handleScroll);
+        return () => window.removeEventListener('scroll', handleScroll);
+    }, []);
+
+    // Scroll to top function
+    const scrollToTop = () => {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+    };
 
     // Generate categories from product.category field
     const categories = useMemo((): Category[] => {
@@ -305,57 +328,68 @@ const ProductsPage: React.FC = () => {
                             </div>
                         </div>
 
-                        {/* Mobile Filters */}
+                        {/* Mobile Filters - Slide-in Sidebar */}
                         {showFilters && (
-                            <div className="lg:hidden bg-white rounded-2xl shadow-lg p-6 mb-6">
-                                <div className="flex items-center justify-between mb-6">
-                                    <h3 className="text-lg font-black text-gray-900 flex items-center gap-2">
-                                        <Filter size={20} className="text-red-600" />
-                                        Filter by Category
-                                    </h3>
-                                    <button
-                                        onClick={() => setShowFilters(false)}
-                                        className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
-                                    >
-                                        <X size={20} />
-                                    </button>
-                                </div>
+                            <>
+                                {/* Backdrop */}
+                                <div
+                                    className="lg:hidden fixed inset-0 bg-black bg-opacity-50 z-40"
+                                    onClick={() => setShowFilters(false)}
+                                ></div>
 
-                                {categories.length > 0 ? (
-                                    <div className="space-y-2 mb-6">
-                                        {categories.map(category => (
-                                            <label
-                                                key={category.id}
-                                                className={`flex items-center gap-3 cursor-pointer p-3 rounded-2xl transition-all ${selectedCategory === category.id
-                                                    ? 'bg-gradient-to-r from-red-50 to-pink-50 border-2 border-red-200'
-                                                    : 'hover:bg-gray-50'
-                                                    }`}
+                                {/* Sidebar */}
+                                <div className="lg:hidden fixed right-0 top-0 h-full w-80 max-w-[85%] bg-white shadow-2xl z-50 overflow-y-auto">
+                                    <div className="p-6">
+                                        <div className="flex items-center justify-between mb-6 sticky top-0 bg-white pb-4 border-b-2 border-gray-200">
+                                            <h3 className="text-lg font-black text-gray-900 flex items-center gap-2">
+                                                <Filter size={20} className="text-red-600" />
+                                                Filter by Category
+                                            </h3>
+                                            <button
+                                                onClick={() => setShowFilters(false)}
+                                                className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
                                             >
-                                                <input
-                                                    type="checkbox"
-                                                    checked={selectedCategory === category.id}
-                                                    onChange={() => handleCategoryChange(category.id)}
-                                                    className="w-5 h-5 text-red-600 rounded focus:ring-red-500"
-                                                />
-                                                <div className="flex-1">
-                                                    <span className="text-sm font-bold">{category.name}</span>
-                                                </div>
-                                            </label>
-                                        ))}
-                                    </div>
-                                ) : (
-                                    <p className="text-sm text-gray-500 text-center py-4 mb-6">
-                                        No categories available
-                                    </p>
-                                )}
+                                                <X size={20} />
+                                            </button>
+                                        </div>
 
-                                <button
-                                    onClick={handleResetFilters}
-                                    className="w-full bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold py-3 rounded-xl transition-colors"
-                                >
-                                    Reset Filters
-                                </button>
-                            </div>
+                                        {categories.length > 0 ? (
+                                            <div className="space-y-2 mb-6">
+                                                {categories.map(category => (
+                                                    <label
+                                                        key={category.id}
+                                                        className={`flex items-center gap-3 cursor-pointer p-3 rounded-2xl transition-all ${selectedCategory === category.id
+                                                            ? 'bg-gradient-to-r from-red-50 to-pink-50 border-2 border-red-200'
+                                                            : 'hover:bg-gray-50'
+                                                            }`}
+                                                    >
+                                                        <input
+                                                            type="checkbox"
+                                                            checked={selectedCategory === category.id}
+                                                            onChange={() => handleCategoryChange(category.id)}
+                                                            className="w-5 h-5 text-red-600 rounded focus:ring-red-500"
+                                                        />
+                                                        <div className="flex-1">
+                                                            <span className="text-sm font-bold">{category.name}</span>
+                                                        </div>
+                                                    </label>
+                                                ))}
+                                            </div>
+                                        ) : (
+                                            <p className="text-sm text-gray-500 text-center py-4 mb-6">
+                                                No categories available
+                                            </p>
+                                        )}
+
+                                        <button
+                                            onClick={handleResetFilters}
+                                            className="w-full bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold py-3 rounded-xl transition-colors"
+                                        >
+                                            Reset Filters
+                                        </button>
+                                    </div>
+                                </div>
+                            </>
                         )}
 
                         {/* Active Filters */}
@@ -410,6 +444,17 @@ const ProductsPage: React.FC = () => {
                     </div>
                 </div>
             </div>
+
+            {/* Scroll to Top Button */}
+            {showScrollTop && (
+                <button
+                    onClick={scrollToTop}
+                    className="fixed bottom-8 right-8 z-50 bg-gradient-to-r from-red-500 to-pink-500 hover:from-red-600 hover:to-pink-600 text-white p-4 rounded-full shadow-2xl hover:shadow-3xl transition-all duration-300 hover:scale-110 animate-bounce"
+                    aria-label="Scroll to top"
+                >
+                    <ArrowUp size={15} strokeWidth={4} />
+                </button>
+            )}
         </div>
     );
 };
