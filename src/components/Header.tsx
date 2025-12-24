@@ -23,13 +23,13 @@ const Header: React.FC = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex items-center justify-between gap-4">
             {/* Logo */}
-            <Link to="/" className="flex items-center space-x-2 sm:space-x-3 group" onClick={() => dispatch(closeMobileMenu())}>
+            <Link to="/" className="flex items-center group" onClick={() => dispatch(closeMobileMenu())}>
               {/* Logo Image */}
               <img
                 src={Logo}
                 loading='lazy'
                 alt="UAE Luxury Car Hire Logo"
-                className="h-8 sm:h-12 md:h-14 w-auto transition-transform duration-300 group-hover:scale-105"
+                className="h-10 sm:h-14 md:h-14 w-auto transition-transform duration-300 group-hover:scale-105"
               />
               {/* Brand Text */}
               <span className="text-lg sm:text-xl md:text-2xl lg:text-2xl font-bold text-gray-800 group-hover:text-red-600 transition-colors duration-300">

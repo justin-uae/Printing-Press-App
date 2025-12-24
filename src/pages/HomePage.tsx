@@ -440,9 +440,9 @@ const HomePage: React.FC = () => {
                         STRANGE AND UNBELIEVABLE PRICES!
                     </h2>
                     <p className="text-2xl lg:text-3xl mb-10 max-w-3xl mx-auto text-white font-bold drop-shadow-lg">
-                        Business cards from <span className="bg-white text-red-600 px-4 py-2 rounded-xl inline-block">37 AED</span> for 1000 pcs!
+                        Business cards from <span className="bg-white text-red-600 px-4 py-2 rounded-xl inline-block">50 AED</span> for 1000 pcs!
                         <br className="hidden sm:block" />
-                        Flyers and Brochures from <span className="bg-white text-red-600 px-4 py-2 rounded-xl inline-block mt-2">50 AED</span>!
+                        Flyers and Brochures from <span className="bg-white text-red-600 px-4 py-2 rounded-xl inline-block mt-2">80 AED</span>!
                     </p>
 
                     <div className="flex flex-wrap justify-center gap-4">
@@ -493,7 +493,7 @@ const HomePage: React.FC = () => {
                             {
                                 icon: TrendingDown,
                                 title: 'Incredible Pricing',
-                                description: 'Our prices are truly unbelievable! Get professional business cards from 37 AED, flyers from 46 AED, and much more.',
+                                description: 'Our prices are truly unbelievable! Get professional business cards from 50 AED, flyers from 80 AED, and much more.',
                                 gradient: 'from-red-400 to-pink-500',
                                 bgGradient: 'from-red-50 to-pink-50'
                             },
@@ -519,6 +519,93 @@ const HomePage: React.FC = () => {
                                 </div>
                             </div>
                         ))}
+                    </div>
+                </div>
+            </section>
+
+            {/* FAQ Section */}
+            <section className="py-16 lg:py-24 bg-white">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div className="text-center mb-12 lg:mb-16">
+                        <div className="inline-block bg-gradient-to-r from-blue-500 to-purple-500 text-white px-6 py-3 rounded-2xl font-black text-sm mb-4 shadow-lg">
+                            FAQ
+                        </div>
+                        <h2 className="text-4xl sm:text-5xl lg:text-6xl font-black text-gray-900 mb-4">
+                            Frequently Asked Questions
+                        </h2>
+                        <p className="text-xl text-gray-700 max-w-2xl mx-auto font-medium">
+                            Everything you need to know about our printing services
+                        </p>
+                    </div>
+
+                    <div className="max-w-4xl mx-auto space-y-4">
+                        {[
+                            {
+                                question: "How do I get in touch with or place an order with Dubai Printing?",
+                                answer: "Easy! Just drop us an email. You can also ring us at +971 55 377 2757 or +971 58 538 9757."
+                            },
+                            {
+                                question: "Can I get free samples?",
+                                answer: "Yes you can, Call us on +971 55 377 2757 or +971 58 538 9757, to Set Up an appointment for one of our Dubai Printing experts."
+                            },
+                            {
+                                question: "How much are your products? Do I get a variety of options?",
+                                answer: "We have specialized in delivering a wide range of products that includes posters, brochures, catalogues, books (Coffee Table, Hard Cover, and Soft Cover), leaflets, danglers, calendars, yearly planners, flyers, stationery, magazines, annual reports, newsletters etc. We have a large product range with lots of different prices. Our prices are low and our quality is high."
+                            },
+                            {
+                                question: "Is there any minimum order?",
+                                answer: "It varies from product to product. Nevertheless we would respond to your query."
+                            },
+                            {
+                                question: "What about privacy and security?",
+                                answer: "No information we collect for order processing or from inquiries is shared with any other company or website. Your information is only used to contact you when necessary."
+                            },
+                            {
+                                question: "Do I get to review my assignment before it goes into print?",
+                                answer: "You will be sent a digital proof for approval and corrections will be carried out as per your specifications before the job is sent for printing."
+                            },
+                            {
+                                question: "What are the payment options available at Dubai printing?",
+                                answer: "We are happy to accept payment in the form of cheques, Debit cards, Credit Cards or Cash. We require full payment before we start work."
+                            },
+                            {
+                                question: "Can I Cancel my order?",
+                                answer: "In order to get your order delivered to you soon, we print the orders within 24 hours, as we're printing something just for you, it's not possible to cancel your order once we begin."
+                            },
+                            {
+                                question: "What if the products I received is damaged?",
+                                answer: "We take special care to deliver your products in the excellent condition. However, if you receive any product in unusable condition, you can contact our customer care and they will do the needful."
+                            },
+                            {
+                                question: "How long does it take for delivery?",
+                                answer: "When you place an order, we ensure that the order starts getting processed within 24 hours, we attempt to process every paid order and deliver within 5 working days, and we also have an express order option with extra charge."
+                            }
+                        ].map((faq, index) => (
+                            <details key={index} className="group bg-gradient-to-br from-gray-50 to-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden">
+                                <summary className="flex items-center justify-between px-6 py-5 cursor-pointer list-none">
+                                    <span className="text-lg font-black text-gray-900 pr-4">{faq.question}</span>
+                                    <span className="text-red-600 transition-transform duration-300 group-open:rotate-180">
+                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                                            <polyline points="6 9 12 15 18 9"></polyline>
+                                        </svg>
+                                    </span>
+                                </summary>
+                                <div className="px-6 pb-5 pt-2">
+                                    <p className="text-gray-700 leading-relaxed font-medium">{faq.answer}</p>
+                                </div>
+                            </details>
+                        ))}
+                    </div>
+
+                    {/* Contact CTA */}
+                    <div className="text-center mt-12">
+                        <p className="text-gray-600 font-bold mb-6">Still have questions?</p>
+                        <Link
+                            to="/contact"
+                            className="inline-flex items-center gap-2 bg-gradient-to-r from-red-500 to-pink-500 hover:from-red-600 hover:to-pink-600 text-white px-8 py-4 rounded-2xl font-black text-lg shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105"
+                        >
+                            Contact Us
+                        </Link>
                     </div>
                 </div>
             </section>

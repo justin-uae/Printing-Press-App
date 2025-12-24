@@ -163,7 +163,7 @@ const AboutPage: React.FC = () => {
                             {
                                 icon: TrendingDown,
                                 title: 'Incredible Pricing',
-                                description: 'Our prices are truly unbelievable! Get professional business cards from 37 AED, flyers from 46 AED, and much more.',
+                                description: 'Our prices are truly unbelievable! Get professional business cards from 50 AED, flyers from 80 AED, and much more.',
                                 gradient: 'from-red-400 to-pink-500',
                                 bg: 'from-red-50 to-pink-50'
                             },

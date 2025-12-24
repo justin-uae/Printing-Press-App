@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
-import { MapPin, Phone, Mail, Clock, Send } from 'lucide-react';
+import React, { useState, useRef } from 'react';
+import { MapPin, Phone, Mail, Clock, Send, CheckCircle } from 'lucide-react';
+import ReCAPTCHA from 'react-google-recaptcha';
 
 interface FormData {
     name: string;
@@ -9,6 +10,13 @@ interface FormData {
 }
 
 const ContactPage: React.FC = () => {
+    const phoneNumber = import.meta.env.VITE_CONTACT_NUMBER;
+    const phoneNumberSecond = import.meta.env.VITE_CONTACT_NUMBER_SECOND;
+    const pressEmail = import.meta.env.VITE_COMPANY_EMAIL;
+
+    const recaptchaRef = useRef<ReCAPTCHA>(null);
+    const [formStatus, setFormStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
+    const [responseMessage, setResponseMessage] = useState('');
     const [formData, setFormData] = useState<FormData>({
         name: '',
         email: '',
@@ -23,19 +31,63 @@ const ContactPage: React.FC = () => {
         });
     };
 
-    const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
         e.preventDefault();
-        alert('Thank you for your message! We will get back to you soon.');
-        setFormData({
-            name: '',
-            email: '',
-            phone: '',
-            message: ''
-        });
-    };
 
-    const phoneNumber = import.meta.env.VITE_CONTACT_NUMBER;
-    const pressEmail = import.meta.env.VITE_COMPANY_EMAIL;
+        // Get reCAPTCHA token
+        const recaptchaToken = recaptchaRef.current?.getValue();
+
+        if (!recaptchaToken) {
+            setFormStatus('error');
+            setResponseMessage('Please complete the reCAPTCHA verification.');
+            return;
+        }
+
+        setFormStatus('loading');
+        setResponseMessage('');
+
+        try {
+            const appURL = import.meta.env.VITE_APP_URL;
+
+            // Send form data to PHP backend
+            const response = await fetch(`${appURL}/api/contact.php`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    ...formData,
+                    recaptchaToken: recaptchaToken
+                })
+            });
+
+            const result = await response.json();
+
+            if (result.success) {
+                setFormStatus('success');
+                setResponseMessage(result.message || 'Thank you! Your message has been sent successfully. We\'ll get back to you within 24 hours.');
+                // Reset form
+                setFormData({
+                    name: '',
+                    email: '',
+                    phone: '',
+                    message: ''
+                });
+                // Reset reCAPTCHA
+                recaptchaRef.current?.reset();
+            } else {
+                setFormStatus('error');
+                setResponseMessage(result.message || 'Something went wrong. Please try again or contact us directly.');
+                // Reset reCAPTCHA on error
+                recaptchaRef.current?.reset();
+            }
+        } catch (error) {
+            console.error('Error submitting form:', error);
+            setFormStatus('error');
+            setResponseMessage('Network error. Please check your connection and try again.');
+            recaptchaRef.current?.reset();
+        }
+    };
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-gray-50 to-white">
@@ -69,8 +121,10 @@ const ContactPage: React.FC = () => {
                                 <h3 className="text-xl font-black mb-3 text-gray-900">Visit Us</h3>
                                 <p className="text-gray-600 leading-relaxed font-medium">
                                     Dubai Print & Design<br />
-
                                     Exchange Tower, Business Bay, Dubai, UAE
+                                    <br />
+                                    <br />
+                                    Khalidiya Towers, M Floor, W10, Al Bateen, Khalidiyah, Abu Dhabi, UAE
                                 </p>
                             </div>
 
@@ -82,6 +136,10 @@ const ContactPage: React.FC = () => {
                                 <h3 className="text-xl font-black mb-3 text-gray-900">Call Us</h3>
                                 <a href={`tel:+${phoneNumber}`} className="text-red-600 hover:text-red-700 font-black text-lg transition-colors">
                                     +{phoneNumber}
+                                </a>
+                                <br />
+                                <a href={`tel:+${phoneNumberSecond}`} className="text-red-600 hover:text-red-700 font-black text-lg transition-colors">
+                                    +{phoneNumberSecond}
                                 </a>
                                 <p className="text-sm text-gray-500 mt-2 font-medium">Mon-Sat, 9AM-6PM</p>
                             </div>
@@ -142,7 +200,8 @@ const ContactPage: React.FC = () => {
                                             value={formData.name}
                                             onChange={handleChange}
                                             required
-                                            className="w-full px-4 py-3 border-2 border-gray-200 rounded-2xl focus:border-red-500 focus:ring-4 focus:ring-red-100 outline-none transition-all font-medium"
+                                            disabled={formStatus === 'loading'}
+                                            className="w-full px-4 py-3 border-2 border-gray-200 rounded-2xl focus:border-red-500 focus:ring-4 focus:ring-red-100 outline-none transition-all font-medium disabled:bg-gray-100 disabled:cursor-not-allowed"
                                             placeholder="John Doe"
                                         />
                                     </div>
@@ -160,7 +219,8 @@ const ContactPage: React.FC = () => {
                                                 value={formData.email}
                                                 onChange={handleChange}
                                                 required
-                                                className="w-full px-4 py-3 border-2 border-gray-200 rounded-2xl focus:border-red-500 focus:ring-4 focus:ring-red-100 outline-none transition-all font-medium"
+                                                disabled={formStatus === 'loading'}
+                                                className="w-full px-4 py-3 border-2 border-gray-200 rounded-2xl focus:border-red-500 focus:ring-4 focus:ring-red-100 outline-none transition-all font-medium disabled:bg-gray-100 disabled:cursor-not-allowed"
                                                 placeholder="john@example.com"
                                             />
                                         </div>
@@ -174,7 +234,8 @@ const ContactPage: React.FC = () => {
                                                 name="phone"
                                                 value={formData.phone}
                                                 onChange={handleChange}
-                                                className="w-full px-4 py-3 border-2 border-gray-200 rounded-2xl focus:border-red-500 focus:ring-4 focus:ring-red-100 outline-none transition-all font-medium"
+                                                disabled={formStatus === 'loading'}
+                                                className="w-full px-4 py-3 border-2 border-gray-200 rounded-2xl focus:border-red-500 focus:ring-4 focus:ring-red-100 outline-none transition-all font-medium disabled:bg-gray-100 disabled:cursor-not-allowed"
                                                 placeholder="+971 XX XXX XXXX"
                                             />
                                         </div>
@@ -191,26 +252,77 @@ const ContactPage: React.FC = () => {
                                             value={formData.message}
                                             onChange={handleChange}
                                             required
+                                            disabled={formStatus === 'loading'}
                                             rows={6}
-                                            className="w-full px-4 py-3 border-2 border-gray-200 rounded-2xl focus:border-red-500 focus:ring-4 focus:ring-red-100 outline-none transition-all resize-none font-medium"
+                                            className="w-full px-4 py-3 border-2 border-gray-200 rounded-2xl focus:border-red-500 focus:ring-4 focus:ring-red-100 outline-none transition-all resize-none font-medium disabled:bg-gray-100 disabled:cursor-not-allowed"
                                             placeholder="Tell us about your printing needs..."
+                                        />
+                                    </div>
+
+                                    {/* reCAPTCHA v2 */}
+                                    <div className="flex justify-center">
+                                        <ReCAPTCHA
+                                            ref={recaptchaRef}
+                                            sitekey={import.meta.env.VITE_RECAPTCHA_SITE_KEY}
+                                            theme="light"
                                         />
                                     </div>
 
                                     {/* Submit Button */}
                                     <button
                                         type="submit"
-                                        className="w-full md:w-auto inline-flex items-center justify-center gap-3 bg-gradient-to-r from-red-500 to-pink-500 hover:from-red-600 hover:to-pink-600 text-white font-black py-4 px-8 rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105"
+                                        disabled={formStatus === 'loading'}
+                                        className="w-full md:w-auto inline-flex items-center justify-center gap-3 bg-gradient-to-r from-red-500 to-pink-500 hover:from-red-600 hover:to-pink-600 text-white font-black py-4 px-8 rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
                                     >
-                                        <Send size={20} />
-                                        Send Message
+                                        {formStatus === 'loading' ? (
+                                            <>
+                                                <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
+                                                Sending Message...
+                                            </>
+                                        ) : (
+                                            <>
+                                                <Send size={20} />
+                                                Send Message
+                                            </>
+                                        )}
                                     </button>
+
+                                    {/* reCAPTCHA Notice */}
+                                    <p className="text-xs text-gray-500 text-center font-medium">
+                                        This site is protected by reCAPTCHA and the Google{' '}
+                                        <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer" className="text-red-600 hover:text-red-700 font-bold">
+                                            Privacy Policy
+                                        </a>{' '}
+                                        and{' '}
+                                        <a href="https://policies.google.com/terms" target="_blank" rel="noopener noreferrer" className="text-red-600 hover:text-red-700 font-bold">
+                                            Terms of Service
+                                        </a>{' '}
+                                        apply.
+                                    </p>
                                 </form>
+
+                                {/* Status Messages */}
+                                {formStatus === 'success' && (
+                                    <div className="mt-6 p-5 bg-green-50 border-2 border-green-200 rounded-xl">
+                                        <div className="flex items-center gap-3">
+                                            <CheckCircle className="w-6 h-6 text-green-600" />
+                                            <p className="text-green-700 font-bold text-base">
+                                                {responseMessage}
+                                            </p>
+                                        </div>
+                                    </div>
+                                )}
+                                {formStatus === 'error' && (
+                                    <div className="mt-6 p-5 bg-red-50 border-2 border-red-200 rounded-xl">
+                                        <p className="text-red-700 font-bold text-base">
+                                            ❌ {responseMessage}
+                                        </p>
+                                    </div>
+                                )}
                             </div>
 
                             {/* Quick Contact Options */}
                             <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6">
-
                                 <a href={`tel:+${phoneNumber}`}
                                     className="group bg-white rounded-3xl shadow-lg hover:shadow-xl p-6 lg:p-8 transition-all duration-300 text-center hover:-translate-y-1"
                                 >
@@ -232,43 +344,6 @@ const ContactPage: React.FC = () => {
                                 </a>
                             </div>
                         </div>
-                    </div>
-                </div>
-            </section>
-
-            {/* FAQ Section */}
-            <section className="py-16 lg:py-24 bg-white">
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div className="text-center mb-12 lg:mb-16">
-                        <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-gray-900 mb-4">
-                            Frequently Asked Questions
-                        </h2>
-                        <p className="text-lg text-gray-600 font-medium">Quick answers to common questions</p>
-                    </div>
-
-                    <div className="max-w-4xl mx-auto space-y-6">
-                        {[
-                            {
-                                q: 'What are your turnaround times?',
-                                a: 'Standard orders are completed in 1-2 business days. We also offer express service with delivery in as fast as 6 hours for select products.',
-                                gradient: 'from-purple-50 to-pink-50'
-                            },
-                            {
-                                q: 'Do you offer design services?',
-                                a: 'Yes! Our design team can help create custom designs for your printing needs. Contact us for a quote on design services.',
-                                gradient: 'from-green-50 to-teal-50'
-                            },
-                            {
-                                q: 'What payment methods do you accept?',
-                                a: 'We accept cash, bank transfer, credit/debit cards, and online payments through our secure checkout system.',
-                                gradient: 'from-red-50 to-pink-50'
-                            }
-                        ].map((faq, idx) => (
-                            <div key={idx} className={`group bg-gradient-to-br ${faq.gradient} rounded-3xl p-6 lg:p-8 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1`}>
-                                <h3 className="text-xl font-black mb-3 text-gray-900">{faq.q}</h3>
-                                <p className="text-gray-700 leading-relaxed font-medium">{faq.a}</p>
-                            </div>
-                        ))}
                     </div>
                 </div>
             </section>

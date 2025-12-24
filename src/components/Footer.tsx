@@ -1,10 +1,12 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Phone, Mail, MapPin, Facebook, Instagram, Twitter } from 'lucide-react';
+import Logo from '../assets/Logo.png'
 
 const Footer: React.FC = () => {
 
     const phoneNumber = import.meta.env.VITE_CONTACT_NUMBER;
+    const phoneNumberSecond = import.meta.env.VITE_CONTACT_NUMBER_SECOND;
     const pressEmail = import.meta.env.VITE_COMPANY_EMAIL;
 
     return (
@@ -15,13 +17,15 @@ const Footer: React.FC = () => {
                     {/* Company Info */}
                     <div>
                         <div className="flex items-center gap-3 mb-4">
-                            <div className="bg-gradient-to-br from-red-500 to-pink-500 w-12 h-12 flex items-center justify-center rounded-2xl font-black text-xl shadow-lg">
-                                DP
-                            </div>
-                            <div>
-                                <h3 className="text-xl font-black">Dubai Print & Design</h3>
-                                <p className="text-xs text-gray-400 font-medium">Printing Excellence</p>
-                            </div>
+                            <img
+                                src={Logo}
+                                loading='lazy'
+                                alt="UAE Luxury Car Hire Logo"
+                                className="h-8 sm:h-12 md:h-14 w-auto transition-transform duration-300 group-hover:scale-105"
+                            />
+                            <span className="text-lg sm:text-xl md:text-2xl lg:text-2xl font-bold text-white group-hover:text-red-600 transition-colors duration-300">
+                                Dubai<span className="text-red-600"> Print & Design</span>
+                            </span>
                         </div>
                         <p className="text-gray-400 text-sm font-medium mb-4">
                             Professional printing services in UAE at unbelievable prices.
@@ -59,12 +63,19 @@ const Footer: React.FC = () => {
                             <li className="flex items-center gap-2 text-gray-400 text-sm">
                                 <MapPin size={16} className="text-red-500" />
                                 <span className="font-medium">
-                                    Exchange Tower, Business Bay, Dubai, UAE</span>
+                                    Exchange Tower, Business Bay, Dubai, UAE
+                                </span>
+                            </li>
+                            <li className="flex items-center gap-2 text-gray-400 text-sm">
+                                <MapPin size={16} className="text-red-500" />
+                                <span className="font-medium">
+                                    Khalidiya Towers, M Floor, W10, Al Bateen, Khalidiyah, Abu Dhabi, UAE
+                                </span>
                             </li>
                             <li className="flex items-center gap-2 text-gray-400 text-sm">
                                 <Phone size={16} className="text-red-500" />
                                 <a href={`tel:+${phoneNumber}`} className="hover:text-white transition-colors font-medium">
-                                    +{phoneNumber}
+                                    +{phoneNumber} / +{phoneNumberSecond}
                                 </a>
                             </li>
                             <li className="flex items-center gap-2 text-gray-400 text-sm">
@@ -80,7 +91,7 @@ const Footer: React.FC = () => {
                 {/* Bottom Bar */}
                 <div className="border-t border-gray-800 pt-6 flex flex-col md:flex-row justify-center items-center gap-4">
                     <p className="text-sm text-gray-400 font-medium flex items-center gap-2">
-                        © {new Date().getFullYear()} Dubai Print & Design.
+                        © {new Date().getFullYear()} Dubai Print & Design LLC.
                     </p>
                 </div>
             </div>
