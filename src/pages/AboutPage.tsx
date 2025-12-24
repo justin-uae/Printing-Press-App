@@ -14,7 +14,7 @@ const AboutPage: React.FC = () => {
                     <div className="inline-block bg-white text-red-600 px-6 py-3 rounded-2xl font-black text-sm mb-6 shadow-lg">
                         TRUSTED BY THOUSANDS
                     </div>
-                    <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black mb-6">About Dubai Print & Design</h1>
+                    <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black mb-6">About DBX Print & Design</h1>
                     <p className="text-xl lg:text-2xl max-w-3xl mx-auto font-medium">
                         Your trusted partner for professional printing services in UAE
                     </p>
@@ -34,7 +34,7 @@ const AboutPage: React.FC = () => {
                                 "Quality printing shouldn't cost a fortune. That's the principle we built our business on."
                             </p>
                             <p className="font-medium">
-                                Dubai Print & Design has been at the forefront of professional printing services in the UAE,
+                                DBX Print & Design has been at the forefront of professional printing services in the UAE,
                                 delivering exceptional quality at unbelievable prices. We understand that businesses
                                 and individuals need high-quality printed materials without breaking the bank.
                             </p>

@@ -1,14 +1,29 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight, Star, Clock, Shield, TrendingDown, CheckCircle } from 'lucide-react';
+import { ArrowRight, Star, Clock, Shield, TrendingDown, CheckCircle, ChevronLeft, ChevronRight } from 'lucide-react';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
 import { fetchProducts } from '../store/productsSlice';
 import ProductCard from '../components/ProductCard';
 import type { Product } from '..';
-import Banner from '../assets/Banner.jpg'
+import Banner2 from '../assets/Banner2.webp'
+import Banner3 from '../assets/Banner3.jpg'
+import Banner4 from '../assets/Banner4.png'
+import Banner5 from '../assets/Banner5.jpg'
+import Banner6 from '../assets/Banner6.jpg'
+import Banner7 from '../assets/Banner7.jpg'
 
 const HomePage: React.FC = () => {
     const dispatch = useAppDispatch();
+    const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
+    const sliderImages = [
+        Banner2,
+        Banner6,
+        Banner5,
+        Banner3,
+        Banner4,
+        Banner7,
+    ];
 
     // Select data from Redux store
     const { items: allProducts, loading: productsLoading, error: productsError } = useAppSelector(
@@ -19,6 +34,34 @@ const HomePage: React.FC = () => {
     useEffect(() => {
         dispatch(fetchProducts({ first: 100 }));
     }, [dispatch]);
+
+    // Auto-play slider
+    useEffect(() => {
+        const interval = setInterval(() => {
+            setCurrentImageIndex((prevIndex) =>
+                prevIndex === sliderImages.length - 1 ? 0 : prevIndex + 1
+            );
+        }, 3000); // Change image every 5 seconds
+
+        return () => clearInterval(interval);
+    }, [sliderImages.length]);
+
+    // Manual navigation
+    const goToNextImage = () => {
+        setCurrentImageIndex((prevIndex) =>
+            prevIndex === sliderImages.length - 1 ? 0 : prevIndex + 1
+        );
+    };
+
+    const goToPrevImage = () => {
+        setCurrentImageIndex((prevIndex) =>
+            prevIndex === 0 ? sliderImages.length - 1 : prevIndex - 1
+        );
+    };
+
+    const goToImage = (index: number) => {
+        setCurrentImageIndex(index);
+    };
 
     // Get featured products (products with POPULAR, BESTSELLER, or NEW badge)
     const featuredProducts = useMemo((): Product[] => {
@@ -62,7 +105,7 @@ const HomePage: React.FC = () => {
                             </div>
 
                             <h1 className="text-4xl sm:text-5xl xl:text-6xl font-bold leading-tight text-gray-900">
-                                Diamond Press
+                                DBX Print & Design
                                 <span className="block mt-3 text-transparent bg-clip-text bg-gradient-to-r from-red-600 to-orange-600">
                                     Quality Printing Services
                                 </span>
@@ -113,20 +156,57 @@ const HomePage: React.FC = () => {
                             </div>
                         </div>
 
-                        {/* RIGHT VISUAL - Real Printing Press Image - Now visible on all devices */}
+                        {/* RIGHT VISUAL - Image Slider */}
                         <div className="relative">
                             <div className="relative">
-                                {/* Main image container */}
+                                {/* Main slider container */}
                                 <div className="relative rounded-2xl overflow-hidden shadow-2xl border-4 border-white">
-                                    {/* Replace this src with your actual printing press image */}
-                                    <img
-                                        src={Banner}
-                                        alt="Professional Printing Press"
-                                        className="w-full h-[400px] lg:h-[500px] object-cover"
-                                    />
+                                    {/* Slider images */}
+                                    <div className="relative h-[400px] lg:h-[500px]">
+                                        {sliderImages.map((image, index) => (
+                                            <img
+                                                key={index}
+                                                src={image}
+                                                alt={`Professional Printing Press ${index + 1}`}
+                                                className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-700 ${index === currentImageIndex ? 'opacity-100' : 'opacity-0'
+                                                    }`}
+                                            />
+                                        ))}
+                                    </div>
 
-                                    {/* Overlay gradient for better badge visibility */}
-                                    <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
+                                    {/* Overlay gradient */}
+                                    <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent pointer-events-none"></div>
+
+                                    {/* Navigation Arrows */}
+                                    <button
+                                        onClick={goToPrevImage}
+                                        className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/90 hover:bg-white text-gray-900 p-2 rounded-full shadow-lg transition-all duration-300 hover:scale-110 z-20"
+                                        aria-label="Previous image"
+                                    >
+                                        <ChevronLeft size={24} strokeWidth={3} />
+                                    </button>
+                                    <button
+                                        onClick={goToNextImage}
+                                        className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/90 hover:bg-white text-gray-900 p-2 rounded-full shadow-lg transition-all duration-300 hover:scale-110 z-20"
+                                        aria-label="Next image"
+                                    >
+                                        <ChevronRight size={24} strokeWidth={3} />
+                                    </button>
+
+                                    {/* Dot Indicators */}
+                                    <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2 z-20">
+                                        {sliderImages.map((_, index) => (
+                                            <button
+                                                key={index}
+                                                onClick={() => goToImage(index)}
+                                                className={`transition-all duration-300 rounded-full ${index === currentImageIndex
+                                                    ? 'w-8 h-3 bg-white'
+                                                    : 'w-3 h-3 bg-white/50 hover:bg-white/75'
+                                                    }`}
+                                                aria-label={`Go to image ${index + 1}`}
+                                            />
+                                        ))}
+                                    </div>
                                 </div>
 
                                 {/* Quality badge */}
@@ -143,7 +223,7 @@ const HomePage: React.FC = () => {
                                 </div>
 
                                 {/* CMYK Color indicators overlay */}
-                                <div className="absolute bottom-6 right-6 flex gap-2 z-10">
+                                <div className="absolute bottom-16 right-6 flex gap-2 z-10">
                                     <div className="w-10 h-10 bg-cyan-500 rounded-full shadow-lg border-2 border-white"></div>
                                     <div className="w-10 h-10 bg-pink-500 rounded-full shadow-lg border-2 border-white"></div>
                                     <div className="w-10 h-10 bg-yellow-400 rounded-full shadow-lg border-2 border-white"></div>
@@ -440,9 +520,9 @@ const HomePage: React.FC = () => {
                         STRANGE AND UNBELIEVABLE PRICES!
                     </h2>
                     <p className="text-2xl lg:text-3xl mb-10 max-w-3xl mx-auto text-white font-bold drop-shadow-lg">
-                        Business cards from <span className="bg-white text-red-600 px-4 py-2 rounded-xl inline-block">50 AED</span> for 1000 pcs!
+                        Business cards from <span className="bg-white text-red-600 px-4 py-2 rounded-xl inline-block">37 AED</span> for 1000 pcs!
                         <br className="hidden sm:block" />
-                        Flyers and Brochures from <span className="bg-white text-red-600 px-4 py-2 rounded-xl inline-block mt-2">80 AED</span>!
+                        Flyers and Brochures from <span className="bg-white text-red-600 px-4 py-2 rounded-xl inline-block mt-2">50 AED</span>!
                     </p>
 
                     <div className="flex flex-wrap justify-center gap-4">
@@ -467,7 +547,7 @@ const HomePage: React.FC = () => {
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="text-center mb-12 lg:mb-16">
                         <h2 className="text-4xl sm:text-5xl lg:text-6xl font-black text-gray-900 mb-4">
-                            Why Choose Dubai Print & Design?
+                            Why Choose DBX Print & Design?
                         </h2>
                         <p className="text-xl text-gray-700 max-w-2xl mx-auto font-medium">
                             The leading printing service in UAE
@@ -493,7 +573,7 @@ const HomePage: React.FC = () => {
                             {
                                 icon: TrendingDown,
                                 title: 'Incredible Pricing',
-                                description: 'Our prices are truly unbelievable! Get professional business cards from 50 AED, flyers from 80 AED, and much more.',
+                                description: 'Our prices are truly unbelievable! Get professional business cards from 37 AED, flyers from 46 AED, and much more.',
                                 gradient: 'from-red-400 to-pink-500',
                                 bgGradient: 'from-red-50 to-pink-50'
                             },
@@ -541,12 +621,12 @@ const HomePage: React.FC = () => {
                     <div className="max-w-4xl mx-auto space-y-4">
                         {[
                             {
-                                question: "How do I get in touch with or place an order with Dubai Printing?",
+                                question: "How do I get in touch with or place an order with DBX Printing?",
                                 answer: "Easy! Just drop us an email. You can also ring us at +971 55 377 2757 or +971 58 538 9757."
                             },
                             {
                                 question: "Can I get free samples?",
-                                answer: "Yes you can, Call us on +971 55 377 2757 or +971 58 538 9757, to Set Up an appointment for one of our Dubai Printing experts."
+                                answer: "Yes you can, Call us on +971 55 377 2757 or +971 58 538 9757, to Set Up an appointment for one of our DBX Printing experts."
                             },
                             {
                                 question: "How much are your products? Do I get a variety of options?",
@@ -565,7 +645,7 @@ const HomePage: React.FC = () => {
                                 answer: "You will be sent a digital proof for approval and corrections will be carried out as per your specifications before the job is sent for printing."
                             },
                             {
-                                question: "What are the payment options available at Dubai printing?",
+                                question: "What are the payment options available at DBX printing?",
                                 answer: "We are happy to accept payment in the form of cheques, Debit cards, Credit Cards or Cash. We require full payment before we start work."
                             },
                             {

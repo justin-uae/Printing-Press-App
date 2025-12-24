@@ -120,7 +120,7 @@ const ContactPage: React.FC = () => {
                                 </div>
                                 <h3 className="text-xl font-black mb-3 text-gray-900">Visit Us</h3>
                                 <p className="text-gray-600 leading-relaxed font-medium">
-                                    Dubai Print & Design<br />
+                                    DBX Print & Design<br />
                                     Exchange Tower, Business Bay, Dubai, UAE
                                     <br />
                                     <br />

@@ -24,7 +24,7 @@ const Footer: React.FC = () => {
                                 className="h-8 sm:h-12 md:h-14 w-auto transition-transform duration-300 group-hover:scale-105"
                             />
                             <span className="text-lg sm:text-xl md:text-2xl lg:text-2xl font-bold text-white group-hover:text-red-600 transition-colors duration-300">
-                                Dubai<span className="text-red-600"> Print & Design</span>
+                                DBX<span className="text-red-600"> Print & Design</span>
                             </span>
                         </div>
                         <p className="text-gray-400 text-sm font-medium mb-4">
@@ -91,7 +91,7 @@ const Footer: React.FC = () => {
                 {/* Bottom Bar */}
                 <div className="border-t border-gray-800 pt-6 flex flex-col md:flex-row justify-center items-center gap-4">
                     <p className="text-sm text-gray-400 font-medium flex items-center gap-2">
-                        © {new Date().getFullYear()} Dubai Print & Design LLC.
+                        © {new Date().getFullYear()} DBX Print & Design LLC.
                     </p>
                 </div>
             </div>

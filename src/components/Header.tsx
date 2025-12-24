@@ -33,7 +33,7 @@ const Header: React.FC = () => {
               />
               {/* Brand Text */}
               <span className="text-lg sm:text-xl md:text-2xl lg:text-2xl font-bold text-gray-800 group-hover:text-red-600 transition-colors duration-300">
-                Dubai<span className="text-red-600"> Print & Design</span>
+                DBX<span className="text-red-600"> Print & Design</span>
               </span>
             </Link>
             {/* Desktop Navigation */}
