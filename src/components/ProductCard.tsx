@@ -25,13 +25,13 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
                     {/* Product Badge */}
                     {product.badge && (
                         <div className={`px-3 py-1.5 rounded-xl font-black text-xs shadow-lg ${product.badge === 'POPULAR' ? 'bg-blue-400 text-white' :
-                                product.badge === 'NEW' ? 'bg-green-400 text-white' :
-                                    product.badge === 'BESTSELLER' ? 'bg-yellow-400 text-gray-900' :
-                                        product.badge === 'HOT' ? 'bg-red-400 text-white' :
-                                            product.badge === 'PREMIUM' ? 'bg-purple-400 text-white' :
-                                                product.badge === 'ECO-FRIENDLY' ? 'bg-green-500 text-white' :
-                                                    product.badge === 'BUDGET' ? 'bg-orange-400 text-white' :
-                                                        'bg-gray-400 text-white'
+                            product.badge === 'NEW' ? 'bg-green-400 text-white' :
+                                product.badge === 'BESTSELLER' ? 'bg-yellow-400 text-gray-900' :
+                                    product.badge === 'HOT' ? 'bg-orange-400 text-white' :
+                                        product.badge === 'PREMIUM' ? 'bg-purple-400 text-white' :
+                                            product.badge === 'ECO-FRIENDLY' ? 'bg-green-500 text-white' :
+                                                product.badge === 'BUDGET' ? 'bg-orange-400 text-white' :
+                                                    'bg-gray-400 text-white'
                             }`}>
                             {product.badge}
                         </div>
@@ -39,7 +39,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
 
                     {/* Discount Badge */}
                     {discount > 0 && (
-                        <div className="bg-gradient-to-r from-red-500 to-pink-500 text-white px-3 py-1.5 rounded-xl font-black text-sm shadow-lg">
+                        <div className="bg-gradient-to-r from-orange-500 to-orange-500 text-white px-3 py-1.5 rounded-xl font-black text-sm shadow-lg">
                             -{discount}%
                         </div>
                     )}
@@ -57,7 +57,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
 
                 {/* Title */}
                 <Link to={`/product/${product.handle}`}>
-                    <h3 className="text-xl font-black text-gray-900 mb-3 hover:text-red-600 transition-colors line-clamp-2 min-h-[3.5rem]">
+                    <h3 className="text-xl font-black text-gray-900 mb-3 hover:text-orange-600 transition-colors line-clamp-2 min-h-[3.5rem]">
                         {product.title}
                     </h3>
                 </Link>
@@ -65,7 +65,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
                 {/* Pricing */}
                 <div className="mb-5">
                     <div className="flex items-baseline gap-3">
-                        <span className="text-3xl font-black text-red-600">
+                        <span className="text-3xl font-black text-orange-600">
                             {lowestPrice} <span className="text-lg">AED</span>
                         </span>
                         {discount > 0 && normalPrice > lowestPrice && (
@@ -93,7 +93,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
                 {/* Action Button */}
                 <Link
                     to={`/product/${product.handle}`}
-                    className="block w-full text-center bg-gradient-to-r from-red-500 to-pink-500 hover:from-red-600 hover:to-pink-600 text-white font-black py-3.5 px-4 rounded-2xl transition-all duration-300 shadow-md hover:shadow-xl transform hover:scale-105"
+                    className="block w-full text-center bg-gradient-to-r from-orange-500 to-orange-500 hover:from-orange-600 hover:to-orange-600 text-white font-black py-3.5 px-4 rounded-2xl transition-all duration-300 shadow-md hover:shadow-xl transform hover:scale-105"
                 >
                     View Details
                 </Link>

@@ -8,6 +8,7 @@ const Footer: React.FC = () => {
     const phoneNumber = import.meta.env.VITE_CONTACT_NUMBER;
     const phoneNumberSecond = import.meta.env.VITE_CONTACT_NUMBER_SECOND;
     const pressEmail = import.meta.env.VITE_COMPANY_EMAIL;
+    const appURL = import.meta.env.VITE_APP_URL;
 
     return (
         <footer className="bg-gray-900 text-white">
@@ -23,8 +24,8 @@ const Footer: React.FC = () => {
                                 alt="UAE Luxury Car Hire Logo"
                                 className="h-8 sm:h-12 md:h-14 w-auto transition-transform duration-300 group-hover:scale-105"
                             />
-                            <span className="text-lg sm:text-xl md:text-2xl lg:text-2xl font-bold text-white group-hover:text-red-600 transition-colors duration-300">
-                                DBX<span className="text-red-600"> Print & Design</span>
+                            <span className="text-lg sm:text-xl md:text-2xl lg:text-2xl font-bold text-white group-hover:text-orange-600 transition-colors duration-300">
+                                DBX<span className="text-orange-600"> Print & Design</span>
                             </span>
                         </div>
                         <p className="text-gray-400 text-sm font-medium mb-4">
@@ -33,13 +34,13 @@ const Footer: React.FC = () => {
 
                         {/* Social Media */}
                         <div className="flex gap-3">
-                            <a href="#" className="w-10 h-10 bg-gray-800 hover:bg-red-600 rounded-xl flex items-center justify-center transition-all">
+                            <a href="#" className="w-10 h-10 bg-gray-800 hover:bg-orange-600 rounded-xl flex items-center justify-center transition-all">
                                 <Facebook size={18} />
                             </a>
-                            <a href="#" className="w-10 h-10 bg-gray-800 hover:bg-red-600 rounded-xl flex items-center justify-center transition-all">
+                            <a href="#" className="w-10 h-10 bg-gray-800 hover:bg-orange-600 rounded-xl flex items-center justify-center transition-all">
                                 <Instagram size={18} />
                             </a>
-                            <a href="#" className="w-10 h-10 bg-gray-800 hover:bg-red-600 rounded-xl flex items-center justify-center transition-all">
+                            <a href="#" className="w-10 h-10 bg-gray-800 hover:bg-orange-600 rounded-xl flex items-center justify-center transition-all">
                                 <Twitter size={18} />
                             </a>
                         </div>
@@ -61,25 +62,25 @@ const Footer: React.FC = () => {
                         <h4 className="text-lg font-black mb-4">Contact</h4>
                         <ul className="space-y-3">
                             <li className="flex items-center gap-2 text-gray-400 text-sm">
-                                <MapPin size={16} className="text-red-500" />
+                                <MapPin size={16} className="text-orange-500" />
                                 <span className="font-medium">
                                     Exchange Tower, Business Bay, Dubai, UAE
                                 </span>
                             </li>
                             <li className="flex items-center gap-2 text-gray-400 text-sm">
-                                <MapPin size={16} className="text-red-500" />
+                                <MapPin size={16} className="text-orange-500" />
                                 <span className="font-medium">
                                     Khalidiya Towers, M Floor, W10, Al Bateen, Khalidiyah, Abu Dhabi, UAE
                                 </span>
                             </li>
                             <li className="flex items-center gap-2 text-gray-400 text-sm">
-                                <Phone size={16} className="text-red-500" />
+                                <Phone size={16} className="text-orange-500" />
                                 <a href={`tel:+${phoneNumber}`} className="hover:text-white transition-colors font-medium">
                                     +{phoneNumber} / +{phoneNumberSecond}
                                 </a>
                             </li>
                             <li className="flex items-center gap-2 text-gray-400 text-sm">
-                                <Mail size={16} className="text-red-500" />
+                                <Mail size={16} className="text-orange-500" />
                                 <a href={`mailto:${pressEmail}`} className="hover:text-white transition-colors font-medium break-all">
                                     {pressEmail}
                                 </a>
@@ -91,7 +92,11 @@ const Footer: React.FC = () => {
                 {/* Bottom Bar */}
                 <div className="border-t border-gray-800 pt-6 flex flex-col md:flex-row justify-center items-center gap-4">
                     <p className="text-sm text-gray-400 font-medium flex items-center gap-2">
-                        © {new Date().getFullYear()} DBX Print & Design LLC.
+                        © {new Date().getFullYear()}
+                        <a className='text-orange-600' href={appURL} target='_blank'>
+                            DBX Print & Design
+                        </a>
+                        is a trading style of DBX Signage For Promotional Gifts Preparing LLC.
                     </p>
                 </div>
             </div>

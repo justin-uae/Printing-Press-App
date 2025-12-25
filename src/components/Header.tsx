@@ -23,37 +23,36 @@ const Header: React.FC = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex items-center justify-between gap-4">
             {/* Logo */}
-            <Link to="/" className="flex items-center group" onClick={() => dispatch(closeMobileMenu())}>
+            <Link to="/" className="flex items-center space-x-2 sm:space-x-3 group" onClick={() => dispatch(closeMobileMenu())}>
               {/* Logo Image */}
               <img
                 src={Logo}
-                loading='lazy'
                 alt="UAE Luxury Car Hire Logo"
-                className="h-10 sm:h-14 md:h-14 w-auto transition-transform duration-300 group-hover:scale-105"
+                className="h-8 sm:h-12 md:h-14 w-auto transition-transform duration-300 group-hover:scale-105"
               />
               {/* Brand Text */}
-              <span className="text-lg sm:text-xl md:text-2xl lg:text-2xl font-bold text-gray-800 group-hover:text-red-600 transition-colors duration-300">
-                DBX<span className="text-red-600"> Print & Design</span>
+              <span className="text-lg sm:text-xl md:text-2xl lg:text-2xl font-bold text-gray-800 group-hover:text-orange-600 transition-colors duration-300">
+                DBX<span className="text-orange-600"> Print & Design</span>
               </span>
             </Link>
             {/* Desktop Navigation */}
             <nav className="hidden lg:flex items-center gap-2">
               <Link
                 to="/"
-                className="px-4 py-2 text-gray-700 hover:text-red-600 font-bold transition-all duration-200 rounded-xl hover:bg-red-50"
+                className="px-4 py-2 text-gray-700 hover:text-orange-600 font-bold transition-all duration-200 rounded-xl hover:bg-orange-50"
               >
                 Home
               </Link>
               <Link
                 to="/products"
-                className="px-4 py-2 text-gray-700 hover:text-red-600 font-bold transition-all duration-200 rounded-xl hover:bg-red-50"
+                className="px-4 py-2 text-gray-700 hover:text-orange-600 font-bold transition-all duration-200 rounded-xl hover:bg-orange-50"
               >
                 Products
               </Link>
 
               {/* Categories Dropdown */}
               <div className="relative group">
-                <button className="px-4 py-2 text-gray-700 hover:text-red-600 font-bold transition-all duration-200 rounded-xl hover:bg-red-50 flex items-center gap-1">
+                <button className="px-4 py-2 text-gray-700 hover:text-orange-600 font-bold transition-all duration-200 rounded-xl hover:bg-orange-50 flex items-center gap-1">
                   Categories
                   <ChevronDown size={16} className="group-hover:rotate-180 transition-transform duration-300" />
                 </button>
@@ -62,7 +61,7 @@ const Header: React.FC = () => {
                     <Link
                       key={category.id}
                       to={`/products?category=${category.id}`}
-                      className="flex items-center gap-3 px-4 py-3 hover:bg-red-50 transition-all duration-200 border-b last:border-b-0"
+                      className="flex items-center gap-3 px-4 py-3 hover:bg-orange-50 transition-all duration-200 border-b last:border-b-0"
                     >
                       <div className="flex-1">
                         <p className="font-bold text-gray-900">{category.name}</p>
@@ -74,13 +73,13 @@ const Header: React.FC = () => {
 
               <Link
                 to="/about"
-                className="px-4 py-2 text-gray-700 hover:text-red-600 font-bold transition-all duration-200 rounded-xl hover:bg-red-50"
+                className="px-4 py-2 text-gray-700 hover:text-orange-600 font-bold transition-all duration-200 rounded-xl hover:bg-orange-50"
               >
                 About
               </Link>
               <Link
                 to="/contact"
-                className="px-4 py-2 text-gray-700 hover:text-red-600 font-bold transition-all duration-200 rounded-xl hover:bg-red-50"
+                className="px-4 py-2 text-gray-700 hover:text-orange-600 font-bold transition-all duration-200 rounded-xl hover:bg-orange-50"
               >
                 Contact
               </Link>
@@ -110,9 +109,9 @@ const Header: React.FC = () => {
                 onClick={() => dispatch(toggleCart())}
                 className="relative p-2.5 hover:bg-gray-100 rounded-xl transition-all duration-200 group"
               >
-                <ShoppingCart size={20} className="text-gray-700 group-hover:text-red-600 transition-colors" />
+                <ShoppingCart size={20} className="text-gray-700 group-hover:text-orange-600 transition-colors" />
                 {cartItems > 0 && (
-                  <span className="absolute -top-1 -right-1 bg-gradient-to-r from-red-500 to-pink-500 text-white text-xs w-5 h-5 flex items-center justify-center rounded-full font-black shadow-lg">
+                  <span className="absolute -top-1 -right-1 bg-gradient-to-r from-orange-500 to-orange-500 text-white text-xs w-5 h-5 flex items-center justify-center rounded-full font-black shadow-lg">
                     {cartItems > 9 ? '9+' : cartItems}
                   </span>
                 )}
@@ -141,14 +140,14 @@ const Header: React.FC = () => {
             <Link
               to="/"
               onClick={() => dispatch(closeMobileMenu())}
-              className="flex items-center justify-between px-4 py-3 text-gray-700 hover:text-red-600 hover:bg-red-50 font-bold rounded-xl transition-all duration-200"
+              className="flex items-center justify-between px-4 py-3 text-gray-700 hover:text-orange-600 hover:bg-orange-50 font-bold rounded-xl transition-all duration-200"
             >
               <span>Home</span>
             </Link>
             <Link
               to="/products"
               onClick={() => dispatch(closeMobileMenu())}
-              className="flex items-center justify-between px-4 py-3 text-gray-700 hover:text-red-600 hover:bg-red-50 font-bold rounded-xl transition-all duration-200"
+              className="flex items-center justify-between px-4 py-3 text-gray-700 hover:text-orange-600 hover:bg-orange-50 font-bold rounded-xl transition-all duration-200"
             >
               <span>All Products</span>
             </Link>
@@ -157,7 +156,7 @@ const Header: React.FC = () => {
             <div className="space-y-1">
               <button
                 onClick={() => setIsCategoryOpen(!isCategoryOpen)}
-                className="w-full flex items-center justify-between px-4 py-3 text-gray-700 hover:text-red-600 hover:bg-red-50 font-bold rounded-xl transition-all duration-200"
+                className="w-full flex items-center justify-between px-4 py-3 text-gray-700 hover:text-orange-600 hover:bg-orange-50 font-bold rounded-xl transition-all duration-200"
               >
                 <span>Categories</span>
                 <ChevronDown
@@ -177,7 +176,7 @@ const Header: React.FC = () => {
                       key={category.id}
                       to={`/products?category=${category.slug}`}
                       onClick={() => dispatch(closeMobileMenu())}
-                      className="flex items-center gap-3 px-4 py-3 text-gray-600 hover:text-red-600 hover:bg-red-50 rounded-xl transition-all duration-200"
+                      className="flex items-center gap-3 px-4 py-3 text-gray-600 hover:text-orange-600 hover:bg-orange-50 rounded-xl transition-all duration-200"
                     >
                       <div className="flex-1">
                         <p className="font-bold">{category.name}</p>
@@ -191,14 +190,14 @@ const Header: React.FC = () => {
             <Link
               to="/about"
               onClick={() => dispatch(closeMobileMenu())}
-              className="flex items-center justify-between px-4 py-3 text-gray-700 hover:text-red-600 hover:bg-red-50 font-bold rounded-xl transition-all duration-200"
+              className="flex items-center justify-between px-4 py-3 text-gray-700 hover:text-orange-600 hover:bg-orange-50 font-bold rounded-xl transition-all duration-200"
             >
               <span>About Us</span>
             </Link>
             <Link
               to="/contact"
               onClick={() => dispatch(closeMobileMenu())}
-              className="flex items-center justify-between px-4 py-3 text-gray-700 hover:text-red-600 hover:bg-red-50 font-bold rounded-xl transition-all duration-200"
+              className="flex items-center justify-between px-4 py-3 text-gray-700 hover:text-orange-600 hover:bg-orange-50 font-bold rounded-xl transition-all duration-200"
             >
               <span>Contact</span>
             </Link>
@@ -216,7 +215,7 @@ const Header: React.FC = () => {
               </a>
 
               <a href={`tel:${phoneNumber}`}
-                className="flex items-center justify-center gap-2 w-full bg-gradient-to-r from-red-500 to-pink-500 text-white font-black py-3 px-6 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-105"
+                className="flex items-center justify-center gap-2 w-full bg-gradient-to-r from-orange-500 to-orange-500 text-white font-black py-3 px-6 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-105"
               >
                 <Phone size={18} />
                 <span>Call Us Now</span>

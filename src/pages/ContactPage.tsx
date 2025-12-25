@@ -92,12 +92,12 @@ const ContactPage: React.FC = () => {
     return (
         <div className="min-h-screen bg-gradient-to-br from-gray-50 to-white">
             {/* Hero Section */}
-            <section className="relative bg-gradient-to-r from-red-500 to-pink-500 text-white py-20 lg:py-28 overflow-hidden">
+            <section className="relative bg-gradient-to-r from-orange-500 to-orange-500 text-white py-20 lg:py-28 overflow-hidden">
                 <div className="absolute top-10 left-10 w-32 h-32 bg-yellow-300 rounded-full opacity-20"></div>
                 <div className="absolute bottom-10 right-10 w-40 h-40 bg-white opacity-10" style={{ clipPath: 'polygon(50% 0%, 100% 100%, 0% 100%)' }}></div>
 
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
-                    <div className="inline-block bg-white text-red-600 px-6 py-3 rounded-2xl font-black text-sm mb-6 shadow-lg">
+                    <div className="inline-block bg-white text-orange-600 px-6 py-3 rounded-2xl font-black text-sm mb-6 shadow-lg">
                         WE'RE HERE TO HELP
                     </div>
                     <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black mb-6">Get In Touch</h1>
@@ -115,16 +115,13 @@ const ContactPage: React.FC = () => {
                         <div className="lg:col-span-1 space-y-6">
                             {/* Address */}
                             <div className="group bg-white rounded-3xl shadow-lg hover:shadow-xl p-6 lg:p-8 transition-all duration-300 hover:-translate-y-1">
-                                <div className="w-14 h-14 bg-gradient-to-br from-red-400 to-pink-500 rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 group-hover:rotate-3 transition-all duration-300 shadow-md">
+                                <div className="w-14 h-14 bg-gradient-to-br from-orange-400 to-orange-500 rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 group-hover:rotate-3 transition-all duration-300 shadow-md">
                                     <MapPin size={28} className="text-white" />
                                 </div>
                                 <h3 className="text-xl font-black mb-3 text-gray-900">Visit Us</h3>
                                 <p className="text-gray-600 leading-relaxed font-medium">
                                     DBX Print & Design<br />
                                     Exchange Tower, Business Bay, Dubai, UAE
-                                    <br />
-                                    <br />
-                                    Khalidiya Towers, M Floor, W10, Al Bateen, Khalidiyah, Abu Dhabi, UAE
                                 </p>
                             </div>
 
@@ -134,11 +131,11 @@ const ContactPage: React.FC = () => {
                                     <Phone size={28} className="text-white" />
                                 </div>
                                 <h3 className="text-xl font-black mb-3 text-gray-900">Call Us</h3>
-                                <a href={`tel:+${phoneNumber}`} className="text-red-600 hover:text-red-700 font-black text-lg transition-colors">
+                                <a href={`tel:+${phoneNumber}`} className="text-orange-600 hover:text-orange-700 font-black text-lg transition-colors">
                                     +{phoneNumber}
                                 </a>
                                 <br />
-                                <a href={`tel:+${phoneNumberSecond}`} className="text-red-600 hover:text-red-700 font-black text-lg transition-colors">
+                                <a href={`tel:+${phoneNumberSecond}`} className="text-orange-600 hover:text-orange-700 font-black text-lg transition-colors">
                                     +{phoneNumberSecond}
                                 </a>
                                 <p className="text-sm text-gray-500 mt-2 font-medium">Mon-Sat, 9AM-6PM</p>
@@ -150,15 +147,15 @@ const ContactPage: React.FC = () => {
                                     <Mail size={28} className="text-white" />
                                 </div>
                                 <h3 className="text-xl font-black mb-3 text-gray-900">Email Us</h3>
-                                <a href={`mailto:${pressEmail}`} className="text-red-600 hover:text-red-700 font-bold break-all transition-colors">
+                                <a href={`mailto:${pressEmail}`} className="text-orange-600 hover:text-orange-700 font-bold break-all transition-colors">
                                     {pressEmail}
                                 </a>
                                 <p className="text-sm text-gray-500 mt-2 font-medium">Reply within 24 hours</p>
                             </div>
 
                             {/* Working Hours */}
-                            <div className="bg-gradient-to-br from-purple-50 to-pink-50 rounded-3xl shadow-lg p-6 lg:p-8">
-                                <div className="w-14 h-14 bg-gradient-to-br from-purple-400 to-pink-500 rounded-2xl flex items-center justify-center mb-4 shadow-md">
+                            <div className="bg-gradient-to-br from-purple-50 to-orange-50 rounded-3xl shadow-lg p-6 lg:p-8">
+                                <div className="w-14 h-14 bg-gradient-to-br from-purple-400 to-orange-500 rounded-2xl flex items-center justify-center mb-4 shadow-md">
                                     <Clock size={28} className="text-white" />
                                 </div>
                                 <h3 className="text-xl font-black mb-4 text-gray-900">Working Hours</h3>
@@ -173,7 +170,7 @@ const ContactPage: React.FC = () => {
                                     </div>
                                     <div className="flex justify-between items-center p-3 bg-white rounded-xl font-medium">
                                         <span className="text-gray-600">Sunday:</span>
-                                        <span className="font-black text-red-600">Closed</span>
+                                        <span className="font-black text-orange-600">Closed</span>
                                     </div>
                                 </div>
                             </div>
@@ -201,7 +198,7 @@ const ContactPage: React.FC = () => {
                                             onChange={handleChange}
                                             required
                                             disabled={formStatus === 'loading'}
-                                            className="w-full px-4 py-3 border-2 border-gray-200 rounded-2xl focus:border-red-500 focus:ring-4 focus:ring-red-100 outline-none transition-all font-medium disabled:bg-gray-100 disabled:cursor-not-allowed"
+                                            className="w-full px-4 py-3 border-2 border-gray-200 rounded-2xl focus:border-orange-500 focus:ring-4 focus:ring-orange-100 outline-none transition-all font-medium disabled:bg-gray-100 disabled:cursor-not-allowed"
                                             placeholder="John Doe"
                                         />
                                     </div>
@@ -220,7 +217,7 @@ const ContactPage: React.FC = () => {
                                                 onChange={handleChange}
                                                 required
                                                 disabled={formStatus === 'loading'}
-                                                className="w-full px-4 py-3 border-2 border-gray-200 rounded-2xl focus:border-red-500 focus:ring-4 focus:ring-red-100 outline-none transition-all font-medium disabled:bg-gray-100 disabled:cursor-not-allowed"
+                                                className="w-full px-4 py-3 border-2 border-gray-200 rounded-2xl focus:border-orange-500 focus:ring-4 focus:ring-orange-100 outline-none transition-all font-medium disabled:bg-gray-100 disabled:cursor-not-allowed"
                                                 placeholder="john@example.com"
                                             />
                                         </div>
@@ -235,7 +232,7 @@ const ContactPage: React.FC = () => {
                                                 value={formData.phone}
                                                 onChange={handleChange}
                                                 disabled={formStatus === 'loading'}
-                                                className="w-full px-4 py-3 border-2 border-gray-200 rounded-2xl focus:border-red-500 focus:ring-4 focus:ring-red-100 outline-none transition-all font-medium disabled:bg-gray-100 disabled:cursor-not-allowed"
+                                                className="w-full px-4 py-3 border-2 border-gray-200 rounded-2xl focus:border-orange-500 focus:ring-4 focus:ring-orange-100 outline-none transition-all font-medium disabled:bg-gray-100 disabled:cursor-not-allowed"
                                                 placeholder="+971 XX XXX XXXX"
                                             />
                                         </div>
@@ -254,7 +251,7 @@ const ContactPage: React.FC = () => {
                                             required
                                             disabled={formStatus === 'loading'}
                                             rows={6}
-                                            className="w-full px-4 py-3 border-2 border-gray-200 rounded-2xl focus:border-red-500 focus:ring-4 focus:ring-red-100 outline-none transition-all resize-none font-medium disabled:bg-gray-100 disabled:cursor-not-allowed"
+                                            className="w-full px-4 py-3 border-2 border-gray-200 rounded-2xl focus:border-orange-500 focus:ring-4 focus:ring-orange-100 outline-none transition-all resize-none font-medium disabled:bg-gray-100 disabled:cursor-not-allowed"
                                             placeholder="Tell us about your printing needs..."
                                         />
                                     </div>
@@ -272,7 +269,7 @@ const ContactPage: React.FC = () => {
                                     <button
                                         type="submit"
                                         disabled={formStatus === 'loading'}
-                                        className="w-full md:w-auto inline-flex items-center justify-center gap-3 bg-gradient-to-r from-red-500 to-pink-500 hover:from-red-600 hover:to-pink-600 text-white font-black py-4 px-8 rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
+                                        className="w-full md:w-auto inline-flex items-center justify-center gap-3 bg-gradient-to-r from-orange-500 to-orange-500 hover:from-orange-600 hover:to-orange-600 text-white font-black py-4 px-8 rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
                                     >
                                         {formStatus === 'loading' ? (
                                             <>
@@ -290,11 +287,11 @@ const ContactPage: React.FC = () => {
                                     {/* reCAPTCHA Notice */}
                                     <p className="text-xs text-gray-500 text-center font-medium">
                                         This site is protected by reCAPTCHA and the Google{' '}
-                                        <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer" className="text-red-600 hover:text-red-700 font-bold">
+                                        <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer" className="text-orange-600 hover:text-orange-700 font-bold">
                                             Privacy Policy
                                         </a>{' '}
                                         and{' '}
-                                        <a href="https://policies.google.com/terms" target="_blank" rel="noopener noreferrer" className="text-red-600 hover:text-red-700 font-bold">
+                                        <a href="https://policies.google.com/terms" target="_blank" rel="noopener noreferrer" className="text-orange-600 hover:text-orange-700 font-bold">
                                             Terms of Service
                                         </a>{' '}
                                         apply.
@@ -313,8 +310,8 @@ const ContactPage: React.FC = () => {
                                     </div>
                                 )}
                                 {formStatus === 'error' && (
-                                    <div className="mt-6 p-5 bg-red-50 border-2 border-red-200 rounded-xl">
-                                        <p className="text-red-700 font-bold text-base">
+                                    <div className="mt-6 p-5 bg-orange-50 border-2 border-orange-200 rounded-xl">
+                                        <p className="text-orange-700 font-bold text-base">
                                             ❌ {responseMessage}
                                         </p>
                                     </div>

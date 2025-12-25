@@ -47,7 +47,7 @@ const ProductDetailPage: React.FC = () => {
     if (loading) {
         return (
             <div className="min-h-screen flex items-center justify-center">
-                <div className="animate-spin rounded-full h-16 w-16 border-b-4 border-red-500"></div>
+                <div className="animate-spin rounded-full h-16 w-16 border-b-4 border-orange-500"></div>
             </div>
         );
     }
@@ -61,7 +61,7 @@ const ProductDetailPage: React.FC = () => {
                     <p className="text-gray-600 mb-6">{error || 'The product you are looking for does not exist.'}</p>
                     <Link
                         to="/products"
-                        className="inline-flex items-center gap-2 bg-gradient-to-r from-red-500 to-pink-500 text-white px-6 py-3 rounded-2xl font-bold"
+                        className="inline-flex items-center gap-2 bg-gradient-to-r from-orange-500 to-orange-500 text-white px-6 py-3 rounded-2xl font-bold"
                     >
                         Back to Products
                     </Link>
@@ -161,9 +161,9 @@ Please confirm availability and processing time.`;
             <div className="bg-white border-b-4 border-gray-900">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
                     <div className="flex items-center gap-2 text-sm">
-                        <Link to="/" className="text-gray-600 hover:text-red-600 font-bold transition-colors">Home</Link>
+                        <Link to="/" className="text-gray-600 hover:text-orange-600 font-bold transition-colors">Home</Link>
                         <span className="text-gray-400">/</span>
-                        <Link to="/products" className="text-gray-600 hover:text-red-600 font-bold transition-colors">Products</Link>
+                        <Link to="/products" className="text-gray-600 hover:text-orange-600 font-bold transition-colors">Products</Link>
                         <span className="text-gray-400">/</span>
                         <span className="text-gray-900 font-black truncate">{product.title}</span>
                     </div>
@@ -173,7 +173,7 @@ Please confirm availability and processing time.`;
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
                 <button
                     onClick={() => navigate(-1)}
-                    className="inline-flex items-center gap-2 text-gray-600 hover:text-red-600 mb-6 font-bold transition-colors group"
+                    className="inline-flex items-center gap-2 text-gray-600 hover:text-orange-600 mb-6 font-bold transition-colors group"
                 >
                     <ChevronLeft size={20} className="group-hover:-translate-x-1 transition-transform" />
                     Back to Products
@@ -199,8 +199,8 @@ Please confirm availability and processing time.`;
                                         key={index}
                                         onClick={() => setSelectedImage(index)}
                                         className={`rounded-2xl overflow-hidden transition-all duration-300 border-3 ${selectedImage === index
-                                            ? 'ring-4 ring-red-500 scale-105 border-red-500'
-                                            : ' hover:border-red-300'
+                                            ? 'ring-4 ring-orange-500 scale-105 border-orange-500'
+                                            : ' hover:border-orange-300'
                                             }`}
                                     >
                                         <img
@@ -287,14 +287,14 @@ Please confirm availability and processing time.`;
                                     <span className={`inline-flex items-center gap-1 px-4 py-2 rounded-full text-sm font-black shadow-md ${product.badge === 'POPULAR' ? 'bg-blue-400 text-white' :
                                         product.badge === 'NEW' ? 'bg-green-400 text-white' :
                                             product.badge === 'BESTSELLER' ? 'bg-yellow-400 text-gray-900' :
-                                                product.badge === 'HOT' ? 'bg-red-400 text-white' :
+                                                product.badge === 'HOT' ? 'bg-orange-400 text-white' :
                                                     'bg-gray-400 text-white'
                                         }`}>
                                         {product.badge}
                                     </span>
                                 )}
                                 {product.productCode && (
-                                    <span className="bg-red-100 text-red-600 px-3 py-1.5 rounded-full font-black text-sm border-red-300">
+                                    <span className="bg-orange-100 text-orange-600 px-3 py-1.5 rounded-full font-black text-sm border-orange-300">
                                         {product.productCode}
                                     </span>
                                 )}
@@ -315,7 +315,7 @@ Please confirm availability and processing time.`;
                         </div>
 
                         {/* Price Calculator Card */}
-                        <div className="bg-gradient-to-br from-red-50 to-pink-50 rounded-3xl shadow-xl p-6 lg:p-8">
+                        <div className="bg-gradient-to-br from-orange-50 to-orange-50 rounded-3xl shadow-xl p-6 lg:p-8">
                             <h3 className="text-xl font-black mb-6 text-gray-900">
                                 Configure Your {product?.category}
                             </h3>
@@ -332,7 +332,7 @@ Please confirm availability and processing time.`;
                                             onClick={() => handleVariantSelect(variant)}
                                             disabled={!variant.available}
                                             className={`p-3 rounded-2xl font-black transition-all duration-300 text-center min-h-[70px] flex flex-col items-center justify-center ${selectedVariant?.id === variant.id
-                                                ? 'bg-gradient-to-r from-red-500 to-pink-500 text-white scale-105 shadow-lg'
+                                                ? 'bg-gradient-to-r from-orange-500 to-orange-500 text-white scale-105 shadow-lg'
                                                 : 'bg-white text-gray-700 hover:bg-gray-50 shadow-md'
                                                 } ${!variant.available ? 'opacity-50 cursor-not-allowed' : ''}`}
                                         >
@@ -349,7 +349,7 @@ Please confirm availability and processing time.`;
                                 <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 mb-4">
                                     <div>
                                         <div className="text-xs text-gray-600 mb-2 font-bold uppercase">Total Price</div>
-                                        <div className="text-3xl lg:text-4xl font-black text-red-600">
+                                        <div className="text-3xl lg:text-4xl font-black text-orange-600">
                                             {getCurrentPrice()}<span className="text-lg lg:text-2xl ml-1">AED</span>
                                         </div>
                                     </div>
@@ -365,7 +365,7 @@ Please confirm availability and processing time.`;
                                     )}
                                 </div>
                                 <div className="text-xs sm:text-sm text-gray-600 pt-4 border-t font-medium">
-                                    Price per unit: <span className="text-red-600 font-black">{getPricePerUnit().toFixed(3)} AED</span>
+                                    Price per unit: <span className="text-orange-600 font-black">{getPricePerUnit().toFixed(3)} AED</span>
                                 </div>
                             </div>
 
@@ -389,7 +389,7 @@ Please confirm availability and processing time.`;
                                 disabled={!selectedVariant || !selectedVariant.available}
                                 className={`w-full font-black py-4 px-6 rounded-2xl text-base lg:text-lg shadow-xl hover:shadow-2xl transition-all duration-300 flex items-center justify-center gap-3 border-2 ${!selectedVariant || !selectedVariant.available
                                     ? 'bg-gray-300 text-gray-500 cursor-not-allowed border-gray-400'
-                                    : 'bg-gradient-to-r from-red-500 to-pink-500 hover:from-red-600 hover:to-pink-600 text-white hover:scale-105 border-gray-900'
+                                    : 'bg-gradient-to-r from-orange-500 to-orange-500 hover:from-orange-600 hover:to-orange-600 text-white hover:scale-105 border-gray-900'
                                     }`}
                             >
                                 <ShoppingCart size={22} />

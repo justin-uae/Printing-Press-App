@@ -5,13 +5,13 @@ const AboutPage: React.FC = () => {
     return (
         <div className="min-h-screen bg-gradient-to-br from-gray-50 to-white">
             {/* Hero Section */}
-            <section className="relative bg-gradient-to-r from-red-500 to-pink-500 text-white py-20 lg:py-28 overflow-hidden">
+            <section className="relative bg-gradient-to-r from-orange-500 to-orange-500 text-white py-20 lg:py-28 overflow-hidden">
                 {/* Decorative shapes */}
                 <div className="absolute top-10 right-10 w-32 h-32 bg-yellow-300 rounded-full opacity-20"></div>
                 <div className="absolute bottom-10 left-10 w-40 h-40 bg-white opacity-10" style={{ clipPath: 'polygon(50% 0%, 100% 100%, 0% 100%)' }}></div>
 
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
-                    <div className="inline-block bg-white text-red-600 px-6 py-3 rounded-2xl font-black text-sm mb-6 shadow-lg">
+                    <div className="inline-block bg-white text-orange-600 px-6 py-3 rounded-2xl font-black text-sm mb-6 shadow-lg">
                         TRUSTED BY THOUSANDS
                     </div>
                     <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black mb-6">About DBX Print & Design</h1>
@@ -27,10 +27,10 @@ const AboutPage: React.FC = () => {
                     <div className="max-w-4xl mx-auto">
                         <div className="text-center mb-12">
                             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-gray-900 mb-4">Our Story</h2>
-                            <div className="w-24 h-1.5 bg-gradient-to-r from-red-500 to-pink-500 mx-auto rounded-full"></div>
+                            <div className="w-24 h-1.5 bg-gradient-to-r from-orange-500 to-orange-500 mx-auto rounded-full"></div>
                         </div>
                         <div className="space-y-6 text-gray-700 text-lg leading-relaxed">
-                            <p className="text-xl font-bold text-red-600 bg-red-50 border-l-4 border-red-500 pl-6 py-4 rounded-r-2xl">
+                            <p className="text-xl font-bold text-orange-600 bg-orange-50 border-l-4 border-orange-500 pl-6 py-4 rounded-r-2xl">
                                 "Quality printing shouldn't cost a fortune. That's the principle we built our business on."
                             </p>
                             <p className="font-medium">
@@ -81,15 +81,15 @@ const AboutPage: React.FC = () => {
                                 icon: Zap,
                                 title: 'Speed & Efficiency',
                                 description: 'Fast turnaround times without sacrificing quality. Express options available.',
-                                gradient: 'from-purple-400 to-pink-500',
-                                bg: 'from-purple-50 to-pink-50'
+                                gradient: 'from-orange-400 to-orange-500',
+                                bg: 'from-orange-50 to-orange-50'
                             },
                             {
                                 icon: Target,
                                 title: 'Affordable Pricing',
                                 description: 'Unbelievable prices that don\'t compromise on quality. Best value guaranteed.',
-                                gradient: 'from-red-400 to-pink-500',
-                                bg: 'from-red-50 to-pink-50'
+                                gradient: 'from-orange-400 to-orange-500',
+                                bg: 'from-orange-50 to-orange-50'
                             }
                         ].map((value, idx) => (
                             <div key={idx} className={`group bg-gradient-to-br ${value.bg} p-8 rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2`}>
@@ -107,7 +107,7 @@ const AboutPage: React.FC = () => {
             </section>
 
             {/* Statistics */}
-            <section className="py-16 lg:py-24 bg-gradient-to-r from-red-500 to-pink-500 text-white relative overflow-hidden">
+            <section className="py-16 lg:py-24 bg-gradient-to-r from-orange-500 to-orange-500 text-white relative overflow-hidden">
                 <div className="absolute inset-0 opacity-10">
                     <div className="absolute top-0 left-1/4 w-64 h-64 bg-yellow-300 rounded-full"></div>
                     <div className="absolute bottom-0 right-1/4 w-48 h-48 bg-white" style={{ clipPath: 'polygon(50% 0%, 100% 100%, 0% 100%)' }}></div>
@@ -164,8 +164,8 @@ const AboutPage: React.FC = () => {
                                 icon: TrendingDown,
                                 title: 'Incredible Pricing',
                                 description: 'Our prices are truly unbelievable! Get professional business cards from 50 AED, flyers from 80 AED, and much more.',
-                                gradient: 'from-red-400 to-pink-500',
-                                bg: 'from-red-50 to-pink-50'
+                                gradient: 'from-orange-400 to-orange-500',
+                                bg: 'from-orange-50 to-orange-50'
                             },
                             {
                                 icon: Shield,

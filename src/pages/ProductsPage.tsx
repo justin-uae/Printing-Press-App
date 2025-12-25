@@ -219,13 +219,13 @@ const ProductsPage: React.FC = () => {
     return (
         <div className="min-h-screen bg-gradient-to-br from-gray-50 to-white">
             {/* Hero Header */}
-            <div className="bg-gradient-to-r from-red-500 to-pink-500 text-white py-16 lg:py-20">
+            <div className="bg-gradient-to-r from-orange-500 to-orange-500 text-white py-16 lg:py-20">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="text-center">
                         <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black mb-4">
                             {selectedCategoryData ? selectedCategoryData.name : 'All Products'}
                         </h1>
-                        <p className="text-lg sm:text-xl text-red-100 max-w-2xl mx-auto font-medium">
+                        <p className="text-lg sm:text-xl text-orange-100 max-w-2xl mx-auto font-medium">
                             {selectedCategoryData
                                 ? selectedCategoryData.description
                                 : 'Browse our complete collection of professional printing products'}
@@ -241,13 +241,13 @@ const ProductsPage: React.FC = () => {
                         <div className="bg-white rounded-3xl shadow-lg p-6 sticky top-24">
                             <div className="flex items-center justify-between mb-6">
                                 <h3 className="text-xl font-black text-gray-900 flex items-center gap-2">
-                                    <Filter size={20} className="text-red-600" />
+                                    <Filter size={20} className="text-orange-600" />
                                     Categories
                                 </h3>
                                 {selectedCategory && (
                                     <button
                                         onClick={handleResetFilters}
-                                        className="text-sm text-red-600 hover:text-red-700 font-bold hover:underline transition-colors"
+                                        className="text-sm text-orange-600 hover:text-orange-700 font-bold hover:underline transition-colors"
                                     >
                                         Reset
                                     </button>
@@ -261,7 +261,7 @@ const ProductsPage: React.FC = () => {
                                         <label
                                             key={category.id}
                                             className={`flex items-center gap-3 cursor-pointer p-3 rounded-2xl transition-all duration-200 ${selectedCategory === category.id
-                                                ? 'bg-gradient-to-r from-red-50 to-pink-50 border-2 border-red-200'
+                                                ? 'bg-gradient-to-r from-orange-50 to-orange-50 border-2 border-orange-200'
                                                 : 'hover:bg-gray-50'
                                                 }`}
                                         >
@@ -269,7 +269,7 @@ const ProductsPage: React.FC = () => {
                                                 type="checkbox"
                                                 checked={selectedCategory === category.id}
                                                 onChange={() => handleCategoryChange(category.id)}
-                                                className="w-5 h-5 text-red-600 rounded focus:ring-red-500 focus:ring-2"
+                                                className="w-5 h-5 text-orange-600 rounded focus:ring-orange-500 focus:ring-2"
                                             />
                                             <div className="flex-1">
                                                 <div className="flex items-center gap-2">
@@ -297,7 +297,7 @@ const ProductsPage: React.FC = () => {
                                 {/* Mobile Filter Button */}
                                 <button
                                     onClick={() => setShowFilters(!showFilters)}
-                                    className="lg:hidden inline-flex items-center gap-2 bg-gradient-to-r from-red-500 to-pink-500 text-white px-4 py-2.5 rounded-xl font-bold hover:from-red-600 hover:to-pink-600 transition-all duration-300"
+                                    className="lg:hidden inline-flex items-center gap-2 bg-gradient-to-r from-orange-500 to-orange-500 text-white px-4 py-2.5 rounded-xl font-bold hover:from-orange-600 hover:to-orange-600 transition-all duration-300"
                                 >
                                     <Filter size={18} />
                                     <span className="hidden xs:inline">Filters</span>
@@ -306,7 +306,7 @@ const ProductsPage: React.FC = () => {
                                 {/* Results Count */}
                                 <div className="flex items-center gap-2">
                                     <span className="text-sm text-gray-600 font-medium hidden sm:inline">Found</span>
-                                    <span className="bg-red-100 text-red-600 px-3 py-1 rounded-full text-sm font-black">
+                                    <span className="bg-orange-100 text-orange-600 px-3 py-1 rounded-full text-sm font-black">
                                         {filteredProducts.length}
                                     </span>
                                 </div>
@@ -317,7 +317,7 @@ const ProductsPage: React.FC = () => {
                                 <select
                                     value={sortBy}
                                     onChange={(e) => setSortBy(e.target.value)}
-                                    className="w-full appearance-none bg-white border-2 border-gray-200 rounded-xl px-4 py-2.5 pr-10 text-sm font-bold text-gray-700 hover:border-red-300 focus:border-red-500 focus:ring-4 focus:ring-red-100 outline-none transition-all cursor-pointer"
+                                    className="w-full appearance-none bg-white border-2 border-gray-200 rounded-xl px-4 py-2.5 pr-10 text-sm font-bold text-gray-700 hover:border-orange-300 focus:border-orange-500 focus:ring-4 focus:ring-orange-100 outline-none transition-all cursor-pointer"
                                 >
                                     <option value="featured">Featured</option>
                                     <option value="price-low">Price: Low to High</option>
@@ -342,7 +342,7 @@ const ProductsPage: React.FC = () => {
                                     <div className="p-6">
                                         <div className="flex items-center justify-between mb-6 sticky top-0 bg-white pb-4 border-b-2 border-gray-200">
                                             <h3 className="text-lg font-black text-gray-900 flex items-center gap-2">
-                                                <Filter size={20} className="text-red-600" />
+                                                <Filter size={20} className="text-orange-600" />
                                                 Filter by Category
                                             </h3>
                                             <button
@@ -359,7 +359,7 @@ const ProductsPage: React.FC = () => {
                                                     <label
                                                         key={category.id}
                                                         className={`flex items-center gap-3 cursor-pointer p-3 rounded-2xl transition-all ${selectedCategory === category.id
-                                                            ? 'bg-gradient-to-r from-red-50 to-pink-50 border-2 border-red-200'
+                                                            ? 'bg-gradient-to-r from-orange-50 to-orange-50 border-2 border-orange-200'
                                                             : 'hover:bg-gray-50'
                                                             }`}
                                                     >
@@ -367,7 +367,7 @@ const ProductsPage: React.FC = () => {
                                                             type="checkbox"
                                                             checked={selectedCategory === category.id}
                                                             onChange={() => handleCategoryChange(category.id)}
-                                                            className="w-5 h-5 text-red-600 rounded focus:ring-red-500"
+                                                            className="w-5 h-5 text-orange-600 rounded focus:ring-orange-500"
                                                         />
                                                         <div className="flex-1">
                                                             <span className="text-sm font-bold">{category.name}</span>
@@ -395,7 +395,7 @@ const ProductsPage: React.FC = () => {
                         {/* Active Filters */}
                         {selectedCategory && (
                             <div className="flex flex-wrap gap-2 mb-6">
-                                <div className="inline-flex items-center gap-2 bg-gradient-to-r from-red-500 to-pink-500 text-white px-4 py-2 rounded-full font-bold shadow-md">
+                                <div className="inline-flex items-center gap-2 bg-gradient-to-r from-orange-500 to-orange-500 text-white px-4 py-2 rounded-full font-bold shadow-md">
                                     <span>{selectedCategoryData?.name}</span>
                                     <button
                                         onClick={() => handleCategoryChange(selectedCategory)}
@@ -410,10 +410,10 @@ const ProductsPage: React.FC = () => {
                         {/* Loading State */}
                         {productsLoading ? (
                             <div className="flex justify-center items-center py-20">
-                                <div className="animate-spin rounded-full h-16 w-16 border-b-4 border-red-500"></div>
+                                <div className="animate-spin rounded-full h-16 w-16 border-b-4 border-orange-500"></div>
                             </div>
                         ) : error ? (
-                            <div className="text-center py-20 bg-red-50 rounded-3xl shadow-lg">
+                            <div className="text-center py-20 bg-orange-50 rounded-3xl shadow-lg">
                                 <div className="text-6xl mb-4">⚠️</div>
                                 <h3 className="text-2xl font-black text-gray-900 mb-3">Error Loading Products</h3>
                                 <p className="text-gray-600 font-medium">{error}</p>
@@ -435,7 +435,7 @@ const ProductsPage: React.FC = () => {
                                 </p>
                                 <button
                                     onClick={handleResetFilters}
-                                    className="inline-flex items-center gap-2 bg-gradient-to-r from-red-500 to-pink-500 hover:from-red-600 hover:to-pink-600 text-white px-8 py-4 rounded-2xl font-black text-lg shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105"
+                                    className="inline-flex items-center gap-2 bg-gradient-to-r from-orange-500 to-orange-500 hover:from-orange-600 hover:to-orange-600 text-white px-8 py-4 rounded-2xl font-black text-lg shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105"
                                 >
                                     Reset Filters
                                 </button>
@@ -449,10 +449,10 @@ const ProductsPage: React.FC = () => {
             {showScrollTop && (
                 <button
                     onClick={scrollToTop}
-                    className="fixed bottom-8 right-8 z-50 bg-gradient-to-r from-red-500 to-pink-500 hover:from-red-600 hover:to-pink-600 text-white p-4 rounded-full shadow-2xl hover:shadow-3xl transition-all duration-300 hover:scale-110 animate-bounce"
+                    className="fixed bottom-8 right-8 z-50 bg-gradient-to-r from-orange-500 to-orange-500 hover:from-orange-600 hover:to-orange-600 text-white p-4 rounded-full shadow-2xl hover:shadow-3xl transition-all duration-300 hover:scale-110 animate-bounce"
                     aria-label="Scroll to top"
                 >
-                    <ArrowUp size={15} strokeWidth={4} />
+                    <ArrowUp size={24} strokeWidth={3} />
                 </button>
             )}
         </div>

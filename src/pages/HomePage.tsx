@@ -5,12 +5,12 @@ import { useAppDispatch, useAppSelector } from '../store/hooks';
 import { fetchProducts } from '../store/productsSlice';
 import ProductCard from '../components/ProductCard';
 import type { Product } from '..';
-import Banner2 from '../assets/Banner2.webp'
-import Banner3 from '../assets/Banner3.jpg'
+import Banner2 from '../assets/Banner2.png'
+import Banner3 from '../assets/Banner3.png'
 import Banner4 from '../assets/Banner4.png'
-import Banner5 from '../assets/Banner5.jpg'
-import Banner6 from '../assets/Banner6.jpg'
-import Banner7 from '../assets/Banner7.jpg'
+import Banner5 from '../assets/Banner5.png'
+import Banner6 from '../assets/Banner6.png'
+import Banner8 from '../assets/Banner8.png'
 
 const HomePage: React.FC = () => {
     const dispatch = useAppDispatch();
@@ -18,11 +18,11 @@ const HomePage: React.FC = () => {
 
     const sliderImages = [
         Banner2,
-        Banner6,
-        Banner5,
         Banner3,
         Banner4,
-        Banner7,
+        Banner5,
+        Banner6,
+        Banner8,
     ];
 
     // Select data from Redux store
@@ -38,10 +38,10 @@ const HomePage: React.FC = () => {
     // Auto-play slider
     useEffect(() => {
         const interval = setInterval(() => {
-            setCurrentImageIndex((prevIndex) =>
+            setCurrentImageIndex((prevIndex) => 
                 prevIndex === sliderImages.length - 1 ? 0 : prevIndex + 1
             );
-        }, 3000); // Change image every 5 seconds
+        }, 4000); // Change image every 4 seconds
 
         return () => clearInterval(interval);
     }, [sliderImages.length]);
@@ -78,7 +78,7 @@ const HomePage: React.FC = () => {
     }, [allProducts]);
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50">
+        <div className="min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-orange-50">
             {/* Hero Section */}
             <section className="relative overflow-hidden bg-gradient-to-br from-gray-100 via-gray-50 to-white">
                 {/* Subtle pattern overlay */}
@@ -99,14 +99,14 @@ const HomePage: React.FC = () => {
                         {/* LEFT CONTENT */}
                         <div>
                             {/* Badge */}
-                            <div className="inline-flex items-center gap-2 bg-red-600 text-white px-4 py-2 rounded-lg text-sm font-bold mb-6 shadow-md">
+                            <div className="inline-flex items-center gap-2 bg-orange-600 text-white px-4 py-2 rounded-lg text-sm font-bold mb-6 shadow-md">
                                 <span className="w-2 h-2 bg-white rounded-full animate-pulse"></span>
                                 UAE's Trusted Printing Partner
                             </div>
 
                             <h1 className="text-4xl sm:text-5xl xl:text-6xl font-bold leading-tight text-gray-900">
                                 DBX Print & Design
-                                <span className="block mt-3 text-transparent bg-clip-text bg-gradient-to-r from-red-600 to-orange-600">
+                                <span className="block mt-3 text-transparent bg-clip-text bg-gradient-to-r from-orange-600 to-orange-600">
                                     Quality Printing Services
                                 </span>
                             </h1>
@@ -119,7 +119,7 @@ const HomePage: React.FC = () => {
                             <div className="mt-10 flex flex-col sm:flex-row gap-4">
                                 <Link
                                     to="/products"
-                                    className="group inline-flex items-center justify-center gap-2 rounded-lg bg-red-600 hover:bg-red-700 px-8 py-4 font-bold text-lg text-white shadow-lg hover:shadow-xl transition-all duration-300"
+                                    className="group inline-flex items-center justify-center gap-2 rounded-lg bg-orange-600 hover:bg-orange-700 px-8 py-4 font-bold text-lg text-white shadow-lg hover:shadow-xl transition-all duration-300"
                                 >
                                     View Products
                                     <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
@@ -145,7 +145,7 @@ const HomePage: React.FC = () => {
                                         key={idx}
                                         className="rounded-lg bg-white border border-gray-200 p-4 text-center shadow-sm hover:shadow-md transition-shadow"
                                     >
-                                        <div className="text-2xl sm:text-3xl font-bold text-red-600">
+                                        <div className="text-2xl sm:text-3xl font-bold text-orange-600">
                                             {stat.value}
                                         </div>
                                         <div className="mt-1 text-xs sm:text-sm font-medium text-gray-600">
@@ -168,8 +168,9 @@ const HomePage: React.FC = () => {
                                                 key={index}
                                                 src={image}
                                                 alt={`Professional Printing Press ${index + 1}`}
-                                                className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-700 ${index === currentImageIndex ? 'opacity-100' : 'opacity-0'
-                                                    }`}
+                                                className={`absolute inset-0 w-full h-full object-contain transition-opacity duration-700 ${
+                                                    index === currentImageIndex ? 'opacity-100' : 'opacity-0'
+                                                }`}
                                             />
                                         ))}
                                     </div>
@@ -199,10 +200,11 @@ const HomePage: React.FC = () => {
                                             <button
                                                 key={index}
                                                 onClick={() => goToImage(index)}
-                                                className={`transition-all duration-300 rounded-full ${index === currentImageIndex
-                                                    ? 'w-8 h-3 bg-white'
-                                                    : 'w-3 h-3 bg-white/50 hover:bg-white/75'
-                                                    }`}
+                                                className={`transition-all duration-300 rounded-full ${
+                                                    index === currentImageIndex
+                                                        ? 'w-8 h-3 bg-white'
+                                                        : 'w-3 h-3 bg-white/50 hover:bg-white/75'
+                                                }`}
                                                 aria-label={`Go to image ${index + 1}`}
                                             />
                                         ))}
@@ -210,12 +212,12 @@ const HomePage: React.FC = () => {
                                 </div>
 
                                 {/* Quality badge */}
-                                <div className="absolute -top-4 -right-4 bg-gradient-to-r from-red-600 to-orange-600 text-white px-6 py-3 rounded-full shadow-xl transform rotate-12 z-10">
+                                <div className="absolute -top-4 -right-4 bg-gradient-to-r from-orange-600 to-orange-600 text-white px-6 py-3 rounded-full shadow-xl transform rotate-12 z-10">
                                     <div className="text-sm font-bold">Premium Quality</div>
                                 </div>
 
                                 {/* Fast Delivery badge */}
-                                <div className="absolute -bottom-4 -left-4 bg-white border-2 border-red-600 rounded-lg px-4 py-2 shadow-lg z-10">
+                                <div className="absolute -bottom-4 -left-4 bg-white border-2 border-orange-600 rounded-lg px-4 py-2 shadow-lg z-10">
                                     <div className="flex items-center gap-2">
                                         <CheckCircle size={16} className="text-green-500" />
                                         <span className="text-sm font-bold text-gray-900">Fast Delivery</span>
@@ -225,13 +227,13 @@ const HomePage: React.FC = () => {
                                 {/* CMYK Color indicators overlay */}
                                 <div className="absolute bottom-16 right-6 flex gap-2 z-10">
                                     <div className="w-10 h-10 bg-cyan-500 rounded-full shadow-lg border-2 border-white"></div>
-                                    <div className="w-10 h-10 bg-pink-500 rounded-full shadow-lg border-2 border-white"></div>
+                                    <div className="w-10 h-10 bg-orange-500 rounded-full shadow-lg border-2 border-white"></div>
                                     <div className="w-10 h-10 bg-yellow-400 rounded-full shadow-lg border-2 border-white"></div>
                                     <div className="w-10 h-10 bg-gray-900 rounded-full shadow-lg border-2 border-white"></div>
                                 </div>
 
                                 {/* Decorative blur elements */}
-                                <div className="absolute -top-6 -left-6 w-16 h-16 bg-red-600 opacity-20 rounded-full blur-xl animate-pulse"></div>
+                                <div className="absolute -top-6 -left-6 w-16 h-16 bg-orange-600 opacity-20 rounded-full blur-xl animate-pulse"></div>
                                 <div className="absolute -bottom-6 -right-6 w-20 h-20 bg-blue-600 opacity-20 rounded-full blur-xl animate-pulse" style={{ animationDelay: '1s' }}></div>
                             </div>
                         </div>
@@ -256,8 +258,8 @@ const HomePage: React.FC = () => {
                                 icon: TrendingDown,
                                 title: 'Unbelievable Prices',
                                 description: 'Get premium quality prints at prices that seem too good to be true',
-                                gradient: 'from-red-400 to-pink-500',
-                                bgGradient: 'from-red-50 to-pink-50'
+                                gradient: 'from-orange-400 to-orange-500',
+                                bgGradient: 'from-orange-50 to-orange-50'
                             },
                             {
                                 icon: Clock,
@@ -289,13 +291,13 @@ const HomePage: React.FC = () => {
             </section>
 
             {/* Categories Section */}
-            <section className="py-16 lg:py-24 bg-gradient-to-br from-purple-50 via-pink-50 to-orange-50 relative overflow-hidden">
+            <section className="py-16 lg:py-24 bg-gradient-to-br from-purple-50 via-orange-50 to-orange-50 relative overflow-hidden">
                 <div className="absolute top-10 right-10 w-32 h-32 bg-yellow-300 rounded-full opacity-20"></div>
                 <div className="absolute bottom-10 left-10 w-40 h-40 bg-blue-300 opacity-20" style={{ clipPath: 'polygon(50% 0%, 100% 100%, 0% 100%)' }}></div>
 
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
                     <div className="text-center mb-12 lg:mb-16">
-                        <div className="inline-block bg-gradient-to-r from-purple-500 to-pink-500 text-white px-6 py-3 rounded-2xl font-black text-sm mb-4 shadow-lg">
+                        <div className="inline-block text-center bg-gradient-to-r from-orange-500 to-orange-500 hover:from-orange-600 hover:to-orange-600 text-white font-black py-3.5 px-4 rounded-2xl transition-all duration-300 shadow-md hover:shadow-xl transform hover:scale-105">
                             PRODUCT TYPES
                         </div>
                         <h2 className="text-4xl sm:text-5xl lg:text-6xl font-black text-gray-900 mb-4">
@@ -365,7 +367,7 @@ const HomePage: React.FC = () => {
                                     <div className="mb-6">
                                         <div className="flex justify-center gap-2">
                                             <div className="w-8 h-8 bg-gradient-to-br from-yellow-400 to-orange-400 rounded-full"></div>
-                                            <div className="w-8 h-8 bg-gradient-to-br from-pink-500 to-rose-500 rounded-lg"></div>
+                                            <div className="w-8 h-8 bg-gradient-to-br from-orange-500 to-rose-500 rounded-lg"></div>
                                             <div className="w-8 h-8 bg-gradient-to-br from-blue-400 to-cyan-500 rounded-lg"></div>
                                         </div>
                                     </div>
@@ -381,11 +383,11 @@ const HomePage: React.FC = () => {
                             {/* Banners */}
                             <div className="relative group md:translate-y-4">
                                 <div className="bg-gradient-to-br from-purple-50 to-white rounded-3xl p-6 shadow-xl hover:shadow-2xl transition-all duration-500 hover:-translate-y-3 border-2 border-purple-100 group-hover:border-purple-300">
-                                    <div className="absolute -top-3 -right-3 w-12 h-12 bg-gradient-to-br from-purple-500 to-pink-500 rounded-full flex items-center justify-center shadow-lg">
+                                    <div className="absolute -top-3 -right-3 w-12 h-12 bg-gradient-to-br from-purple-500 to-orange-500 rounded-full flex items-center justify-center shadow-lg">
                                         <span className="text-white font-black text-sm">04</span>
                                     </div>
                                     <div className="mb-6">
-                                        <div className="w-20 h-10 bg-gradient-to-r from-purple-500 to-pink-500 rounded-lg shadow-md mx-auto flex items-center justify-center">
+                                        <div className="w-20 h-10 bg-gradient-to-r from-purple-500 to-orange-500 rounded-lg shadow-md mx-auto flex items-center justify-center">
                                             <span className="text-white text-xs font-black">BANNER</span>
                                         </div>
                                     </div>
@@ -400,8 +402,8 @@ const HomePage: React.FC = () => {
 
                             {/* Packaging */}
                             <div className="relative group md:col-span-2 lg:col-span-1">
-                                <div className="bg-gradient-to-br from-red-50 to-white rounded-3xl p-6 shadow-xl hover:shadow-2xl transition-all duration-500 hover:-translate-y-3 border-2 border-red-100 group-hover:border-red-300">
-                                    <div className="absolute -top-3 -right-3 w-12 h-12 bg-gradient-to-br from-red-500 to-orange-500 rounded-full flex items-center justify-center shadow-lg">
+                                <div className="bg-gradient-to-br from-orange-50 to-white rounded-3xl p-6 shadow-xl hover:shadow-2xl transition-all duration-500 hover:-translate-y-3 border-2 border-orange-100 group-hover:border-red-300">
+                                    <div className="absolute -top-3 -right-3 w-12 h-12 bg-gradient-to-br from-orange-500 to-orange-500 rounded-full flex items-center justify-center shadow-lg">
                                         <span className="text-white font-black text-sm">05</span>
                                     </div>
                                     <div className="mb-6">
@@ -414,7 +416,7 @@ const HomePage: React.FC = () => {
                                             </div>
                                         </div>
                                     </div>
-                                    <h3 className="text-xl font-black text-gray-900 text-center mb-2 group-hover:text-red-600 transition-colors">
+                                    <h3 className="text-xl font-black text-gray-900 text-center mb-2 group-hover:text-orange-600 transition-colors">
                                         Packaging
                                     </h3>
                                     <p className="text-sm text-gray-600 text-center font-medium">
@@ -429,14 +431,14 @@ const HomePage: React.FC = () => {
                         <div className="absolute top-1/4 left-5 w-4 h-4 bg-purple-400 rounded-full animate-bounce opacity-50"></div>
                         <div className="absolute top-1/3 right-10 w-3 h-3 bg-blue-400 rounded-full animate-bounce opacity-50 delay-75"></div>
                         <div className="absolute bottom-1/4 left-1/4 w-2 h-2 bg-yellow-400 rounded-full animate-bounce opacity-50 delay-150"></div>
-                        <div className="absolute bottom-1/3 right-1/3 w-3 h-3 bg-pink-400 rounded-full animate-bounce opacity-50 delay-300"></div>
+                        <div className="absolute bottom-1/3 right-1/3 w-3 h-3 bg-orange-400 rounded-full animate-bounce opacity-50 delay-300"></div>
                     </div>
 
                     {/* View All Products Button */}
                     <div className="text-center mt-12 lg:mt-16">
                         <Link
                             to="/products"
-                            className="group inline-flex items-center gap-3 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white px-8 py-4 rounded-2xl font-black text-lg shadow-xl hover:shadow-2xl transition-all duration-300"
+                            className="group inline-flex text-center bg-gradient-to-r from-orange-500 to-orange-500 hover:from-orange-600 hover:to-orange-600 text-white font-black py-3.5 px-4 rounded-2xl transition-all duration-300 shadow-md hover:shadow-xl transform hover:scale-105"
                         >
                             View All Products
                             <div className="group-hover:translate-x-2 transition-transform duration-300">
@@ -464,11 +466,11 @@ const HomePage: React.FC = () => {
 
                     {productsLoading ? (
                         <div className="flex justify-center items-center py-20">
-                            <div className="animate-spin rounded-full h-16 w-16 border-b-4 border-red-500"></div>
+                            <div className="animate-spin rounded-full h-16 w-16 border-b-4 border-orange-500"></div>
                         </div>
                     ) : productsError ? (
-                        <div className="text-center py-20 bg-red-50 rounded-3xl">
-                            <p className="text-red-600 text-lg font-bold">Error loading products</p>
+                        <div className="text-center py-20 bg-orange-50 rounded-3xl">
+                            <p className="text-orange-600 text-lg font-bold">Error loading products</p>
                             <p className="text-gray-600 mt-2">{productsError}</p>
                         </div>
                     ) : featuredProducts.length > 0 ? (
@@ -482,7 +484,7 @@ const HomePage: React.FC = () => {
                             <div className="text-center mt-12">
                                 <Link
                                     to="/products"
-                                    className="inline-flex items-center gap-3 bg-gradient-to-r from-red-500 to-pink-500 hover:from-red-600 hover:to-pink-600 text-white px-10 py-5 rounded-2xl font-black text-lg shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105"
+                                    className="inline-flex items-center gap-3 bg-gradient-to-r from-orange-500 to-orange-500 hover:from-orange-600 hover:to-orange-600 text-white px-10 py-5 rounded-2xl font-black text-lg shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105"
                                 >
                                     <span>View All Products</span>
                                     <ArrowRight size={22} strokeWidth={3} />
@@ -494,7 +496,7 @@ const HomePage: React.FC = () => {
                             <div className="text-6xl mb-4"></div>
                             <Link
                                 to="/products"
-                                className="inline-flex items-center gap-2 bg-gradient-to-r from-red-500 to-pink-500 hover:from-red-600 hover:to-pink-600 text-white px-8 py-4 rounded-2xl font-black text-lg shadow-xl hover:shadow-2xl transition-all duration-300"
+                                className="inline-flex items-center gap-2 bg-gradient-to-r from-orange-500 to-orange-500 hover:from-orange-600 hover:to-orange-600 text-white px-8 py-4 rounded-2xl font-black text-lg shadow-xl hover:shadow-2xl transition-all duration-300"
                             >
                                 Browse All Products
                             </Link>
@@ -504,7 +506,7 @@ const HomePage: React.FC = () => {
             </section>
 
             {/* Special Offer Banner */}
-            <section className="py-16 lg:py-24 bg-gradient-to-r from-red-500 via-pink-500 to-purple-500 relative overflow-hidden">
+            <section className="py-16 lg:py-24 bg-gradient-to-r from-orange-500 via-orange-500 to-purple-500 relative overflow-hidden">
                 <div className="absolute inset-0 opacity-20">
                     <div className="absolute top-0 left-1/4 w-64 h-64 bg-yellow-300 rounded-full"></div>
                     <div className="absolute bottom-0 right-1/4 w-48 h-48 bg-blue-300" style={{ clipPath: 'polygon(50% 0%, 100% 100%, 0% 100%)' }}></div>
@@ -512,7 +514,7 @@ const HomePage: React.FC = () => {
                 </div>
 
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
-                    <div className="inline-flex items-center gap-2 bg-white text-red-600 px-8 py-4 rounded-2xl font-black text-lg mb-8 shadow-2xl animate-bounce">
+                    <div className="inline-flex items-center gap-2 bg-white text-orange-600 px-8 py-4 rounded-2xl font-black text-lg mb-8 shadow-2xl animate-bounce">
                         <span>LIMITED TIME OFFER</span>
                     </div>
 
@@ -520,15 +522,15 @@ const HomePage: React.FC = () => {
                         STRANGE AND UNBELIEVABLE PRICES!
                     </h2>
                     <p className="text-2xl lg:text-3xl mb-10 max-w-3xl mx-auto text-white font-bold drop-shadow-lg">
-                        Business cards from <span className="bg-white text-red-600 px-4 py-2 rounded-xl inline-block">37 AED</span> for 1000 pcs!
+                        Business cards from <span className="bg-white text-orange-600 px-4 py-2 rounded-xl inline-block">37 AED</span> for 1000 pcs!
                         <br className="hidden sm:block" />
-                        Flyers and Brochures from <span className="bg-white text-red-600 px-4 py-2 rounded-xl inline-block mt-2">50 AED</span>!
+                        Flyers and Brochures from <span className="bg-white text-orange-600 px-4 py-2 rounded-xl inline-block mt-2">50 AED</span>!
                     </p>
 
                     <div className="flex flex-wrap justify-center gap-4">
                         <Link
                             to="/products?category=Business Cards"
-                            className="inline-flex items-center gap-2 bg-white text-red-600 hover:bg-yellow-300 px-8 py-4 rounded-2xl font-black text-lg shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105"
+                            className="inline-flex items-center gap-2 bg-white text-orange-600 hover:bg-yellow-300 px-8 py-4 rounded-2xl font-black text-lg shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105"
                         >
                             Business Cards
                         </Link>
@@ -543,7 +545,7 @@ const HomePage: React.FC = () => {
             </section>
 
             {/* Why Choose Us */}
-            <section className="py-16 lg:py-24 bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50">
+            <section className="py-16 lg:py-24 bg-gradient-to-br from-blue-50 via-purple-50 to-orange-50">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="text-center mb-12 lg:mb-16">
                         <h2 className="text-4xl sm:text-5xl lg:text-6xl font-black text-gray-900 mb-4">
@@ -574,8 +576,8 @@ const HomePage: React.FC = () => {
                                 icon: TrendingDown,
                                 title: 'Incredible Pricing',
                                 description: 'Our prices are truly unbelievable! Get professional business cards from 37 AED, flyers from 46 AED, and much more.',
-                                gradient: 'from-red-400 to-pink-500',
-                                bgGradient: 'from-red-50 to-pink-50'
+                                gradient: 'from-orange-400 to-orange-500',
+                                bgGradient: 'from-orange-50 to-orange-50'
                             },
                             {
                                 icon: Shield,
@@ -664,7 +666,7 @@ const HomePage: React.FC = () => {
                             <details key={index} className="group bg-gradient-to-br from-gray-50 to-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden">
                                 <summary className="flex items-center justify-between px-6 py-5 cursor-pointer list-none">
                                     <span className="text-lg font-black text-gray-900 pr-4">{faq.question}</span>
-                                    <span className="text-red-600 transition-transform duration-300 group-open:rotate-180">
+                                    <span className="text-orange-600 transition-transform duration-300 group-open:rotate-180">
                                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
                                             <polyline points="6 9 12 15 18 9"></polyline>
                                         </svg>
@@ -682,7 +684,7 @@ const HomePage: React.FC = () => {
                         <p className="text-gray-600 font-bold mb-6">Still have questions?</p>
                         <Link
                             to="/contact"
-                            className="inline-flex items-center gap-2 bg-gradient-to-r from-red-500 to-pink-500 hover:from-red-600 hover:to-pink-600 text-white px-8 py-4 rounded-2xl font-black text-lg shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105"
+                            className="inline-flex items-center gap-2 bg-gradient-to-r from-orange-500 to-orange-500 hover:from-orange-600 hover:to-orange-600 text-white px-8 py-4 rounded-2xl font-black text-lg shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105"
                         >
                             Contact Us
                         </Link>
@@ -695,7 +697,7 @@ const HomePage: React.FC = () => {
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="bg-gradient-to-r from-gray-900 to-gray-800 text-white rounded-3xl p-10 lg:p-16 text-center relative overflow-hidden shadow-2xl">
                         <div className="absolute top-10 right-10 w-24 h-24 bg-yellow-400 rounded-full opacity-20"></div>
-                        <div className="absolute bottom-10 left-10 w-32 h-32 bg-red-400 opacity-20" style={{ clipPath: 'polygon(50% 0%, 100% 100%, 0% 100%)' }}></div>
+                        <div className="absolute bottom-10 left-10 w-32 h-32 bg-orange-400 opacity-20" style={{ clipPath: 'polygon(50% 0%, 100% 100%, 0% 100%)' }}></div>
 
                         <div className="relative z-10">
                             <h2 className="text-4xl sm:text-5xl lg:text-6xl font-black mb-6">
@@ -707,7 +709,7 @@ const HomePage: React.FC = () => {
                             <div className="flex flex-wrap justify-center gap-4">
                                 <Link
                                     to="/products"
-                                    className="inline-flex items-center gap-2 bg-gradient-to-r from-red-500 to-pink-500 hover:from-red-600 hover:to-pink-600 text-white px-8 py-4 rounded-2xl font-black text-lg shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105"
+                                    className="inline-flex items-center gap-2 bg-gradient-to-r from-orange-500 to-orange-500 hover:from-orange-600 hover:to-orange-600 text-white px-8 py-4 rounded-2xl font-black text-lg shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105"
                                 >
                                     Browse Products
                                 </Link>
