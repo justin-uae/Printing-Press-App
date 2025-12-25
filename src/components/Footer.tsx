@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Phone, Mail, MapPin, Facebook, Instagram, Twitter } from 'lucide-react';
 import Logo from '../assets/Logo.png'
+import { PaymentIcon } from 'react-svg-credit-card-payment-icons';
 
 const Footer: React.FC = () => {
 
@@ -88,7 +89,24 @@ const Footer: React.FC = () => {
                         </ul>
                     </div>
                 </div>
+                <div className="mt-6 flex justify-center items-center gap-3 sm:gap-4">
+                    <span className="text-xs sm:text-sm text-gray-400 font-medium">We Accept:</span>
+                    <div className="flex items-center gap-2 sm:gap-3">
+                        {/* Visa */}
+                        <div className="rounded p-1.5 sm:p-2 shadow-lg hover:scale-105 transition-transform">
+                            <PaymentIcon className="w-10 h-6 sm:w-12 sm:h-7" type="Visa" format="flatRounded" />
+                        </div>
+                        {/* Mastercard */}
+                        <div className="rounded p-1.5 sm:p-2 shadow-lg hover:scale-105 transition-transform">
+                            <PaymentIcon className="w-10 h-6 sm:w-12 sm:h-7" type="Mastercard" format="flatRounded" />
 
+                        </div>
+                        <div className="rounded p-1.5 sm:p-2 shadow-lg hover:scale-105 transition-transform">
+                            <PaymentIcon className="w-10 h-6 sm:w-12 sm:h-7" type="Americanexpress" format="flatRounded" />
+
+                        </div>
+                    </div>
+                </div>
                 {/* Bottom Bar */}
                 <div className="border-t border-gray-800 pt-6 flex flex-col md:flex-row justify-center items-center gap-4">
                     <p className="text-sm text-gray-400 font-medium flex items-center gap-2">
