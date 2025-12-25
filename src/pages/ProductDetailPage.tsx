@@ -38,11 +38,13 @@ const ProductDetailPage: React.FC = () => {
     }, [handle, dispatch]);
 
     // Set initial variant when product loads
+    // Reset and set initial variant when product changes
     useEffect(() => {
-        if (product && product.variants.length > 0 && !selectedVariant) {
+        if (product && product.variants.length > 0) {
             setSelectedVariant(product.variants[0]);
+            setSelectedImage(0); // Also reset selected image
         }
-    }, [product]);
+    }, [product?.id]);
 
     // Handle loading state
     if (loading) {
