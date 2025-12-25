@@ -6,6 +6,7 @@ import {
     Package,
     Shield,
     ChevronLeft,
+    Truck,
 } from 'lucide-react';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
 import { fetchProductByHandle } from '../store/productsSlice';
@@ -365,7 +366,7 @@ Please confirm availability and processing time.`;
                                     )}
                                 </div>
                                 <div className="text-xs sm:text-sm text-gray-600 pt-4 border-t font-medium">
-                                    Price per unit: <span className="text-orange-600 font-black">{getPricePerUnit().toFixed(3)} AED</span>
+                                    <span className="text-gray-600">Delivery Charge: <span className="text-orange-600 font-black">49 AED</span></span>
                                 </div>
                             </div>
 
@@ -416,6 +417,10 @@ Please confirm availability and processing time.`;
 
                             {/* Additional Info */}
                             <div className="mt-6 space-y-2">
+                                <div className="flex items-center gap-3 text-xs sm:text-sm font-bold bg-white px-4 py-3 rounded-xl">
+                                    <Truck size={16} className="text-red-600 flex-shrink-0" />
+                                    <span className="text-gray-700">Delivery Charges: 49 AED</span>
+                                </div>
                                 {product.turnaround && (
                                     <div className="flex items-center gap-3 text-xs sm:text-sm font-bold bg-white px-4 py-3 rounded-xl">
                                         <Clock size={16} className="text-blue-600 flex-shrink-0" />

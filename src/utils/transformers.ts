@@ -23,6 +23,18 @@ const parseList = (value: string | null | undefined): string[] => {
     }
 };
 
+// ============================================
+// PRICE INCREASE UTILITY
+// ============================================
+
+/**
+ * Apply price increase to a price value
+ */
+const applyPriceIncrease = (price: number, increasePercentage: number): number => {
+    if (increasePercentage === 0) return price;
+    return Math.round(price * (1 + increasePercentage / 100));
+};
+
 export const transformShopifyProduct = (shopifyProduct: ShopifyProduct): Product => {
     // Create metafields map for easy access
     const metafieldsMap = new Map(
@@ -65,16 +77,36 @@ export const transformShopifyProduct = (shopifyProduct: ShopifyProduct): Product
     const paperWeights = parseList(metafieldsMap.get('paper_weights'));
     const finishingOptions = parseList(metafieldsMap.get('finishing_options'));
 
+    // Get price increase percentage from metafield
+    const priceIncreasePercentage = metafieldsMap?.get('price_increase_percentage')
+        ? parseFloat(metafieldsMap?.get('price_increase_percentage')!)
+        : 0;
+
     // Extract images
     const images = shopifyProduct.images.edges.map(edge => edge.node.url);
 
-    // Combine online and normal pricing
+    // Determine category from product type or tags
+    const category = shopifyProduct.productType ||
+        shopifyProduct.tags.find(tag =>
+            ['business-cards', 'flyers', 'brochures', 'stickers', 'labels', 'packaging', 'marketing'].includes(tag)
+        ) ||
+        'general';
+
+    // Combine online and normal pricing with price increase applied
     const pricing: PricingTier[] = [
-        ...pricingTiersData.online.map(p => ({ ...p, type: 'online' })),
-        ...pricingTiersData.normal.map(p => ({ ...p, type: 'normal' })),
+        ...pricingTiersData.online.map(p => ({
+            ...p,
+            type: 'online',
+            price: applyPriceIncrease(p.price, priceIncreasePercentage)
+        })),
+        ...pricingTiersData.normal.map(p => ({
+            ...p,
+            type: 'normal',
+            price: applyPriceIncrease(p.price, priceIncreasePercentage)
+        })),
     ];
 
-    // Transform variants
+    // Transform variants with price increase applied
     const variants: ProductVariant[] = shopifyProduct.variants.edges.map(edge => {
         const variant = edge.node;
         const options: Record<string, string> = {};
@@ -86,9 +118,9 @@ export const transformShopifyProduct = (shopifyProduct: ShopifyProduct): Product
         return {
             id: variant.id,
             title: variant.title,
-            price: parseFloat(variant.priceV2.amount),
+            price: applyPriceIncrease(parseFloat(variant.priceV2.amount), priceIncreasePercentage),
             compareAtPrice: variant.compareAtPriceV2
-                ? parseFloat(variant.compareAtPriceV2.amount)
+                ? applyPriceIncrease(parseFloat(variant.compareAtPriceV2.amount), priceIncreasePercentage)
                 : undefined,
             available: variant.availableForSale,
             quantity: variant.quantityAvailable,
@@ -96,13 +128,6 @@ export const transformShopifyProduct = (shopifyProduct: ShopifyProduct): Product
             options,
         };
     });
-
-    // Determine category from product type or tags
-    const category = shopifyProduct.productType ||
-        shopifyProduct.tags.find(tag =>
-            ['business-cards', 'flyers', 'brochures', 'stickers', 'labels', 'packaging', 'marketing'].includes(tag)
-        ) ||
-        'general';
 
     return {
         id: shopifyProduct.id,

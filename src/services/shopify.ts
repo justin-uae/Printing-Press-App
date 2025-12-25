@@ -131,6 +131,7 @@ export const PRODUCT_FRAGMENT = `
       { namespace: "custom", key: "min_order_quantity" }
       { namespace: "custom", key: "paper_weights" }
       { namespace: "custom", key: "finishing_options" }
+      { namespace: "custom", key: "price_increase_percentage" }
     ]) {
       namespace
       key

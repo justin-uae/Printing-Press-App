@@ -110,11 +110,10 @@ const Footer: React.FC = () => {
                 {/* Bottom Bar */}
                 <div className="border-t border-gray-800 pt-6 flex flex-col md:flex-row justify-center items-center gap-4">
                     <p className="text-sm text-gray-400 font-medium flex items-center gap-2">
-                        © {new Date().getFullYear()}
-                        <a className='text-orange-600' href={appURL} target='_blank'>
-                            DBX Print & Design
+                        <a href={appURL} target='_blank'>
+                            © {new Date().getFullYear()}
+                            {""} <span className='text-orange-600'>DBX Print & Design</span> is a trading style of DBX Signage For Promotional Gifts Preparing LLC. All rights reserved
                         </a>
-                        is a trading style of DBX Signage For Promotional Gifts Preparing LLC.
                     </p>
                 </div>
             </div>
