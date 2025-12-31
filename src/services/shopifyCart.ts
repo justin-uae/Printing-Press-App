@@ -60,9 +60,9 @@ export const createCart = async (
     cartInput.buyerIdentity = {
       customerAccessToken
     };
-    console.log('🔐 Creating authenticated checkout for logged-in customer');
+    console.log('Creating authenticated checkout for logged-in customer');
   } else {
-    console.log('👤 Creating guest checkout');
+    console.log('Creating guest checkout');
   }
 
   try {
@@ -99,9 +99,9 @@ export const createCart = async (
     const checkoutUrl = result.data.cartCreate.cart.checkoutUrl;
 
     if (customerAccessToken) {
-      console.log('✅ Authenticated checkout created - orders will be linked to customer account');
+      console.log('Authenticated checkout created - orders will be linked to customer account');
     } else {
-      console.log('✅ Guest checkout created - customer won\'t be able to track order without account');
+      console.log('Guest checkout created - customer won\'t be able to track order without account');
     }
 
     return checkoutUrl;

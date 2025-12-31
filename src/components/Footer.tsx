@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Phone, Mail, MapPin, Facebook, Instagram, Twitter } from 'lucide-react';
 import Logo from '../assets/Logo.png'
-import { PaymentIcon } from 'react-svg-credit-card-payment-icons';
+import PaymentMethods from '../assets/payment.png'
 
 const Footer: React.FC = () => {
 
@@ -89,22 +89,14 @@ const Footer: React.FC = () => {
                         </ul>
                     </div>
                 </div>
-                <div className="mt-6 flex justify-center items-center gap-3 sm:gap-4">
-                    <span className="text-xs sm:text-sm text-gray-400 font-medium">We Accept:</span>
-                    <div className="flex items-center gap-2 sm:gap-3">
-                        {/* Visa */}
-                        <div className="rounded p-1.5 sm:p-2 shadow-lg hover:scale-105 transition-transform">
-                            <PaymentIcon className="w-10 h-6 sm:w-12 sm:h-7" type="Visa" format="flatRounded" />
-                        </div>
-                        {/* Mastercard */}
-                        <div className="rounded p-1.5 sm:p-2 shadow-lg hover:scale-105 transition-transform">
-                            <PaymentIcon className="w-10 h-6 sm:w-12 sm:h-7" type="Mastercard" format="flatRounded" />
-
-                        </div>
-                        <div className="rounded p-1.5 sm:p-2 shadow-lg hover:scale-105 transition-transform">
-                            <PaymentIcon className="w-10 h-6 sm:w-12 sm:h-7" type="Americanexpress" format="flatRounded" />
-
-                        </div>
+                <div className="mt-6 flex flex-col items-center gap-2">
+                    <span className="text-xs text-gray-400 font-medium">We Accept:</span>
+                    <div className="rounded-lg p-2 shadow-md">
+                        <img
+                            src={PaymentMethods}
+                            alt="Payment Methods: PayPal, Mastercard, Visa, Maestro, Apple Pay, Amazon Pay, Google Pay, Stripe"
+                            className="w-full max-w-xs h-auto"
+                        />
                     </div>
                 </div>
                 {/* Bottom Bar */}
