@@ -12,6 +12,10 @@ import ContactPage from './pages/ContactPage';
 import Cart from './components/Cart';
 import ScrollToTop from './components/ScrollToTop';
 import { WhatsAppButton } from './components/WhatsAppButton';
+import ProfilePage from './pages/ProfilePage';
+import LoginPage from './pages/LoginPage';
+import RegisterPage from './pages/RegisterPage';
+import BookingsPage from './pages/BookingsPage';
 
 const App: React.FC = () => {
   return (
@@ -27,6 +31,13 @@ const App: React.FC = () => {
               <Route path="/product/:handle" element={<ProductDetailPage />} />\
               <Route path="/about" element={<AboutPage />} />
               <Route path="/contact" element={<ContactPage />} />
+              <Route path="/login" element={<LoginPage />} />
+              <Route path="/register" element={<RegisterPage />} />
+
+              {/* Protected Routes */}
+              <Route path="/profile" element={<ProfilePage />} />
+              <Route path="/bookings" element={<BookingsPage />} />
+              
             </Routes>
           </main>
           <WhatsAppButton />

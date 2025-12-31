@@ -4,6 +4,8 @@ import collectionsReducer from './collectionsSlice';
 import cartReducer from './slices/cartSlice';
 import filterReducer from './slices/filterSlice';
 import uiReducer from './slices/uiSlice';
+import authReducer from './slices/authSlice';
+import ordersReducer from './slices/ordersSlice';
 
 export const store = configureStore({
     reducer: {
@@ -11,7 +13,9 @@ export const store = configureStore({
         collections: collectionsReducer,
         cart: cartReducer,
         filter: filterReducer,
-        ui: uiReducer
+        ui: uiReducer,
+        auth: authReducer,
+        orders: ordersReducer
     },
     middleware: (getDefaultMiddleware) =>
         getDefaultMiddleware({

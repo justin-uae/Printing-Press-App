@@ -1,219 +1,200 @@
-// Shopify Storefront API Cart & Checkout Service
-const SHOPIFY_DOMAIN = import.meta.env.VITE_SHOPIFY_DOMAIN;
-const STOREFRONT_TOKEN = import.meta.env.VITE_SHOPIFY_STOREFRONT_TOKEN;
+import type { CartItem } from "../store/slices/cartSlice";
 
-const STOREFRONT_API_URL = `https://${SHOPIFY_DOMAIN}/api/2024-01/graphql.json`;
+const SHOPIFY_DOMAIN = import.meta.env.VITE_SHOPIFY_DOMAIN || '';
+const STOREFRONT_ACCESS_TOKEN = import.meta.env.VITE_SHOPIFY_STOREFRONT_TOKEN || '';
+const SHOPIFY_GRAPHQL_URL = `https://${SHOPIFY_DOMAIN}/api/2024-01/graphql.json`;
 
-// GraphQL mutation to create a cart
-const CREATE_CART_MUTATION = `
-  mutation cartCreate($input: CartInput!) {
-    cartCreate(input: $input) {
-      cart {
-        id
-        checkoutUrl
-        lines(first: 100) {
-          edges {
-            node {
-              id
-              quantity
-              merchandise {
-                ... on ProductVariant {
-                  id
-                  title
-                  priceV2 {
-                    amount
-                    currencyCode
-                  }
-                  product {
-                    title
-                  }
-                }
-              }
-              attributes {
-                key
-                value
-              }
-            }
-          }
-        }
-        cost {
-          totalAmount {
-            amount
-            currencyCode
-          }
-          subtotalAmount {
-            amount
-            currencyCode
-          }
-        }
-      }
-      userErrors {
-        field
-        message
-      }
-    }
-  }
-`;
-
-// GraphQL mutation to add lines to cart
-const CART_LINES_ADD_MUTATION = `
-  mutation cartLinesAdd($cartId: ID!, $lines: [CartLineInput!]!) {
-    cartLinesAdd(cartId: $cartId, lines: $lines) {
-      cart {
-        id
-        checkoutUrl
-        lines(first: 100) {
-          edges {
-            node {
-              id
-              quantity
-            }
-          }
-        }
-      }
-      userErrors {
-        field
-        message
-      }
-    }
-  }
-`;
-
-interface CartLineInput {
-    merchandiseId: string;  // Variant ID
-    quantity: number;
-    attributes?: Array<{
-        key: string;
-        value: string;
-    }>;
-}
-
-interface CreateCartResponse {
-    cartCreate: {
-        cart: {
-            id: string;
-            checkoutUrl: string;
-            lines: any;
-            cost: {
-                totalAmount: {
-                    amount: string;
-                    currencyCode: string;
-                };
-                subtotalAmount: {
-                    amount: string;
-                    currencyCode: string;
-                };
-            };
-        };
-        userErrors: Array<{
-            field: string[];
-            message: string;
-        }>;
-    };
+interface ShopifyCartLineInput {
+  merchandiseId: string;
+  quantity: number;
 }
 
 /**
- * Make a GraphQL request to Shopify Storefront API
+ * Convert cart items to Shopify line inputs
  */
-async function storefrontFetch(query: string, variables: any = {}) {
-    const response = await fetch(STOREFRONT_API_URL, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'X-Shopify-Storefront-Access-Token': STOREFRONT_TOKEN,
-        },
-        body: JSON.stringify({
-            query,
-            variables,
-        }),
+export const cartItemsToLineInputs = (cartItems: CartItem[]): ShopifyCartLineInput[] => {
+  return cartItems.map(item => ({
+    merchandiseId: item.variant.id,
+    quantity: item.quantity
+  }));
+};
+
+/**
+ * Create a Shopify cart and return checkout URL
+ * @param lines - Array of cart line inputs
+ * @param customerAccessToken - Optional customer access token for authenticated checkout
+ */
+export const createCart = async (
+  lines: ShopifyCartLineInput[],
+  customerAccessToken?: string
+): Promise<string> => {
+  const mutation = `
+        mutation cartCreate($input: CartInput!) {
+            cartCreate(input: $input) {
+                cart {
+                    id
+                    checkoutUrl
+                    totalQuantity
+                    cost {
+                        totalAmount {
+                            amount
+                            currencyCode
+                        }
+                    }
+                }
+                userErrors {
+                    field
+                    message
+                }
+            }
+        }
+    `;
+
+  // Build the cart input
+  const cartInput: any = {
+    lines
+  };
+
+  // Add buyer identity if customer is logged in
+  if (customerAccessToken) {
+    cartInput.buyerIdentity = {
+      customerAccessToken
+    };
+    console.log('🔐 Creating authenticated checkout for logged-in customer');
+  } else {
+    console.log('👤 Creating guest checkout');
+  }
+
+  try {
+    const response = await fetch(SHOPIFY_GRAPHQL_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Shopify-Storefront-Access-Token': STOREFRONT_ACCESS_TOKEN,
+      },
+      body: JSON.stringify({
+        query: mutation,
+        variables: {
+          input: cartInput
+        }
+      }),
     });
 
     if (!response.ok) {
-        throw new Error(`Shopify API error: ${response.statusText}`);
+      throw new Error(`HTTP error! status: ${response.status}`);
     }
 
-    const json = await response.json();
+    const result = await response.json();
 
-    if (json.errors) {
-        console.error('GraphQL Errors:', json.errors);
-        throw new Error(json.errors[0]?.message || 'GraphQL error');
+    if (result.errors) {
+      console.error('GraphQL Errors:', result.errors);
+      throw new Error(result.errors[0].message);
     }
 
-    return json.data;
-}
+    if (result.data.cartCreate.userErrors.length > 0) {
+      console.error('Cart Creation Errors:', result.data.cartCreate.userErrors);
+      throw new Error(result.data.cartCreate.userErrors[0].message);
+    }
+
+    const checkoutUrl = result.data.cartCreate.cart.checkoutUrl;
+
+    if (customerAccessToken) {
+      console.log('✅ Authenticated checkout created - orders will be linked to customer account');
+    } else {
+      console.log('✅ Guest checkout created - customer won\'t be able to track order without account');
+    }
+
+    return checkoutUrl;
+  } catch (error) {
+    console.error('Error creating cart:', error);
+    throw error;
+  }
+};
 
 /**
- * Create a new cart and get checkout URL
+ * Alternative: Create checkout with email for guest users
+ * This associates the order with an email even for guests
  */
-export async function createCart(lines: CartLineInput[]): Promise<string> {
-    try {
-        const data: CreateCartResponse = await storefrontFetch(CREATE_CART_MUTATION, {
-            input: {
-                lines,
-            },
-        });
-
-        if (data.cartCreate.userErrors.length > 0) {
-            const errors = data.cartCreate.userErrors
-                .map(err => err.message)
-                .join(', ');
-            throw new Error(`Cart creation failed: ${errors}`);
+export const createCartWithEmail = async (
+  lines: ShopifyCartLineInput[],
+  email?: string,
+  customerAccessToken?: string
+): Promise<string> => {
+  const mutation = `
+        mutation cartCreate($input: CartInput!) {
+            cartCreate(input: $input) {
+                cart {
+                    id
+                    checkoutUrl
+                    totalQuantity
+                    cost {
+                        totalAmount {
+                            amount
+                            currencyCode
+                        }
+                    }
+                }
+                userErrors {
+                    field
+                    message
+                }
+            }
         }
+    `;
 
-        return data.cartCreate.cart.checkoutUrl;
-    } catch (error) {
-        console.error('Error creating cart:', error);
-        throw error;
-    }
-}
+  const cartInput: any = {
+    lines
+  };
 
-/**
- * Add lines to an existing cart
- */
-export async function addLinesToCart(
-    cartId: string,
-    lines: CartLineInput[]
-): Promise<any> {
-    try {
-        const data = await storefrontFetch(CART_LINES_ADD_MUTATION, {
-            cartId,
-            lines,
-        });
+  // Prioritize customer access token, then email
+  if (customerAccessToken) {
+    cartInput.buyerIdentity = {
+      customerAccessToken
+    };
+    console.log('🔐 Creating authenticated checkout');
+  } else if (email) {
+    cartInput.buyerIdentity = {
+      email
+    };
+    console.log('📧 Creating checkout with email:', email);
+  } else {
+    console.log('👤 Creating anonymous guest checkout');
+  }
 
-        if (data.cartLinesAdd.userErrors.length > 0) {
-            const errors = data.cartLinesAdd.userErrors
-                .map((err: any) => err.message)
-                .join(', ');
-            throw new Error(`Failed to add items: ${errors}`);
+  try {
+    const response = await fetch(SHOPIFY_GRAPHQL_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Shopify-Storefront-Access-Token': STOREFRONT_ACCESS_TOKEN,
+      },
+      body: JSON.stringify({
+        query: mutation,
+        variables: {
+          input: cartInput
         }
+      }),
+    });
 
-        return data.cartLinesAdd.cart;
-    } catch (error) {
-        console.error('Error adding items to cart:', error);
-        throw error;
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
     }
-}
 
-/**
- * Convert cart items to Shopify cart line inputs
- */
-export function cartItemsToLineInputs(cartItems: any[]): CartLineInput[] {
-    return cartItems.map(item => ({
-        merchandiseId: item.variantId, // Shopify variant GID
-        quantity: item.quantity,
-        attributes: [
-            {
-                key: 'Price Type',
-                value: item.selectedOptions?.priceType || 'online',
-            },
-            {
-                key: 'Turnaround',
-                value: item.selectedOptions?.turnaroundType || 'normal',
-            },
-        ],
-    }));
-}
+    const result = await response.json();
 
-// Keep old function names for backwards compatibility
-export const createCheckout = createCart;
-export const cartItemsToLineItems = cartItemsToLineInputs;
+    if (result.errors) {
+      console.error('GraphQL Errors:', result.errors);
+      throw new Error(result.errors[0].message);
+    }
+
+    if (result.data.cartCreate.userErrors.length > 0) {
+      console.error('Cart Creation Errors:', result.data.cartCreate.userErrors);
+      throw new Error(result.data.cartCreate.userErrors[0].message);
+    }
+
+    return result.data.cartCreate.cart.checkoutUrl;
+  } catch (error) {
+    console.error('Error creating cart:', error);
+    throw error;
+  }
+};

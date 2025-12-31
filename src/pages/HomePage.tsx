@@ -10,7 +10,7 @@ import Banner3 from '../assets/Banner3.png'
 import Banner4 from '../assets/Banner4.png'
 import Banner5 from '../assets/Banner5.png'
 import Banner6 from '../assets/Banner6.png'
-import Banner8 from '../assets/Banner8.png'
+import Banner9 from '../assets/Banner9.png'
 
 const HomePage: React.FC = () => {
     const dispatch = useAppDispatch();
@@ -22,7 +22,7 @@ const HomePage: React.FC = () => {
         Banner4,
         Banner5,
         Banner6,
-        Banner8,
+        Banner9,
     ];
 
     // Select data from Redux store

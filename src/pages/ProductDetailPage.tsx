@@ -7,6 +7,7 @@ import {
     Shield,
     ChevronLeft,
     Truck,
+    ShoppingCart,
 } from 'lucide-react';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
 import { fetchProductByHandle } from '../store/productsSlice';
@@ -14,6 +15,8 @@ import { fetchProductByHandle } from '../store/productsSlice';
 // import { openCart } from '../store/slices/uiSlice';
 import { getLowestOnlinePrice, getLowestNormalPrice } from '../utils/transformers';
 import type { ProductVariant } from '../';
+import { addToCart } from '../store/slices/cartSlice';
+import { openCart } from '../store/slices/uiSlice';
 
 const ProductDetailPage: React.FC = () => {
     const { handle } = useParams<{ handle: string }>();
@@ -116,22 +119,22 @@ const ProductDetailPage: React.FC = () => {
         setSelectedVariant(variant);
     };
 
-    // const handleAddToCart = (): void => {
-    //     if (!selectedVariant) {
-    //         alert('Please select a variant');
-    //         return;
-    //     }
+    const handleAddToCart = (): void => {
+        if (!selectedVariant) {
+            alert('Please select a variant');
+            return;
+        }
 
-    //     dispatch(addToCart({
-    //         product,
-    //         variant: selectedVariant,
-    //         quantity: 1,
-    //         priceType,
-    //         turnaroundType,
-    //     }));
+        dispatch(addToCart({
+            product,
+            variant: selectedVariant,
+            quantity: 1,
+            priceType,
+            turnaroundType,
+        }));
 
-    //     dispatch(openCart());
-    // };
+        dispatch(openCart());
+    };
 
     const handleOrderWhatsApp = (): void => {
         if (!selectedVariant) {
@@ -387,17 +390,17 @@ Please confirm availability and processing time.`;
                             )}
 
                             {/* Add to Cart Button */}
-                            {/* <button
+                            <button
                                 onClick={handleAddToCart}
                                 disabled={!selectedVariant || !selectedVariant.available}
-                                className={`w-full font-black py-4 px-6 rounded-2xl text-base lg:text-lg shadow-xl hover:shadow-2xl transition-all duration-300 flex items-center justify-center gap-3 border-2 ${!selectedVariant || !selectedVariant.available
+                                className={`mb-2 w-full font-black py-4 px-6 rounded-2xl text-base lg:text-lg shadow-xl hover:shadow-2xl transition-all duration-300 flex items-center justify-center gap-3 ${!selectedVariant || !selectedVariant.available
                                     ? 'bg-gray-300 text-gray-500 cursor-not-allowed border-gray-400'
-                                    : 'bg-gradient-to-r from-orange-500 to-orange-500 hover:from-orange-600 hover:to-orange-600 text-white hover:scale-105 border-gray-900'
+                                    : 'bg-gradient-to-r from-orange-500 to-orange-500 hover:from-orange-600 hover:to-orange-600 text-white hover:scale-105'
                                     }`}
                             >
                                 <ShoppingCart size={22} />
                                 {!selectedVariant ? 'Select a Variant' : !selectedVariant.available ? 'Out of Stock' : 'Add to Cart'}
-                            </button> */}
+                            </button>
 
                             <button
                                 onClick={handleOrderWhatsApp}
